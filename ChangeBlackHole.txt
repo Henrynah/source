@@ -1,0 +1,299 @@
+local RunService = game:GetService("RunService")
+local targetAssetId = "rbxassetid://111278758469077"
+local loadedModel = nil
+
+pcall(function()
+    loadedModel = game:GetObjects(targetAssetId)[1]
+end)
+
+local function scaleNumberSequence(ns, multiplier)
+    if not ns then return end
+    local keypoints = {}
+    for _, kp in ipairs(ns.Keypoints) do
+        table.insert(keypoints, NumberSequenceKeypoint.new(kp.Time, kp.Value * multiplier, kp.Envelope * multiplier))
+    end
+    return NumberSequence.new(keypoints)
+end
+
+local function scaleNumberRange(nr, multiplier)
+    if not nr then return end
+    return NumberRange.new(nr.Min * multiplier, nr.Max * multiplier)
+end
+
+local function watchForDrone(holeObj)
+    for _, c in pairs(holeObj:GetDescendants()) do
+        if c.Name == "Drone" then
+            task.defer(function()
+                if c and c.Parent then
+                    c:Destroy()
+                end
+            end)
+        end
+    end
+    holeObj.DescendantAdded:Connect(function(c)
+        if c.Name == "Drone" then
+            task.defer(function()
+                if c and c.Parent then
+                    c:Destroy()
+                end
+            end)
+        end
+    end)
+end
+
+local function applyChanges(child)
+    if child.Name == "Drone" then
+        task.defer(function()
+            if child and child.Parent then
+                child:Destroy()
+            end
+        end)
+        return
+    end
+
+    if child.Name == "BillboardGui" and child:IsA("BillboardGui") then
+        local function hideGui()
+            child.Enabled = false
+            for _, element in pairs(child:GetDescendants()) do
+                pcall(function() element.BackgroundTransparency = 1 end)
+                pcall(function() element.TextTransparency = 1 end)
+                pcall(function() element.ImageTransparency = 1 end)
+            end
+        end
+        hideGui()
+        child.Changed:Connect(hideGui)
+        child.DescendantAdded:Connect(hideGui)
+    elseif child.Name == "Hole" and child:IsA("BasePart") then
+        task.wait(0.1)
+
+        child.Transparency = 1
+        child:GetPropertyChangedSignal("Transparency"):Connect(function()
+            if child.Transparency ~= 1 then
+                child.Transparency = 1
+            end
+        end)
+
+        if loadedModel and not child:GetAttribute("HasCustomHole") then
+            child:SetAttribute("HasCustomHole", true)
+            
+            local clone = loadedModel:Clone()
+            clone.Name = "CustomHoleModel"
+            clone.Parent = workspace 
+
+            local rotationOffset = CFrame.Angles(math.rad(90), 0, 0)
+            local originalProps = {}
+
+            local function saveProps(obj)
+                if obj:IsA("BasePart") then
+                    originalProps[obj] = {Size = obj.Size}
+                elseif obj:IsA("SpecialMesh") or obj:IsA("BlockMesh") or obj:IsA("CylinderMesh") then
+                    originalProps[obj] = {Scale = obj.Scale}
+                elseif obj:IsA("Attachment") then
+                    originalProps[obj] = {Position = obj.Position}
+                elseif obj:IsA("ParticleEmitter") then
+                    originalProps[obj] = {Size = obj.Size, Speed = obj.Speed}
+                elseif obj:IsA("Beam") then
+                    originalProps[obj] = {
+                        Width0 = obj.Width0, 
+                        Width1 = obj.Width1, 
+                        CurveSize0 = obj.CurveSize0, 
+                        CurveSize1 = obj.CurveSize1
+                    }
+                elseif obj:IsA("Trail") then
+                    originalProps[obj] = {WidthScale = obj.WidthScale}
+                elseif obj:IsA("PointLight") or obj:IsA("SurfaceLight") or obj:IsA("SpotLight") then
+                    originalProps[obj] = {Range = obj.Range}
+                end
+            end
+
+            if clone:IsA("Model") then
+                local cframe = clone:GetBoundingBox()
+
+                for _, part in pairs(clone:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Anchored = false
+                        part.CanCollide = false
+
+                        local offset = cframe:ToObjectSpace(part.CFrame)
+                        part.CFrame = (child.CFrame * rotationOffset) * offset
+
+                        local weld = Instance.new("WeldConstraint")
+                        weld.Part0 = part
+                        weld.Part1 = child
+                        weld.Parent = part
+
+                        for _, att in pairs(part:GetChildren()) do
+                            if att:IsA("Attachment") then
+                                att.CFrame = rotationOffset * att.CFrame
+                            end
+                        end
+                    end
+
+                    if part:IsA("Script") then
+                        part.Disabled = true
+                        local newScript = Instance.new("Script")
+                        newScript.Source = [[
+local part = script.Parent
+local partspeed = 0.015
+
+while task.wait() do
+    part.CFrame = part.CFrame * CFrame.Angles(0, partspeed, 0)
+end
+]]
+                        newScript.Parent = part.Parent
+                    end
+                end
+
+                for _, obj in pairs(clone:GetDescendants()) do
+                    if obj:IsA("Script") and not obj.Disabled then
+                        obj.Disabled = true
+                        local newScript = Instance.new("Script")
+                        newScript.Source = [[
+local part = script.Parent
+local partspeed = 0.015
+
+while task.wait() do
+    part.CFrame = part.CFrame * CFrame.Angles(0, partspeed, 0)
+end
+]]
+                        newScript.Parent = obj.Parent
+                    end
+                end
+
+            elseif clone:IsA("BasePart") then
+                clone.Anchored = false
+                clone.CanCollide = false
+                clone.CFrame = child.CFrame * rotationOffset
+
+                for _, att in pairs(clone:GetChildren()) do
+                    if att:IsA("Attachment") then
+                        att.CFrame = rotationOffset * att.CFrame
+                    end
+                end
+
+                local weld = Instance.new("WeldConstraint")
+                weld.Part0 = clone
+                weld.Part1 = child
+                weld.Parent = clone
+            end
+            
+            local soundPart = clone:IsA("BasePart") and clone or clone:FindFirstChildWhichIsA("BasePart", true)
+            local bhSound
+            if soundPart then
+                bhSound = Instance.new("Sound")
+                bhSound.SoundId = "rbxassetid://71291438346620"
+                bhSound.PlaybackSpeed = 0.5
+                bhSound.Volume = 1.8
+                bhSound.Looped = true
+                bhSound.RollOffMaxDistance = 130
+                bhSound.RollOffMinDistance = 15
+                bhSound.Parent = soundPart
+                bhSound:Play()
+            end
+
+            saveProps(clone)
+            for _, obj in pairs(clone:GetDescendants()) do
+                saveProps(obj)
+            end
+            
+            local isDestroying = false
+            local shrinkAlpha = 1
+            local shrinkSpeed = 1
+
+            local function onHoleDestroyed()
+                if isDestroying then return end
+                isDestroying = true
+                for _, obj in pairs(clone:GetDescendants()) do
+                    if obj:IsA("BasePart") then obj.Anchored = true end
+                end
+                if clone:IsA("BasePart") then clone.Anchored = true end
+            end
+
+            child.AncestryChanged:Connect(function(_, newParent)
+                if not newParent then
+                    onHoleDestroyed()
+                end
+            end)
+
+            local connection
+            connection = RunService.Heartbeat:Connect(function(dt)
+                if not clone or not clone.Parent then
+                    connection:Disconnect()
+                    return
+                end
+
+                if isDestroying then
+                    shrinkAlpha = shrinkAlpha - (dt * shrinkSpeed)
+                    if shrinkAlpha <= 0 then
+                        shrinkAlpha = 0
+                        connection:Disconnect()
+                        clone:Destroy()
+                        return
+                    end
+                    if bhSound then
+                        bhSound.Volume = 2 * shrinkAlpha
+                    end
+                end
+
+                local basePartScale = 0.5 * shrinkAlpha
+                local effectScale = shrinkAlpha 
+
+                for obj, props in pairs(originalProps) do
+                    if obj:IsA("BasePart") then
+                        obj.Size = props.Size * basePartScale
+                    elseif obj:IsA("SpecialMesh") or obj:IsA("BlockMesh") or obj:IsA("CylinderMesh") then
+                        obj.Scale = props.Scale * basePartScale
+                    elseif obj:IsA("Attachment") then
+                        obj.Position = props.Position * basePartScale
+                    elseif obj:IsA("ParticleEmitter") then
+                        obj.Size = scaleNumberSequence(props.Size, effectScale)
+                        if props.Speed then
+                            obj.Speed = scaleNumberRange(props.Speed, effectScale)
+                        end
+                    elseif obj:IsA("Beam") then
+                        obj.Width0 = props.Width0 * effectScale
+                        obj.Width1 = props.Width1 * effectScale
+                        if props.CurveSize0 then
+                            obj.CurveSize0 = props.CurveSize0 * effectScale
+                            obj.CurveSize1 = props.CurveSize1 * effectScale
+                        end
+                    elseif obj:IsA("Trail") then
+                        obj.WidthScale = scaleNumberSequence(props.WidthScale, effectScale)
+                    elseif obj:IsA("PointLight") or obj:IsA("SurfaceLight") or obj:IsA("SpotLight") then
+                        obj.Range = props.Range * effectScale
+                    end
+                end
+            end)
+        end
+    end
+end
+
+local function handleBlackHoleKick(obj)
+    for _, descendant in pairs(obj:GetDescendants()) do
+        if descendant.Name == "Hole" and descendant:IsA("BasePart") then
+            watchForDrone(descendant)
+        end
+    end
+    obj.DescendantAdded:Connect(function(descendant)
+        if descendant.Name == "Hole" and descendant:IsA("BasePart") then
+            watchForDrone(descendant)
+        end
+    end)
+
+    for _, descendant in pairs(obj:GetDescendants()) do
+        applyChanges(descendant)
+    end
+    obj.DescendantAdded:Connect(applyChanges)
+end
+
+for _, descendant in pairs(workspace:GetDescendants()) do
+    if descendant.Name == "BlackHoleKick" then
+        handleBlackHoleKick(descendant)
+    end
+end
+
+workspace.DescendantAdded:Connect(function(descendant)
+    if descendant.Name == "BlackHoleKick" then
+        handleBlackHoleKick(descendant)
+    end
+end)

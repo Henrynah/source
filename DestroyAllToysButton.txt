@@ -1,0 +1,169 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+
+function getNil(name, class)
+    for _, v in next, getnilinstances() do
+        if v.ClassName == class and v.Name == name then
+            return v
+        end
+    end
+end
+
+local targetParent = LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("MenuGui"):WaitForChild("Menu"):WaitForChild("TabContents"):WaitForChild("ToyDestroy")
+
+targetParent:WaitForChild("Title"):WaitForChild("TitleText").Text = "Sex on the beach"
+
+if targetParent:FindFirstChild("DestroyAllButton") then
+    targetParent.DestroyAllButton:Destroy()
+end
+
+if targetParent:FindFirstChild("DestroyAllButtonBottom") then
+    targetParent.DestroyAllButtonBottom:Destroy()
+end
+
+if targetParent:FindFirstChild("DestroyAllButtonLeft") then
+    targetParent.DestroyAllButtonLeft:Destroy()
+end
+
+if targetParent:FindFirstChild("DestroyAllButtonRight") then
+    targetParent.DestroyAllButtonRight:Destroy()
+end
+
+local DestroyAllButton = Instance.new("TextButton")
+DestroyAllButton.Name = "DestroyAllButton"
+DestroyAllButton.Size = UDim2.new(0, 150, 0, 35)
+DestroyAllButton.Position = UDim2.new(0.5, 0, 0, 70)
+DestroyAllButton.AnchorPoint = Vector2.new(0.5, 0)
+DestroyAllButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+DestroyAllButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+DestroyAllButton.Text = "Destroy All Toys"
+DestroyAllButton.Font = Enum.Font.SourceSansBold
+DestroyAllButton.TextSize = 16
+DestroyAllButton.Parent = targetParent
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.Parent = DestroyAllButton
+
+DestroyAllButton.MouseButton1Click:Connect(function()
+    local folderName = LocalPlayer.Name .. "SpawnedInToys"
+    local toyFolder = workspace:FindFirstChild(folderName)
+
+    if toyFolder then
+        local toys = toyFolder:GetChildren()
+        
+        for _, toy in ipairs(toys) do
+            if toy.Name ~= "ToyNumber" and toy.Name ~= "완전한 사람" and not Players:GetPlayerFromCharacter(toy) then
+                local args = {
+                    [1] = toy
+                }
+                ReplicatedStorage:WaitForChild("MenuToys"):WaitForChild("DestroyToy"):FireServer(unpack(args))
+            end
+        end
+    end
+end)
+
+local DestroyAllButtonBottom = Instance.new("TextButton")
+DestroyAllButtonBottom.Name = "DestroyAllButtonBottom"
+DestroyAllButtonBottom.Size = UDim2.new(0, 150, 0, 35)
+DestroyAllButtonBottom.Position = UDim2.new(0.5, 0, 1, -60)
+DestroyAllButtonBottom.AnchorPoint = Vector2.new(0.5, 1)
+DestroyAllButtonBottom.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+DestroyAllButtonBottom.TextColor3 = Color3.fromRGB(255, 255, 255)
+DestroyAllButtonBottom.Text = "Destroy All Toys"
+DestroyAllButtonBottom.Font = Enum.Font.SourceSansBold
+DestroyAllButtonBottom.TextSize = 16
+DestroyAllButtonBottom.Parent = targetParent
+
+local UICornerBottom = Instance.new("UICorner")
+UICornerBottom.CornerRadius = UDim.new(0, 8)
+UICornerBottom.Parent = DestroyAllButtonBottom
+
+DestroyAllButtonBottom.MouseButton1Click:Connect(function()
+    local folderName = LocalPlayer.Name .. "SpawnedInToys"
+    local toyFolder = workspace:FindFirstChild(folderName)
+
+    if toyFolder then
+        local toys = toyFolder:GetChildren()
+        
+        for _, toy in ipairs(toys) do
+            if toy.Name ~= "ToyNumber" and toy.Name ~= "완전한 사람" and not Players:GetPlayerFromCharacter(toy) then
+                local args = {
+                    [1] = toy
+                }
+                ReplicatedStorage:WaitForChild("MenuToys"):WaitForChild("DestroyToy"):FireServer(unpack(args))
+            end
+        end
+    end
+end)
+
+local DestroyAllButtonLeft = Instance.new("TextButton")
+DestroyAllButtonLeft.Name = "DestroyAllButtonLeft"
+DestroyAllButtonLeft.Size = UDim2.new(0, 150, 0, 35)
+DestroyAllButtonLeft.Position = UDim2.new(0, 20, 0.5, 0)
+DestroyAllButtonLeft.AnchorPoint = Vector2.new(0.5, 0.5)
+DestroyAllButtonLeft.Rotation = -90
+DestroyAllButtonLeft.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+DestroyAllButtonLeft.TextColor3 = Color3.fromRGB(255, 255, 255)
+DestroyAllButtonLeft.Text = "Destroy All Toys"
+DestroyAllButtonLeft.Font = Enum.Font.SourceSansBold
+DestroyAllButtonLeft.TextSize = 16
+DestroyAllButtonLeft.Parent = targetParent
+
+local UICornerLeft = Instance.new("UICorner")
+UICornerLeft.CornerRadius = UDim.new(0, 8)
+UICornerLeft.Parent = DestroyAllButtonLeft
+
+DestroyAllButtonLeft.MouseButton1Click:Connect(function()
+    local folderName = LocalPlayer.Name .. "SpawnedInToys"
+    local toyFolder = workspace:FindFirstChild(folderName)
+
+    if toyFolder then
+        local toys = toyFolder:GetChildren()
+        
+        for _, toy in ipairs(toys) do
+            if toy.Name ~= "ToyNumber" and toy.Name ~= "완전한 사람" and not Players:GetPlayerFromCharacter(toy) then
+                local args = {
+                    [1] = toy
+                }
+                ReplicatedStorage:WaitForChild("MenuToys"):WaitForChild("DestroyToy"):FireServer(unpack(args))
+            end
+        end
+    end
+end)
+
+local DestroyAllButtonRight = Instance.new("TextButton")
+DestroyAllButtonRight.Name = "DestroyAllButtonRight"
+DestroyAllButtonRight.Size = UDim2.new(0, 150, 0, 35)
+DestroyAllButtonRight.Position = UDim2.new(1, -20, 0.5, 0)
+DestroyAllButtonRight.AnchorPoint = Vector2.new(0.5, 0.5)
+DestroyAllButtonRight.Rotation = 90
+DestroyAllButtonRight.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+DestroyAllButtonRight.TextColor3 = Color3.fromRGB(255, 255, 255)
+DestroyAllButtonRight.Text = "Destroy All Toys"
+DestroyAllButtonRight.Font = Enum.Font.SourceSansBold
+DestroyAllButtonRight.TextSize = 16
+DestroyAllButtonRight.Parent = targetParent
+
+local UICornerRight = Instance.new("UICorner")
+UICornerRight.CornerRadius = UDim.new(0, 8)
+UICornerRight.Parent = DestroyAllButtonRight
+
+DestroyAllButtonRight.MouseButton1Click:Connect(function()
+    local folderName = LocalPlayer.Name .. "SpawnedInToys"
+    local toyFolder = workspace:FindFirstChild(folderName)
+
+    if toyFolder then
+        local toys = toyFolder:GetChildren()
+        
+        for _, toy in ipairs(toys) do
+            if toy.Name ~= "ToyNumber" and toy.Name ~= "완전한 사람" and not Players:GetPlayerFromCharacter(toy) then
+                local args = {
+                    [1] = toy
+                }
+                ReplicatedStorage:WaitForChild("MenuToys"):WaitForChild("DestroyToy"):FireServer(unpack(args))
+            end
+        end
+    end
+end)

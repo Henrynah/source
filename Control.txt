@@ -1,0 +1,348 @@
+game_Players = game:GetService("Players")
+game_Debris = game:GetService("Debris")
+game_Workspace = game:GetService("Workspace")
+game_Lighting = game:GetService("Lighting")
+game_TweenService = game:GetService("TweenService")
+game_UserInputService = game:GetService("UserInputService")
+game_ReplicatedStorage = game:GetService("ReplicatedStorage")
+game_ContextActionService = game:GetService("ContextActionService")
+game_RunService = game:GetService("RunService")
+
+CurrentPlayer = game_Players.LocalPlayer
+
+GrabEventsFolder = game_ReplicatedStorage:WaitForChild("GrabEvents")
+SetOwnershipEvent = GrabEventsFolder:WaitForChild("SetNetworkOwner")
+DestroyLineEvent = GrabEventsFolder:WaitForChild("DestroyGrabLine")
+CreateLineEvent = GrabEventsFolder:WaitForChild("CreateGrabLine", 3)
+
+_G.ControllingCreature = nil
+ConnectionNoclip = nil
+NoclipEnabled = false
+
+RaycastParameters = RaycastParams.new()
+RaycastParameters.FilterDescendantsInstances = {CurrentPlayer.Character}
+RaycastParameters.FilterType = Enum.RaycastFilterType.Exclude
+
+function CreateLookAtCFrame(startPosition, endPosition)
+    DirectionVector = (endPosition - startPosition).Unit
+    RightAxis = DirectionVector:Cross(Vector3.new(0, 1, 0))
+    UpAxis = RightAxis:Cross(DirectionVector)
+    return CFrame.fromMatrix(startPosition, RightAxis, UpAxis)
+end
+
+function GetCurrentCharacter()
+    if CurrentPlayer.Character and (CurrentPlayer.Character:FindFirstChild("HumanoidRootPart") and CurrentPlayer.Character:FindFirstChildOfClass("Humanoid")) then
+        return CurrentPlayer.Character
+    end
+end
+
+function ValidatePartOwnership(partInstance, shouldReturnOwner)
+    if typeof(partInstance) == "Instance" and (partInstance:FindFirstChild("PartOwner") and partInstance.PartOwner.Value == CurrentPlayer.Name) then
+        return not shouldReturnOwner and true or partInstance.PartOwner
+    end
+end
+
+function RequestOwnershipSingle(partInstance)
+    DistanceFromPlayer = CurrentPlayer:DistanceFromCharacter(partInstance.Position)
+    if CurrentPlayer.Character and CurrentPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        if ValidatePartOwnership(partInstance) then
+            return true
+        end
+        if DistanceFromPlayer <= 30 then
+            SetOwnershipEvent:FireServer(partInstance, CreateLookAtCFrame(CurrentPlayer.Character.HumanoidRootPart.Position, partInstance.Position))
+        end
+    end
+end
+
+function RequestOwnershipAndRemoveLine(partInstance)
+    DistanceCalculated = CurrentPlayer:DistanceFromCharacter(partInstance.Position)
+    IsConnected = partInstance:GetAttribute("Connected")
+    HasCreatedConnection = partInstance:GetAttribute("CreatedConnected")
+    
+    if CurrentPlayer.Character and CurrentPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        if ValidatePartOwnership(partInstance) then
+            partInstance:SetAttribute("Connected", true)
+            DestroyLineEvent:FireServer(partInstance)
+            if not HasCreatedConnection then
+                partInstance:SetAttribute("CreatedConnected", true)
+                partInstance.ChildAdded:Connect(function(childAdded)
+                    if childAdded.Name == "PartOwner" and childAdded.Value ~= CurrentPlayer.Name then
+                        partInstance:SetAttribute("Connected", false)
+                    end
+                end)
+            end
+        elseif DistanceCalculated <= 30 and not IsConnected then
+            SetOwnershipEvent:FireServer(partInstance, CreateLookAtCFrame(CurrentPlayer.Character.HumanoidRootPart.Position, partInstance.Position))
+        end
+    end
+end
+
+function ActivateNoclipMode()
+    if not ConnectionNoclip then
+        NoclipEnabled = false
+        NoclipLoopFunction = function()
+            if NoclipEnabled == false and game_Players.LocalPlayer.Character ~= nil then
+                ChildrenIterator, ChildrenTable, CurrentIndex = pairs(game_Players.LocalPlayer.Character:GetChildren())
+                while true do
+                    CurrentChild = nil
+                    CurrentIndex, CurrentChild = ChildrenIterator(ChildrenTable, CurrentIndex)
+                    if CurrentIndex == nil then
+                        break
+                    end
+                    if CurrentChild:IsA("BasePart") and CurrentChild.CanCollide then
+                        CurrentChild.CanCollide = false
+                    end
+                end
+            end
+            wait(0.21)
+        end
+        ConnectionNoclip = game_RunService.Stepped:Connect(NoclipLoopFunction)
+    end
+end
+
+function DeactivateNoclipMode()
+    if not _G.NoclipToggle then
+        if ConnectionNoclip then
+            ConnectionNoclip:Disconnect()
+            ConnectionNoclip = nil
+        end
+        NoclipEnabled = true
+    end
+end
+
+function DisableCharacterQuery(characterModel)
+    PartsIterator, PartsTable, PartIndex = pairs(characterModel:GetChildren())
+    while true do
+        CurrentPart = nil
+        PartIndex, CurrentPart = PartsIterator(PartsTable, PartIndex)
+        if PartIndex == nil then
+            break
+        end
+        if CurrentPart:IsA("Part") then
+            CurrentPart.CanQuery = false
+        end
+    end
+end
+
+function EnableCharacterQuery(characterModel)
+    IteratorFunc, TableData, IndexPos = pairs(characterModel:GetChildren())
+    while true do
+        PartData = nil
+        IndexPos, PartData = IteratorFunc(TableData, IndexPos)
+        if IndexPos == nil then
+            break
+        end
+        if PartData:IsA("Part") then
+            PartData.CanQuery = true
+        end
+    end
+end
+
+ControlAudioEffect = Instance.new("Sound", game_Workspace)
+ControlAudioEffect.SoundId = "rbxassetid://9114374439"
+ControlAudioEffect.PlaybackSpeed = 1.25
+
+ColorCorrectionInstance = Instance.new("ColorCorrectionEffect", game_Lighting)
+ColorCorrectionInstance.Enabled = false
+
+FieldOfViewTween = game_TweenService:Create(game_Workspace.CurrentCamera, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, 0, true), {FieldOfView = 100})
+TintColorTween = game_TweenService:Create(ColorCorrectionInstance, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TintColor = Color3.fromRGB(200, 210, 240)})
+BrightnessTween = game_TweenService:Create(ColorCorrectionInstance, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {Brightness = -0.1})
+ResetColorTween = game_TweenService:Create(ColorCorrectionInstance, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TintColor = Color3.new(3, 3, 3), Brightness = 0})
+
+function StartControlVisuals()
+    ColorCorrectionInstance.Enabled = true
+    ColorCorrectionInstance.TintColor = Color3.new()
+    FieldOfViewTween:Play()
+    TintColorTween:Play()
+    ControlAudioEffect:Play()
+    TintColorTween.Completed:Once(function()
+        BrightnessTween:Play()
+    end)
+end
+
+function EndControlVisuals()
+    ResetColorTween:Play()
+    ResetColorTween.Completed:Once(function()
+        ColorCorrectionInstance.Enabled = false
+    end)
+end
+
+function MovePlayerToPosition(targetCFrame, offsetVector)
+    PlayerCharacter = GetCurrentCharacter()
+    if PlayerCharacter and typeof(targetCFrame) == "CFrame" then
+        RootPartInstance = PlayerCharacter.HumanoidRootPart
+        HumanoidInstance = PlayerCharacter:FindFirstChildOfClass("Humanoid")
+        RootPartInstance.CFrame = RootPartInstance.CFrame.Rotation + targetCFrame.Position
+        if HumanoidInstance.SeatPart == nil or tostring(HumanoidInstance.SeatPart.Parent) ~= "CreatureBlobman" then
+            HumanoidInstance.Sit = false
+        end
+    end
+end
+
+function BeginControllingTarget(targetModelInstance)
+    if typeof(targetModelInstance) == "Instance" and targetModelInstance:IsA("Model") then
+        TargetModel = targetModelInstance
+        TargetHumanoid = TargetModel:FindFirstChildOfClass("Humanoid")
+        TargetRootPart = TargetModel:FindFirstChild("HumanoidRootPart")
+        TargetHead = TargetModel:FindFirstChild("Head")
+        IsValidTargetType = (function()
+            if not game_Players:GetPlayerFromCharacter(targetModelInstance) and (targetModelInstance.Name == "YouDecoy" or (targetModelInstance.Name == "CreatureBlobman" or tostring(targetModelInstance.Parent.Name) == "Robloxians")) then
+                return true
+            end
+        end)()
+        
+        if TargetModel and (TargetHumanoid and TargetRootPart) then
+            ConnectionsTable = {}
+            
+            CleanupAllConnections = function()
+                ConnectionIterator, ConnectionData, ConnectionIndex = pairs(ConnectionsTable)
+                while true do
+                    ConnectionObject = nil
+                    ConnectionIndex, ConnectionObject = ConnectionIterator(ConnectionData, ConnectionIndex)
+                    if ConnectionIndex == nil then
+                        break
+                    end
+                    if typeof(ConnectionObject) == "RBXScriptConnection" then
+                        ConnectionObject:Disconnect()
+                    end
+                end
+                table.clear(ConnectionsTable)
+            end
+            
+            _G.ControllingCreature = TargetModel
+            TargetHumanoid.WalkSpeed = 0
+            TargetHumanoid.JumpPower = 24
+            TargetHumanoid.CameraOffset = Vector3.new(0, 0, -0.7)
+            
+            ConnectionsTable[1] = TargetHumanoid.Died:Connect(function()
+                _G.ControllingCreature = nil
+            end)
+            
+            VelocityController = Instance.new("BodyVelocity", TargetRootPart)
+            PlayerVelocityController = Instance.new("BodyVelocity")
+            PlayerVelocityController.MaxForce = Vector3.new(0, math.huge, 0)
+            PlayerVelocityController.Velocity = Vector3.new()
+            VelocityController.MaxForce = Vector3.new(math.huge, 0, math.huge)
+            
+            DisableCharacterQuery(TargetModel)
+            
+            task.spawn(function()
+                ActivateNoclipMode()
+                while TargetModel.Parent and _G.ControllingCreature ~= nil do
+                    if IsValidTargetType then
+                        RequestOwnershipAndRemoveLine(TargetHead)
+                    else
+                        RequestOwnershipSingle(TargetHead)
+                    end
+                    TargetHumanoid.AutoRotate = true
+                    task.wait()
+                end
+            end)
+            
+            game_Workspace.CurrentCamera.CameraSubject = TargetHumanoid
+            StartControlVisuals()
+            
+            PlayerCharacterCurrent = GetCurrentCharacter()
+            PlayerRootPartReference = nil
+            PlayerHumanoidReference = nil
+            
+            if PlayerCharacterCurrent then
+                PlayerHumanoidReference = PlayerCharacterCurrent:FindFirstChildOfClass("Humanoid")
+                PlayerRootPartReference = PlayerCharacterCurrent:FindFirstChild("HumanoidRootPart")
+                PlayerVelocityController.Parent = PlayerRootPartReference
+                
+                ConnectionsTable[2] = PlayerHumanoidReference.Died:Connect(function()
+                    _G.ControllingCreature = nil
+                end)
+                
+                ConnectionsTable[3] = game_UserInputService.JumpRequest:Connect(function()
+                    TargetHumanoid:ChangeState("Jumping")
+                end)
+                
+                ConnectionsTable[5] = PlayerHumanoidReference.Changed:Connect(function(propertyName)
+                    if propertyName == "MoveDirection" then
+                        VelocityController.Velocity = PlayerHumanoidReference.MoveDirection * 20
+                    end
+                end)
+                
+                ConnectionsTable[6] = workspace.CurrentCamera.Changed:Connect(function(cameraProperty)
+                    if cameraProperty == "CameraSubject" then
+                        game_Workspace.CurrentCamera.CameraSubject = TargetHumanoid
+                    end
+                end)
+                
+                CameraDirectionVector = nil
+                ConnectionsTable[7] = TargetHead.Changed:Connect(function(headProperty)
+                    if headProperty == "CFrame" then
+                        CameraDirectionVector = game_Workspace.CurrentCamera.CFrame.lookVector
+                        TargetHumanoid.CameraOffset = -Vector3.new(CameraDirectionVector.X, 5, CameraDirectionVector.Z) * 1.7
+                    end
+                end)
+                
+                TargetHumanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+            else
+                PlayerRootPartReference = nil
+                PlayerHumanoidReference = nil
+            end
+            
+            while TargetModel.Parent and (_G.ControllingCreature ~= nil and (PlayerCharacterCurrent and PlayerCharacterCurrent.Parent)) do
+                MovePlayerToPosition(CFrame.new(TargetRootPart.Position + Vector3.new(0, -10, 0)))
+                task.wait()
+            end
+            
+            CleanupAllConnections()
+            DeactivateNoclipMode()
+            MovePlayerToPosition(CFrame.new(TargetRootPart.Position + Vector3.new(5, 15, 5)))
+            EnableCharacterQuery(TargetModel)
+            VelocityController:Destroy()
+            PlayerVelocityController:Destroy()
+            game_Workspace.CurrentCamera.CameraSubject = PlayerHumanoidReference
+            _G.ControllingCreature = nil
+            PlayerRootPartReference.Velocity = Vector3.new()
+            EndControlVisuals()
+        end
+    end
+end
+
+function ExecuteControlAction()
+    ActiveCharacter = GetCurrentCharacter()
+    if ActiveCharacter then
+        CharacterHead = ActiveCharacter.Head
+        ActiveCamera = game_Workspace.CurrentCamera
+        CharacterHumanoid = ActiveCharacter:FindFirstChildOfClass("Humanoid")
+        RaycastResult = game_Workspace:Raycast(CharacterHead.Position, ActiveCamera.CFrame.lookVector * 50, RaycastParameters)
+        if RaycastResult and (CharacterHumanoid and CharacterHumanoid.Health > 0) then
+            HitInstanceParent = RaycastResult.Instance.Parent
+            if HitInstanceParent:FindFirstChildOfClass("Humanoid") then
+                BeginControllingTarget(HitInstanceParent)
+            end
+        end
+    end
+end
+
+function HandleControlInput(inputAction, inputState, inputObject)
+    if inputAction == "Control(V)" and inputState == Enum.UserInputState.Begin then
+        if _G.ControllingCreature then
+            _G.ControllingCreature = nil
+        else
+            ExecuteControlAction()
+        end
+    end
+end
+
+CurrentPlayer.CharacterAdded:Connect(function(newCharacter)
+    RaycastParameters.FilterDescendantsInstances = {newCharacter}
+end)
+
+GrabTab:CreateToggle({
+    Name = "Control Characters (V)",
+    Default = false,
+    Callback = function(toggleState)
+        if toggleState then
+            game_ContextActionService:BindAction("Control(V)", HandleControlInput, false, Enum.KeyCode.V)
+        else
+            game_ContextActionService:UnbindAction("Control(V)")
+        end
+    end,
+})

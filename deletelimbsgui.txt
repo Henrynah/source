@@ -1,0 +1,301 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local plr = Players.LocalPlayer
+local playerGui = plr:WaitForChild("PlayerGui")
+
+local TITLE_H   = 32
+local BTN_H     = 34
+local BTN_GAP   = 5
+local BTN_COUNT = 5
+local PADDING_V = 10
+local WIDTH     = 180
+local FULL_H    = TITLE_H + PADDING_V + BTN_COUNT * BTN_H + (BTN_COUNT - 1) * BTN_GAP + PADDING_V
+
+local isMinimized = false
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "LimbDeleteGUI"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.IgnoreGuiInset = true
+screenGui.Parent = playerGui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, WIDTH, 0, FULL_H)
+mainFrame.Position = UDim2.new(0.5, -WIDTH/2, 0.5, -FULL_H/2)
+mainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = screenGui
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 10)
+mainCorner.Parent = mainFrame
+
+local mainStroke = Instance.new("UIStroke")
+mainStroke.Color = Color3.fromRGB(90, 60, 200)
+mainStroke.Thickness = 1.2
+mainStroke.Parent = mainFrame
+
+local titleBar = Instance.new("Frame")
+titleBar.Name = "TitleBar"
+titleBar.Size = UDim2.new(1, 0, 0, TITLE_H)
+titleBar.Position = UDim2.new(0, 0, 0, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(80, 52, 180)
+titleBar.BorderSizePixel = 0
+titleBar.ZIndex = 2
+titleBar.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 10)
+titleCorner.Parent = titleBar
+
+local titleFix = Instance.new("Frame")
+titleFix.Size = UDim2.new(1, 0, 0, 10)
+titleFix.Position = UDim2.new(0, 0, 1, -10)
+titleFix.BackgroundColor3 = Color3.fromRGB(80, 52, 180)
+titleFix.BorderSizePixel = 0
+titleFix.ZIndex = 2
+titleFix.Parent = titleBar
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -75, 1, 0)
+titleLabel.Position = UDim2.new(0, 10, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "🦴 Limb Deleter"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextSize = 12
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.ZIndex = 3
+titleLabel.Parent = titleBar
+
+local minBtn = Instance.new("TextButton")
+minBtn.Name = "MinimizeButton"
+minBtn.Size = UDim2.new(0, 22, 0, 22)
+minBtn.Position = UDim2.new(1, -52, 0.5, -11)
+minBtn.BackgroundColor3 = Color3.fromRGB(200, 160, 40)
+minBtn.Text = "−"
+minBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+minBtn.TextSize = 14
+minBtn.Font = Enum.Font.GothamBold
+minBtn.BorderSizePixel = 0
+minBtn.ZIndex = 4
+minBtn.Parent = titleBar
+
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(0, 5)
+minCorner.Parent = minBtn
+
+local closeBtn = Instance.new("TextButton")
+closeBtn.Name = "CloseButton"
+closeBtn.Size = UDim2.new(0, 22, 0, 22)
+closeBtn.Position = UDim2.new(1, -26, 0.5, -11)
+closeBtn.BackgroundColor3 = Color3.fromRGB(210, 55, 75)
+closeBtn.Text = "✕"
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeBtn.TextSize = 11
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.BorderSizePixel = 0
+closeBtn.ZIndex = 4
+closeBtn.Parent = titleBar
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 5)
+closeCorner.Parent = closeBtn
+
+closeBtn.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+minBtn.MouseButton1Click:Connect(function()
+    if isMinimized then
+        isMinimized = false
+        minBtn.Text = "−"
+        TweenService:Create(mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, WIDTH, 0, FULL_H)
+        }):Play()
+    else
+        isMinimized = true
+        minBtn.Text = "+"
+        TweenService:Create(mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, WIDTH, 0, TITLE_H)
+        }):Play()
+    end
+end)
+
+local dragging = false
+local dragStartPos = nil
+local frameStartPos = nil
+
+local function onDragBegan(inputPos)
+    dragging = true
+    dragStartPos = inputPos
+    frameStartPos = mainFrame.Position
+end
+
+local function onDragChanged(inputPos)
+    if not dragging then return end
+    local delta = inputPos - dragStartPos
+    local newX = frameStartPos.X.Offset + delta.X
+    local newY = frameStartPos.Y.Offset + delta.Y
+    mainFrame.Position = UDim2.new(frameStartPos.X.Scale, newX, frameStartPos.Y.Scale, newY)
+end
+
+local function onDragEnded()
+    dragging = false
+end
+
+titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        onDragBegan(Vector2.new(input.Position.X, input.Position.Y))
+    end
+end)
+
+titleBar.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        onDragChanged(Vector2.new(input.Position.X, input.Position.Y))
+    end
+end)
+
+titleBar.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        onDragEnded()
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        onDragChanged(Vector2.new(input.Position.X, input.Position.Y))
+    end
+end)
+
+local buttonContainer = Instance.new("Frame")
+buttonContainer.Name = "ButtonContainer"
+buttonContainer.Size = UDim2.new(1, -16, 0, BTN_COUNT * BTN_H + (BTN_COUNT - 1) * BTN_GAP)
+buttonContainer.Position = UDim2.new(0, 8, 0, TITLE_H + PADDING_V)
+buttonContainer.BackgroundTransparency = 1
+buttonContainer.Parent = mainFrame
+
+local listLayout = Instance.new("UIListLayout")
+listLayout.FillDirection = Enum.FillDirection.Vertical
+listLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Padding = UDim.new(0, BTN_GAP)
+listLayout.Parent = buttonContainer
+
+local buttonConfigs = {
+    { label = "Delete Right Arm",    key = "deleteRarm",  color = Color3.fromRGB(195, 70, 70),  config = {RightArm=true,  LeftArm=false, RightLeg=false, LeftLeg=false}, order=1 },
+    { label = "Delete Left Arm",     key = "deleteLarm",  color = Color3.fromRGB(195, 70, 70),  config = {RightArm=false, LeftArm=true,  RightLeg=false, LeftLeg=false}, order=2 },
+    { label = "Delete Right Leg",    key = "deleteRleg",  color = Color3.fromRGB(60, 120, 195), config = {RightArm=false, LeftArm=false, RightLeg=true,  LeftLeg=false}, order=3 },
+    { label = "Delete Left Leg",     key = "deleteLleg",  color = Color3.fromRGB(60, 120, 195), config = {RightArm=false, LeftArm=false, RightLeg=false, LeftLeg=true},  order=4 },
+    { label = "🔥 Delete All Limbs", key = "deleteLimbs", color = Color3.fromRGB(150, 45, 190), config = {RightArm=true,  LeftArm=true,  RightLeg=true,  LeftLeg=true},  order=5 },
+}
+
+local function setRagdoll(state)
+    local char = plr.Character
+    if char then
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        local ragdollRemote = ReplicatedStorage:FindFirstChild("CharacterEvents")
+            and ReplicatedStorage.CharacterEvents:FindFirstChild("RagdollRemote")
+        if hrp and ragdollRemote then
+            ragdollRemote:FireServer(hrp, state and 1 or 0)
+        end
+    end
+end
+
+local function deleteParts(config)
+    local char = plr.Character
+    if not char then warn("캐릭터를 찾을 수 없습니다.") return end
+
+    local partNames = {
+        RightArm = "Right Arm",
+        LeftArm  = "Left Arm",
+        RightLeg = "Right Leg",
+        LeftLeg  = "Left Leg",
+    }
+
+    local targets = {}
+    for key, shouldDelete in pairs(config) do
+        if shouldDelete then
+            local part = char:FindFirstChild(partNames[key])
+            if part then table.insert(targets, part) end
+        end
+    end
+
+    if #targets == 0 then warn("삭제할 부위를 찾을 수 없습니다.") return end
+
+    setRagdoll(true)
+    task.wait(0.3)
+
+    for _, part in ipairs(targets) do
+        if part then part.CFrame = CFrame.new(0, -99999, 0) end
+    end
+
+    task.wait(0.1)
+
+    local torso = char:FindFirstChild("Torso")
+    local setNetworkOwnerRemote = ReplicatedStorage:FindFirstChild("GrabEvents")
+        and ReplicatedStorage.GrabEvents:FindFirstChild("SetNetworkOwner")
+    if torso and setNetworkOwnerRemote then
+        setNetworkOwnerRemote:FireServer(torso, torso.CFrame)
+    end
+end
+
+for _, cfg in ipairs(buttonConfigs) do
+    local btn = Instance.new("TextButton")
+    btn.Name = cfg.key
+    btn.Size = UDim2.new(1, 0, 0, BTN_H)
+    btn.BackgroundColor3 = cfg.color
+    btn.Text = cfg.label
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 11
+    btn.Font = Enum.Font.GothamSemibold
+    btn.BorderSizePixel = 0
+    btn.LayoutOrder = cfg.order
+    btn.Parent = buttonContainer
+
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0, 7)
+    btnCorner.Parent = btn
+
+    local btnStroke = Instance.new("UIStroke")
+    btnStroke.Color = Color3.fromRGB(255, 255, 255)
+    btnStroke.Thickness = 0
+    btnStroke.Parent = btn
+
+    btn.MouseEnter:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.12), {
+            BackgroundColor3 = Color3.new(
+                math.min(cfg.color.R + 0.1, 1),
+                math.min(cfg.color.G + 0.1, 1),
+                math.min(cfg.color.B + 0.1, 1)
+            )
+        }):Play()
+        btnStroke.Thickness = 1
+    end)
+
+    btn.MouseLeave:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.12), {
+            BackgroundColor3 = cfg.color
+        }):Play()
+        btnStroke.Thickness = 0
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.07), {
+            Size = UDim2.new(0.96, 0, 0, BTN_H - 3)
+        }):Play()
+        task.delay(0.07, function()
+            TweenService:Create(btn, TweenInfo.new(0.07), {
+                Size = UDim2.new(1, 0, 0, BTN_H)
+            }):Play()
+        end)
+        deleteParts(cfg.config)
+    end)
+end
