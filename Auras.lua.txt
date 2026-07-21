@@ -1,0 +1,212 @@
+return function(ctx)
+    local Services = ctx.Services
+    local Connect = ctx.ConnectionManager.Connect
+    local Disconnect = ctx.ConnectionManager.Disconnect
+    local Utils = ctx.Utils
+    local Tabs = ctx.Tabs
+    local Toggles = ctx.Toggles
+    
+    local AurasOffensive = Tabs.Auras:AddLeftGroupbox("Offensive Auras")
+    local AurasDefensive = Tabs.Auras:AddRightGroupbox("Defensive Auras")
+    
+    -- Remove Anti-Kick Aura
+    local removeAKRadius = 15
+    
+    AurasDefensive:AddDropdown("RemoveAKRadiusDropdown", {
+        Text = "Remove AK Radius", Values = {"10", "12", "14", "16", "18", "20"}, Default = "15",
+        Callback = function(v) removeAKRadius = tonumber(v) end
+    })
+    
+    AurasDefensive:AddToggle("RemoveAKWhitelist", {
+        Text = "Whitelist Friends", Default = true,
+    })
+    
+    AurasDefensive:AddToggle("RemoveAKAuraToggle", {
+        Text = "Remove Anti-Kick Aura", Default = false,
+        Callback = function(on)
+            if on then
+                local SetNetOwner = Services.GrabEvents and Services.GrabEvents:FindFirstChild("SetNetworkOwner")
+                if not SetNetOwner then return end
+                local tickLimiter = 0
+                Connect("RemoveAKAura", Services.RunService.Heartbeat, function()
+                    if not (Toggles.RemoveAKAuraToggle and Toggles.RemoveAKAuraToggle.Value) then return end
+                    if tick() - tickLimiter < 0.1 then return end
+                    tickLimiter = tick()
+                    local myRoot = Utils.getHRP()
+                    if not myRoot then return end
+                    for _, target in ipairs(Services.Players:GetPlayers()) do
+                        if target ~= Services.Player then
+                            local tRoot = Utils.getHRP(target)
+                            if tRoot then
+                                local isFriend = Toggles.RemoveAKWhitelist and Toggles.RemoveAKWhitelist.Value and Utils.isFriend(target)
+                                if not isFriend then
+                                    if (tRoot.Position - myRoot.Position).Magnitude <= removeAKRadius then
+                                        local spawned = workspace:FindFirstChild(target.Name .. "SpawnedInToys")
+                                        if spawned then
+                                            for _, toyName in ipairs({"NinjaKunai", "NinjaShuriken", "AntiKick"}) do
+                                                local toy = spawned:FindFirstChild(toyName)
+                                                if toy then
+                                                    local part = toy:FindFirstChild("SoundPart")
+                                                    if part then
+                                                        pcall(function() SetNetOwner:FireServer(part, part.CFrame) end)
+                                                        if part:FindFirstChild("PartOwner") and part.PartOwner.Value == Services.Player.Name then
+                                                            part.CFrame = CFrame.new(0, 1000, 0)
+                                                        end
+                                                    end
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end)
+            else
+                Disconnect("RemoveAKAura")
+            end
+        end
+    })
+    
+    -- Dual Hand Kick Aura
+    local dualKickAuraRadius = 20
+    
+    AurasOffensive:AddDropdown("DualKickRadiusDropdown", {
+        Text = "Dual Kick Radius", Values = {"10", "20", "30", "40", "50"}, Default = "20",
+        Callback = function(v) dualKickAuraRadius = tonumber(v) end
+    })
+    
+    AurasOffensive:AddToggle("DualKickWhitelist", { Text = "Whitelist Friends", Default = true })
+    
+    AurasOffensive:AddToggle("DualKickAuraToggle", {
+        Text = "Dual Hand Kick Aura", Default = false,
+        Callback = function(on)
+            if on then
+                local tickLimiter = 0
+                Connect("DualKickAura", Services.RunService.Heartbeat, function()
+                    if tick() - tickLimiter < 0.12 then return end
+                    tickLimiter = tick()
+                    local char = Utils.getCharacter()
+                    local hum = char and char:FindFirstChildOfClass("Humanoid")
+                    local seat = hum and hum.SeatPart
+                    local myRoot = Utils.getHRP()
+                    if not (seat and myRoot) then return end
+                    local seatParent = seat.Parent
+                    local scriptFolder = seatParent and seatParent:FindFirstChild("BlobmanSeatAndOwnerScript")
+                    local grab = scriptFolder and scriptFolder:FindFirstChild("CreatureGrab")
+                    local drop = scriptFolder and scriptFolder:FindFirstChild("CreatureDrop")
+                    local leftDet = seatParent:FindFirstChild("LeftDetector")
+                    local rightDet = seatParent:FindFirstChild("RightDetector")
+                    local leftWeld = leftDet and leftDet:FindFirstChild("LeftWeld")
+                    local rightWeld = rightDet and rightDet:FindFirstChild("RightWeld")
+                    if not (grab and drop and leftDet and rightDet and leftWeld and rightWeld) then return end
+                    for _, plr in ipairs(Services.Players:GetPlayers()) do
+                        if plr ~= Services.Player and plr.Character then
+                            local isFriend = Toggles.DualKickWhitelist and Toggles.DualKickWhitelist.Value and Utils.isFriend(plr)
+                            if not isFriend then
+                                local hrp = Utils.getHRP(plr)
+                                local hum2 = Utils.getHumanoid(plr)
+                                if hrp and hum2 and hum2.Health > 0 and (hrp.Position - myRoot.Position).Magnitude <= dualKickAuraRadius then
+                                    pcall(function()
+                                        grab:FireServer(leftDet, hrp, leftWeld); task.wait(0.04)
+                                        drop:FireServer(leftWeld, hrp)
+                                        grab:FireServer(rightDet, hrp, rightWeld); task.wait(0.04)
+                                        drop:FireServer(rightWeld, hrp)
+                                        grab:FireServer(leftDet, hrp, leftWeld)
+                                        grab:FireServer(rightDet, hrp, rightWeld); task.wait(0.03)
+                                        drop:FireServer(leftWeld, hrp)
+                                        drop:FireServer(rightWeld, hrp)
+                                    end)
+                                end
+                            end
+                        end
+                    end
+                end)
+            else
+                Disconnect("DualKickAura")
+            end
+        end
+    })
+    
+    -- Kick Aura 1 Hand
+    local kickAura1Radius = 20
+    
+    AurasOffensive:AddDropdown("Kick1RadiusDropdown", {
+        Text = "1-Hand Kick Radius", Values = {"10", "20", "30", "40", "50"}, Default = "20",
+        Callback = function(v) kickAura1Radius = tonumber(v) end
+    })
+    
+    AurasOffensive:AddToggle("Kick1WhitelistToggle", { Text = "Whitelist Friends", Default = true })
+    
+    AurasOffensive:AddToggle("Kick1AuraToggle", {
+        Text = "Kick Aura 1 Hand", Default = false,
+        Callback = function(on)
+            if on then
+                local tickLimiter = 0
+                Connect("Kick1Aura", Services.RunService.Heartbeat, function()
+                    if tick() - tickLimiter < 0.12 then return end
+                    tickLimiter = tick()
+                    local char = Utils.getCharacter()
+                    local hum = char and char:FindFirstChildOfClass("Humanoid")
+                    local seat = hum and hum.SeatPart
+                    local root = Utils.getHRP()
+                    if not (seat and root) then return end
+                    local blob = seat.Parent
+                    local scriptObj = blob:FindFirstChild("BlobmanSeatAndOwnerScript")
+                    local CG = scriptObj and scriptObj:FindFirstChild("CreatureGrab")
+                    local CD = scriptObj and scriptObj:FindFirstChild("CreatureDrop")
+                    local R_Det = blob:FindFirstChild("RightDetector")
+                    local R_Weld = R_Det and (R_Det:FindFirstChild("RightWeld") or R_Det:FindFirstChildWhichIsA("Weld"))
+                    if not (CG and CD and R_Det and R_Weld) then return end
+                    for _, plr in ipairs(Services.Players:GetPlayers()) do
+                        if plr ~= Services.Player and plr.Character then
+                            local isFriend = Toggles.Kick1WhitelistToggle and Toggles.Kick1WhitelistToggle.Value and Utils.isFriend(plr)
+                            if not isFriend then
+                                local tRoot = Utils.getHRP(plr)
+                                local tHum = Utils.getHumanoid(plr)
+                                if tRoot and tHum and tHum.Health > 0 and (tRoot.Position - root.Position).Magnitude <= kickAura1Radius then
+                                    pcall(function()
+                                        local weld = R_Det:FindFirstChild("RightWeld") or R_Det:FindFirstChildWhichIsA("Weld")
+                                        if weld then CD:FireServer(weld); CG:FireServer(R_Det, tRoot, R_Weld) end
+                                    end)
+                                end
+                            end
+                        end
+                    end
+                end)
+            else
+                Disconnect("Kick1Aura")
+            end
+        end
+    })
+    
+    -- Grab All Aura
+    AurasOffensive:AddToggle("GrabAllAuraToggle", {
+        Text = "Grab All Aura", Default = false,
+        Callback = function(on)
+            if on then
+                Connect("GrabAllAura", Services.RunService.Heartbeat, function()
+                    if not (Toggles.GrabAllAuraToggle and Toggles.GrabAllAuraToggle.Value) then return end
+                    if not Services.GrabEvents then return end
+                    local myRoot = Utils.getHRP()
+                    if not myRoot then return end
+                    for _, plr in ipairs(Services.Players:GetPlayers()) do
+                        if plr ~= Services.Player and plr.Character then
+                            if not Utils.isFriend(plr) then
+                                local tRoot = Utils.getHRP(plr)
+                                if tRoot and (tRoot.Position - myRoot.Position).Magnitude <= 25 then
+                                    pcall(function()
+                                        Services.GrabEvents.SetNetworkOwner:FireServer(tRoot, myRoot.CFrame)
+                                        Services.GrabEvents.CreateGrabLine:FireServer(tRoot, Vector3.zero, tRoot.Position, false)
+                                    end)
+                                end
+                            end
+                        end
+                    end
+                end)
+            else
+                Disconnect("GrabAllAura")
+            end
+        end
+    })
+end
