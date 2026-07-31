@@ -1,0 +1,248 @@
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/jadpy/suki/refs/heads/main/orion"))()
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- ============================================
+-- Blobman Beta機能（Kick用）
+-- ============================================
+local BlobmanBeta = {}
+
+function BlobmanBeta.getLocalChar() return LocalPlayer.Character end
+function BlobmanBeta.getLocalRoot()
+    local char = BlobmanBeta.getLocalChar()
+    return char and (char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso"))
+end
+function BlobmanBeta.getLocalHum()
+    local char = BlobmanBeta.getLocalChar()
+    return char and char:FindFirstChildOfClass("Humanoid")
+end
+function BlobmanBeta.getInv()
+    return Workspace:FindFirstChild(LocalPlayer.Name .. "SpawnedInToys")
+end
+
+function BlobmanBeta.SetNetworkOwner(part)
+    ReplicatedStorage.GrabEvents.SetNetworkOwner:FireServer(part, BlobmanBeta.getLocalRoot().CFrame)
+end
+
+function BlobmanBeta.ungrab(part)
+    ReplicatedStorage.GrabEvents.DestroyGrabLine:FireServer(part)
+end
+
+function BlobmanBeta.getBlobman()
+    local inv = BlobmanBeta.getInv()
+    if inv then
+        local v = inv:FindFirstChild("CreatureBlobman")
+        if v and v:FindFirstChild("VehicleSeat") then return v end
+    end
+    for _, p in Workspace.PlotItems:GetChildren() do
+        local m = p:FindFirstChild("CreatureBlobman")
+        if m and m:FindFirstChild("PlayerValue") and m.PlayerValue.Value == LocalPlayer.Name then
+            return m
+        end
+    end
+    return nil
+end
+
+function BlobmanBeta.spawnBlobman()
+    ReplicatedStorage.MenuToys.SpawnToyRemoteFunction:InvokeServer("CreatureBlobman", BlobmanBeta.getLocalRoot().CFrame, Vector3.zero)
+    task.wait(1.0)
+    return BlobmanBeta.getBlobman()
+end
+
+function BlobmanBeta.destroyBlobman()
+    local blob = BlobmanBeta.getBlobman()
+    if blob then
+        ReplicatedStorage.MenuToys.DestroyToy:FireServer(blob)
+    end
+end
+
+function BlobmanBeta.isSittingOnBlobman()
+    local hum = BlobmanBeta.getLocalHum()
+    if not hum then return false end
+    local blob = BlobmanBeta.getBlobman()
+    if not blob or not blob:FindFirstChild("VehicleSeat") then return false end
+    return hum.Sit and hum.SeatPart == blob.VehicleSeat
+end
+
+function BlobmanBeta.ensureSitBlobman()
+    local blob = BlobmanBeta.getBlobman()
+    if not blob or not blob:FindFirstChild("VehicleSeat") then return false end
+    local seat = blob.VehicleSeat
+    local hum = BlobmanBeta.getLocalHum()
+    if hum and not hum.Sit then
+        seat:Sit(hum)
+        task.wait(0.6)
+    end
+    return BlobmanBeta.isSittingOnBlobman()
+end
+
+function BlobmanBeta.blobGrab(blob, target, side)
+    if not blob then return end
+    local detector = blob:FindFirstChild(side .. "Detector")
+    if not detector then return end
+    local weld = detector:FindFirstChild(side .. "Weld")
+    if not weld then return end
+    local script = blob:FindFirstChild("BlobmanSeatAndOwnerScript", true)
+    if not script then return end
+    local remote = script:FindFirstChild("CreatureGrab")
+    if remote then
+        pcall(function() remote:FireServer(detector, target, weld) end)
+    end
+end
+
+function BlobmanBeta.blobDrop(blob, target, side)
+    if not blob then return end
+    local detector = blob:FindFirstChild(side .. "Detector")
+    if not detector then return end
+    local script = blob:FindFirstChild("BlobmanSeatAndOwnerScript", true)
+    if not script then return end
+    local remote = script:FindFirstChild("CreatureDrop")
+    if remote then
+        pcall(function() remote:FireServer(detector, target) end)
+    end
+end
+
+function BlobmanBeta.blobKick(blob, targetRoot, side)
+    BlobmanBeta.blobGrab(blob, BlobmanBeta.getLocalRoot(), side)
+    task.wait(0.08)
+    BlobmanBeta.SetNetworkOwner(targetRoot)
+    task.wait(0.08)
+    targetRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 16, 0)
+    task.wait(0.08)
+    BlobmanBeta.ungrab(targetRoot)
+    task.wait(0.08)
+    BlobmanBeta.blobGrab(blob, targetRoot, side)
+    task.wait(0.08)
+    BlobmanBeta.blobDrop(blob, targetRoot, side)
+    task.wait(0.08)
+    BlobmanBeta.ungrab(targetRoot)
+end
+
+-- ============================================
+-- プレイヤー選択UIとKick実行
+-- ============================================
+local isExecuting = false
+local selectedPlayer = nil
+
+-- プレイヤーリストを更新する関数
+local function UpdatePlayerList(Dropdown)
+    local playerNames = {}
+    for _, plr in Players:GetPlayers() do
+        if plr ~= LocalPlayer then
+            table.insert(playerNames, plr.Name)
+        end
+    end
+    Dropdown:Refresh(playerNames, true)
+end
+
+-- 選択したプレイヤーに対してKickを実行
+local function KickSelectedPlayer()
+    if isExecuting then
+        OrionLib:MakeNotification({Name = "Error", Content = "Already executing...", Time = 3})
+        return
+    end
+    
+    if not selectedPlayer then
+        OrionLib:MakeNotification({Name = "Error", Content = "Please select a player first", Time = 3})
+        return
+    end
+    
+    local targetPlayer = Players:FindFirstChild(selectedPlayer)
+    if not targetPlayer then
+        OrionLib:MakeNotification({Name = "Error", Content = "Player not found", Time = 3})
+        return
+    end
+    
+    local targetChar = targetPlayer.Character
+    if not targetChar then
+        OrionLib:MakeNotification({Name = "Error", Content = "Target has no character", Time = 3})
+        return
+    end
+    
+    local targetRoot = targetChar:FindFirstChild("HumanoidRootPart")
+    if not targetRoot then
+        OrionLib:MakeNotification({Name = "Error", Content = "Target has no HumanoidRootPart", Time = 3})
+        return
+    end
+    
+    isExecuting = true
+    
+    local function doKick()
+        local blob = BlobmanBeta.getBlobman()
+        if not blob then
+            blob = BlobmanBeta.spawnBlobman()
+            if not blob then
+                OrionLib:MakeNotification({Name = "Error", Content = "Failed to spawn Blobman", Time = 5})
+                return false
+            end
+        end
+        
+        if not BlobmanBeta.isSittingOnBlobman() then
+            BlobmanBeta.ensureSitBlobman()
+            if not BlobmanBeta.isSittingOnBlobman() then
+                OrionLib:MakeNotification({Name = "Error", Content = "Not sitting on Blobman", Time = 4})
+                return false
+            end
+        end
+        
+        local myRoot = BlobmanBeta.getLocalRoot()
+        if myRoot and targetRoot then
+            local oldPos = myRoot.CFrame
+            myRoot.CFrame = targetRoot.CFrame
+            task.wait(0.07)
+            BlobmanBeta.blobKick(blob, targetRoot, "Left")
+            task.wait(0.25)
+            myRoot.CFrame = oldPos
+        end
+        
+        BlobmanBeta.destroyBlobman()
+        OrionLib:MakeNotification({Name = "Success", Content = "Kicked " .. targetPlayer.Name .. "!", Time = 5})
+        return true
+    end
+    
+    doKick()
+    isExecuting = false
+end
+
+-- ============================================
+-- UI（プレイヤー選択 + Kickボタン）
+-- ============================================
+local Window = OrionLib:MakeWindow({
+    Name = "henry cu rosa",
+    HidePremium = true,
+    SaveConfig = false,
+    IntroEnabled = false
+})
+
+local Tab = Window:MakeTab({Name = "Kick Player", Icon = "rbxassetid://7733916988", PremiumOnly = false})
+
+local PlayerDropdown = Tab:AddDropdown({
+    Name = "Select Player",
+    Options = {},
+    Callback = function(value)
+        selectedPlayer = value
+    end
+})
+
+-- プレイヤーリストを更新するボタン
+Tab:AddButton({
+    Name = "プレイヤーリスト更新",
+    Callback = function()
+        UpdatePlayerList(PlayerDropdown)
+    end
+})
+
+-- Kick実行ボタン
+Tab:AddButton({
+    Name = "Kick Selected Player",
+    Callback = KickSelectedPlayer
+})
+
+-- 初期プレイヤーリスト読み込み
+UpdatePlayerList(PlayerDropdown)
+
+OrionLib:Init()
