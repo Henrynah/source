@@ -1,0 +1,39 @@
+Tab:AddToggle({
+        Name = "Anti grab",
+        Default = false,
+        Color = Color3.fromRGB(102, 0, 102),
+        Callback = function(Value)     
+            if Value then
+                antiGrabCoroutine = RunService.Heartbeat:Connect(function()
+                    local character = LocalPlayer.Character
+                    if character and character:FindFirstChild("Head") then
+                        local head = character.Head
+                        local partOwner = head:FindFirstChild("PartOwner")
+                        if partOwner then
+                            Struggle:FireServer()
+                            RagdollRemote:FireServer(character.HumanoidRootPart, 0)
+                            ReplicatedStorage.GameCorrectionEvents.StopAllVelocity:FireServer()
+                            for _, part in pairs(character:GetChildren()) do
+                                if part:IsA("BasePart") then
+                                    part.Anchored = true
+                                end
+                            end
+                            while LocalPlayer.IsHeld.Value do
+                                wait()
+                            end
+                            for _, part in pairs(character:GetChildren()) do
+                                if part:IsA("BasePart") then
+                                    part.Anchored = false
+                                end
+                            end
+                        end
+                    end
+                end)
+            else
+                if antiGrabCoroutine then
+                    antiGrabCoroutine:Disconnect()
+                    antiGrabCoroutine = nil
+                end
+            end
+        end 
+    })

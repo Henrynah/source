@@ -1,0 +1,233 @@
+getgenv().gethui = function() return game.CoreGui end
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "invisivle ",
+    LoadingTitle = "Loading...",
+    LoadingSubtitle = "by RobloxPlayer",
+    ConfigurationSaving = {
+        Enabled = false,
+    },
+    KeySystem = false,
+})
+
+local Tab = Window:CreateTab("Anti Grab", 4483362458)
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+
+local me = Players.LocalPlayer
+local w = Workspace
+local rs = ReplicatedStorage
+
+local ToySpawn = rs.MenuToys.SpawnToyRemoteFunction
+local GrabEvent = rs.GrabEvents.SetNetworkOwner
+local RagdollRemote = rs.CharacterEvents.RagdollRemote
+
+-- スクリプト起動時にヒューマノイドを破壊してリスポーン
+local char = me.Character or me.CharacterAdded:Wait()
+local hum = char:FindFirstChildOfClass("Humanoid")
+if hum then
+    hum.Health = 0
+end
+me.CharacterAdded:Wait()
+
+local autoGucciT = false
+local sitJumpT = false
+local ragdollLoopD = false
+local GucciRunning = false
+
+local function FWC(Parent, Name, Time)
+    return Parent:FindFirstChild(Name) or Parent:WaitForChild(Name, Time)
+end
+
+local function FindPlot()
+    local myName = me.Name
+    local plots = w.Plots
+    local plotItems = w.PlotItems
+    for i = 1, 5 do
+        local Plot = "Plot" .. i
+        local childs = plots[Plot].PlotSign.ThisPlotsOwners:GetChildren()
+        for j = 1, #childs do
+            if childs[j].Value == myName then
+                return plotItems[Plot]
+            end
+        end
+    end
+    return false
+end
+
+local function grab(prt)
+    GrabEvent:FireServer(prt, prt.CFrame)
+end
+
+local function toy_spawn(name, cframe, vector)
+    local InPlot = me.InPlot
+    local InOwnerPlot = me.InOwnedPlot
+    local CanSpawn = me.CanSpawnToy
+
+    while InPlot.Value and not InOwnerPlot.Value and not CanSpawn.Value do
+        task.wait()
+    end
+
+    if vector then
+        task.spawn(function()
+            ToySpawn:InvokeServer(name, cframe, vector)
+        end)
+    else
+        task.spawn(function()
+            ToySpawn:InvokeServer(name, cframe, Vector3.new())
+        end)
+    end
+
+    local SpawnedToy, InHouse
+    if InOwnerPlot.Value then
+        local Plot = FindPlot()
+        if Plot then
+            Plot.ChildAdded:Once(function(toy)
+                if toy.Name == name and toy:IsA("Model") then
+                    SpawnedToy = toy
+                end
+            end)
+            InHouse = true
+        end
+    else
+        local BackPack = w[me.Name .. 'SpawnedInToys']
+        BackPack.ChildAdded:Once(function(toy)
+            if toy.Name == name and toy:IsA("Model") then
+                SpawnedToy = toy
+            end
+        end)
+        InHouse = false
+    end
+
+    local time = tick()
+    while not SpawnedToy do
+        if tick() - time < 3 then
+            task.wait()
+        else
+            return false
+        end
+    end
+    return SpawnedToy, InHouse
+end
+
+Tab:CreateButton({
+    Name = "invisible(tractor)",
+    Callback = function()
+        if GucciRunning then return end
+        GucciRunning = true
+
+        local char = me.Character or me.CharacterAdded:Wait()
+        local hum = FWC(char, "Humanoid")
+
+        hum.Sit = true
+        task.wait()
+        hum.Sit = false
+        task.wait()
+
+        task.spawn(function()
+            local time = tick()
+            while tick() - time < 1 do
+                for _, v in pairs(char:GetChildren()) do
+                    if v:IsA('BasePart') then
+                        v.Velocity = Vector3.new()
+                    end
+                end
+                task.wait()
+            end
+        end)
+
+        local Tractor, InHouse
+        autoGucciT = true
+        sitJumpT = false
+
+        task.spawn(function()
+            while not Tractor do task.wait() end
+            local THead = FWC(Tractor, "Head")
+            local HitBox = FWC(Tractor, "GrabbableHitbox")
+            while not THead:FindFirstChild("PartOwner")
+            or THead.PartOwner.Value ~= me.Name do
+                task.spawn(grab, HitBox)
+                task.wait()
+            end
+        end)
+
+        local hrp = FWC(char, "HumanoidRootPart")
+        local originalCFrame = hrp.CFrame
+
+        local spawnLocation = w:FindFirstChildOfClass("SpawnLocation")
+        local spawnCFrame = spawnLocation
+            and CFrame.new(spawnLocation.Position + Vector3.new(0, 100000, 0))
+            or CFrame.new(0, 100000, 0)
+
+        Tractor, InHouse = toy_spawn(
+            "TractorGreen",
+            spawnCFrame,
+            Vector3.new(0, -15.716, 0)
+        )
+
+        if not Tractor then
+            GucciRunning = false
+            return
+        end
+
+        local Seat = FWC(Tractor, "VehicleSeat")
+
+        task.defer(function()
+            if not (char or hum) then return end
+            local startTime = tick()
+            while autoGucciT and tick() - startTime < 0.3 do
+                if Tractor and Seat and Seat.Occupant ~= hum then
+                    Seat:Sit(hum)
+                    RagdollRemote:FireServer(hrp, 0.095)
+                end
+                task.wait(0.01)
+                hum:ChangeState(Enum.HumanoidStateType.Jumping)
+                task.wait(0.01)
+            end
+            autoGucciT = false
+            sitJumpT = false
+            hrp.CFrame = originalCFrame
+        end)
+
+        sitJumpT = true
+        task.defer(function()
+            if ragdollLoopD then return end
+            ragdollLoopD = true
+            while sitJumpT do
+                RagdollRemote:FireServer(hrp, 0.095)
+                task.wait()
+            end
+            ragdollLoopD = false
+        end)
+
+        task.wait(0.01)
+        hum.Sit = false
+
+        if Tractor then
+            local THead = FWC(Tractor, "Head")
+            for _, v in pairs(Tractor:GetChildren()) do
+                if v:IsA("BasePart") then
+                    v.CanCollide = false
+                    v.CanTouch = false
+                    v.CanQuery = false
+                end
+            end
+
+            task.defer(function()
+                while task.wait() and Tractor and THead do
+                    THead.CFrame = CFrame.new(-1e22, -1e22, math.random(0, 100000))
+                end
+            end)
+        end
+
+        task.delay(0.35, function()
+            GucciRunning = false
+        end)
+    end
+})
+
+Rayfield:LoadConfiguration()

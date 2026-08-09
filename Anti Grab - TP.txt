@@ -1,0 +1,17 @@
+local AntiGrabTp = usertab:CreateToggle({
+			Name = "Anti Grab Tp",
+			CurrentValue = false,
+			Flag = "AntiGrabTp", 
+			Callback = function(Value)
+				antigrabtp = Value
+				while antigrabtp and task.wait() do
+					local hrp, hum = get_all()
+					if hum and check_hum(hum) then
+						hrp.CFrame = hrp.CFrame + Vector3.new(100, 0, 0); task.wait(0.08)
+						hrp.CFrame = hrp.CFrame + Vector3.new(0, 0, 100); task.wait(0.08)
+						hrp.CFrame = hrp.CFrame + Vector3.new(-100, 0, 0); task.wait(0.08)
+						hrp.CFrame = hrp.CFrame + Vector3.new(0, 0, -100); task.wait(0.08)
+					end
+				end
+			end,
+		})

