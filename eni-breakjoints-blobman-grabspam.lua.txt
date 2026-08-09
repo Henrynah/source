@@ -1,0 +1,144 @@
+--[=============================================================================]
+-- ENI BreakJoints & Blobman GrabSpam Suite
+-- Target: Roblox (Luau / Delta Executor Context)
+-- Description: Breaks player joints, spawns Blobmans, and locks them into a high-frequency 
+--              grab-spam physics loop targeting the dismembered parts.
+--[=============================================================================]
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CoreGui = game:GetService("CoreGui")
+local LocalPlayer = Players.LocalPlayer
+
+-- Clean up existing GUI
+if CoreGui:FindFirstChild("ENI_BlobmanDismemberGUI") then
+    CoreGui.ENI_BlobmanDismemberGUI:Destroy()
+end
+
+-- Create minimal GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "ENI_BlobmanDismemberGUI"
+ScreenGui.Parent = CoreGui
+
+local Frame = Instance.new("Frame")
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+Frame.BorderColor3 = Color3.fromRGB(220, 60, 60)
+Frame.BorderSizePixel = 2
+Frame.Position = UDim2.new(0.05, 0, 0.1, 0)
+Frame.Size = UDim2.new(0, 260, 0, 230)
+Frame.Active = true
+Frame.Draggable = true
+
+local Title = Instance.new("TextLabel")
+Title.Parent = Frame
+Title.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+Title.BorderSizePixel = 0
+Title.Size = UDim2.new(1, 0, 0, 35)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "ENI // Dismember & BlobSpam"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 12
+
+local function makeBtn(text, yPos)
+    local b = Instance.new("TextButton")
+    b.Parent = Frame
+    b.BackgroundColor3 = Color3.fromRGB(160, 40, 40)
+    b.BorderSizePixel = 0
+    b.Position = UDim2.new(0.08, 0, yPos, 0)
+    b.Size = UDim2.new(0.84, 0, 0, 32)
+    b.Text = text
+    b.TextColor3 = Color3.fromRGB(255, 255, 255)
+    b.Font = Enum.Font.GothamBold
+    b.TextSize = 11
+    return b
+end
+
+local DismemberBtn = makeBtn("1. BREAK JOINTS & COLLECT", 0.18)
+local SpawnBtn     = makeBtn("2. SPAWN BLOBMANS", 0.35)
+local GrabSpamBtn  = makeBtn("3. EXECUTE BLOB GRABSPAM", 0.52)
+
+local Status = Instance.new("TextLabel")
+Status.Parent = Frame
+Status.BackgroundTransparency = 1
+Status.Position = UDim2.new(0.08, 0, 0.72, 0)
+Status.Size = UDim2.new(0.84, 0, 0, 55)
+Status.Font = Enum.Font.Gotham
+Status.Text = "Status: Ready\n(Step 1 -> 2 -> 3)"
+Status.TextColor3 = Color3.fromRGB(150, 150, 150)
+Status.TextSize = 10
+Status.TextWrapped = true
+
+local spawnRemote = nil
+pcall(function()
+    spawnRemote = ReplicatedStorage.MenuToys.SpawnToyRemoteFunction
+end)
+
+local cachedParts = {}
+local spawnedBlobs = {}
+local grabConn = nil
+
+-- Step 1: Break joints of all other players and collect their dismembered parts
+DismemberBtn.MouseButton1Click:Connect(function()
+    Status.Text = "Status: Dismembering players..."
+    cachedParts = {}
+    
+    if grabConn then
+        grabConn:Disconnect()
+        grabConn = nil
+        GrabSpamBtn.BackgroundColor3 = Color3.fromRGB(160, 40, 40)
+        GrabSpamBtn.Text = "3. EXECUTE BLOB GRABSPAM"
+    end
+    
+    pcall(function()
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local char = player.Character
+                if char then
+                    local hum = char:FindFirstChildOfClass("Humanoid")
+                    if hum then
+                        hum.PlatformStand = true
+                        hum.Health = 0
+                    end
+                    
+                    char:BreakJoints()
+                    
+                    for _, part in ipairs(char:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.Anchored = false
+                            part.CanCollide = true
+                            part.Massless = false
+                            table.insert(cachedParts, part)
+                        end
+                    end
+                end
+            end
+        end
+    end)
+    
+    Status.Text = "Status: Dismembered (" .. #cachedParts .. " parts ready)"
+end)
+
+-- Step 2: Spawn Blobmans via Remote Function around local player
+SpawnBtn.MouseButton1Click:Connect(function()
+    if not spawnRemote then
+        Status.Text = "Status: SpawnRemote not found!"
+        return
+    end
+    
+    Status.Text = "Status: Spawning Blobmans..."
+    spawnedBlobs = {}
+    
+    task.spawn(function()
+        local char = LocalPlayer.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            local rootCF = char.HumanoidRootPart.CFrame
+            
+            for i = 1, 10 do
+                pcall(function()
+                    local angle = (i / 10) * (math.pi * 2)
+                    local offset = CFrame.new(math.cos(angle) * 4, 1, math.sin(angle) * 4)
+                    spawnRemote:InvokeServer("CreatureBlobman", rootCF * offset, Vector3.new(0, 5, 0))
+                end)
+                task.wait

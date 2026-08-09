@@ -1,0 +1,124 @@
+script = '''local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/jadpy/suki/refs/heads/main/orion"))()
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Debris = game:GetService("Debris")
+local Workspace = game:GetService("Workspace")
+
+local localPlayer = Players.LocalPlayer
+
+-- リモートイベント
+local GrabEvents = ReplicatedStorage:WaitForChild("GrabEvents")
+local SetNetworkOwner = GrabEvents:WaitForChild("SetNetworkOwner")
+local DestroyGrabLine = GrabEvents:WaitForChild("DestroyGrabLine")
+local CreateGrabLine = GrabEvents:WaitForChild("CreateGrabLine")
+local ExtendGrabLine = GrabEvents:WaitForChild("ExtendGrabLine")
+
+local CharacterEvents = ReplicatedStorage:WaitForChild("CharacterEvents")
+local RagdollRemote = CharacterEvents:WaitForChild("RagdollRemote")
+local Struggle = CharacterEvents:WaitForChild("Struggle")
+
+local MenuToys = ReplicatedStorage:WaitForChild("MenuToys")
+local SpawnToyRemoteFunction = MenuToys:WaitForChild("SpawnToyRemoteFunction")
+local DestroyToy = MenuToys:WaitForChild("DestroyToy")
+
+local GameCorrectionEvents = ReplicatedStorage:WaitForChild("GameCorrectionEvents")
+local StopAllVelocity = GameCorrectionEvents:WaitForChild("StopAllVelocity")
+
+-- 設定
+local Config = {
+    KillAuraToggle = false,
+    LaunchAuraToggle = false,
+    WalkSpeedToggle = false,
+    Range = 30,
+    auraRadius = 600,
+    walkSpeedValue = 5,
+    ToyName = "CreatureBlobman",
+    Running = false,
+    LaunchAuraCoroutine = nil,
+    walkSpeedConnection = nil
+}
+
+-- ユーティリティ関数
+local function GetCharacter()
+    return localPlayer.Character or localPlayer.CharacterAdded:Wait()
+end
+
+local function getLocalHum()
+    local char = localPlayer.Character
+    return char and char:FindFirstChildOfClass("Humanoid")
+end
+
+local function getCharInfo()
+    local char = localPlayer.Character
+    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    return char, hrp, hum
+end
+
+local function getInv()
+    return workspace:FindFirstChild(localPlayer.Name .. "SpawnedInToys")
+end
+
+local function SPNTOY(name, CFE, vector)
+    SpawnToyRemoteFunction:InvokeServer(name, CFE, vector or Vector3.zero)
+    local inv = getInv()
+    return inv and inv:WaitForChild(name, 5)
+end
+
+-- Blobman関連
+local function spawnBlobmanIfNeeded()
+    local inv = getInv()
+    if not inv then return nil end
+  
+    local existing = inv:FindFirstChild(Config.ToyName)
+    if existing then return existing end
+  
+    local char = GetCharacter()
+    if char and char:FindFirstChild("Head") then
+        pcall(function()
+            SPNTOY(Config.ToyName, char.Head.CFrame)
+        end)
+    end
+  
+    return inv:WaitForChild(Config.ToyName, 5)
+end
+
+local function sitOnBlobman(blobman)
+    if not blobman then return end
+    local seat = blobman:FindFirstChildWhichIsA("VehicleSeat", true)
+    local hum = getLocalHum()
+    if seat and hum and not seat.Occupant then
+        task.wait(0.1)
+        pcall(function() seat:Sit(hum) end)
+    end
+end
+
+-- ターゲット判定
+local function CanAuraTarget(targetPlayer)
+    if not targetPlayer or targetPlayer == localPlayer then return false end
+    if not targetPlayer.Character then return false end
+    local hum = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
+    return hum and hum.Health > 0
+end
+
+-- メインのKill Aura処理
+local function runKillAura()
+    local hpToggle = false
+    while Config.Running do
+        task.wait(0.01)
+        local _, hrp = getCharInfo()
+        if not hrp then continue end
+  
+        local blobman = spawnBlobmanIfNeeded()
+        if not blobman then continue end
+  
+        sitOnBlobman(blobman)
+  
+        local scriptFolder = blobman:FindFirstChild("BlobmanSeatAndOwnerScript")
+        local detector = blobman:FindFirstChild("LeftDetector")
+        local weld = detector and detector:FindFirstChild("LeftWeld")
+  
+        if scriptFolder and detector and weld then
+            local CreatureGrab = scriptFolder:FindFirstChild

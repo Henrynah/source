@@ -1,0 +1,4618 @@
+-- made by 45-ms.netlify.app
+
+local Env = getfenv();
+local M = {};
+local v1 = {...};
+local r1 = true;
+local r2 = string.gmatch;
+local function r3(...)
+    error("Tamper Detected!");
+    return; 
+end;
+local r4 = false;
+local v2 = pcall(function(...)
+    r4 = true;
+    return; 
+end);
+local v3 = v2;
+if v2 then
+    v3 = r4;
+end;
+local v4 = 1;
+local r5 = math.random;
+local v5 = table.concat;
+local function v6(...)
+    while true do
+        l1 = l2;
+        l2 = l1;
+        r3(); 
+    end;
+    return; 
+end;
+local r6 = table and table.unpack or unpack;
+local r7 = r5(3, 65);
+local v7 = {
+    pcall(function(...)
+        return "TN" / (6962964 - "JFbrjly0k" ^ 6621837); 
+    end)
+};
+local v8 = v7[2];
+local r8 = tonumber(r2(tostring(v8), ":(%d*):")());
+for W = 1, r7 do
+    r9 = W;
+    r10 = math.random(1, 100);
+    r11 = r5(0, 255);
+    r12 = r5(1, r10);
+    r13 = r5(1, 2) == 1;
+    r14 = v8.gsub(v8, ":(%d*):", ":" .. tostring(r5(0, 10000)) .. ":");
+    N = {
+        pcall(function(...)
+            if r5(1, 2) == 1 or r9 == r7 then
+                r1 = r1 and r8 == tonumber(r2(tostring(({
+                    pcall(function(...)
+                        return "1RvUuXAvrJvct" / (2381577 - "JzAt7SeCJiq" ^ 1000360); 
+                    end)
+                })[2]), ":(%d*):")());
+            end;
+            if r13 then
+                error(r14, 0);
+            end;
+            v1 = {};
+            for d = 1, r10 do
+                v1[d] = r5(0, 255); 
+            end;
+            v1[r12] = r11;
+            return r6(v1); 
+        end)
+    };
+    if r13 then
+        r1 = r1 and (pcall(function(...)
+            if r5(1, 2) == 1 or r9 == r7 then
+                r1 = r1 and r8 == tonumber(r2(tostring(({
+                    pcall(function(...)
+                        return "1RvUuXAvrJvct" / (2381577 - "JzAt7SeCJiq" ^ 1000360); 
+                    end)
+                })[2]), ":(%d*):")());
+            end;
+            if r13 then
+                error(r14, 0);
+            end;
+            v1 = {};
+            for d = 1, r10 do
+                v1[d] = r5(0, 255); 
+            end;
+            v1[r12] = r11;
+            return r6(v1); 
+        end) == false and N[2] == r14);
+    end; 
+end;
+r1 = r1 and 0 == 0;
+if r1 then
+    r17 = math.floor;
+    v7 = {};
+    f = 226;
+    i = 227;
+    r18 = 0;
+    M[i] = 2;
+    M[f] = {};
+    b = 0;
+    for t = 1, 256 do
+        v7[t] = t; 
+    end;
+    v8 = #v7 == 0;
+    t = table.remove(v7, math.random(1, #v7));
+    M[f][t] = string.char(t - 1);
+    if #v7 == 0 then
+        YA[9] = 31289576356074;
+        r19 = {};
+        YA[8] = "l\x02e\xc0\xf8\xf9\xd2";
+        YA[6] = "0\xb6\r\xffBev";
+        r22 = {};
+        r16 = setmetatable({}, {
+            ["__index"] = r22,
+            ["__metatable"] = nil
+        });
+        YA[2] = "\xbf\xbd\xdb\x0c\xe7F";
+        YA[12] = "\xa3\xe4\x19\xd4UD2\xd6l\xda";
+        YA[11] = 6073810619148;
+        YA[1] = 31586665068916;
+        YA[3] = 827736048001;
+        YA[13] = 33982351048144;
+        YA[5] = 2542499841183;
+        YA[4] = "\x8d\x84~\x89\x02?1";
+        YA[7] = 17079291813649;
+        YA[1] = r15(YA[2], YA[3]);
+        YA[1] = r16;
+        YA[2] = r15;
+        YA[3] = YA[2](YA[4], YA[5]);
+        YA[1] = true;
+        YA[3] = r16;
+        YA[4] = r15;
+        YA[5] = YA[4](YA[6], YA[7]);
+        YA[2] = YA[3][YA[5]];
+        YA[5] = r16;
+        YA[3] = true;
+        YA[6] = r15;
+        YA[7] = YA[6](YA[8], YA[9]);
+        YA[4] = YA[5][YA[7]];
+        YA[7] = r16;
+        YA[8] = r15;
+        YA[10] = "i\x0b\xeb\x0e6\x94q";
+        YA[9] = YA[8](YA[10], YA[11]);
+        YA[6] = YA[7][YA[9]];
+        YA[5] = true;
+        YA[7] = true;
+        YA[9] = r16;
+        YA[10] = r15;
+        YA[11] = YA[10](YA[12], YA[13]);
+        YA[8] = YA[9][YA[11]];
+        YA[9] = true;
+        w = game;
+        Q = not ({
+            ["Zenya286733"] = true,
+            ["FrEEdY_smail103"] = true,
+            ["ghodoffwar"] = true,
+            ["Weuk2339fake"] = true,
+            ["dfkkfazzxx"] = true,
+            ["aferistxx"] = true,
+            ["METAVORSHIPS"] = true,
+            ["oreo_vkisnoebludo"] = true,
+            ["P_ANIKA99"] = true,
+            ["Rayn_Class"] = true,
+            ["Mazik_pro11"] = true,
+            ["miha77558"] = true,
+            ["Weuklox2339"] = true,
+            ["Darkness123600"] = true,
+            ["Danyache2333"] = true,
+            ["qwerty_618250"] = true,
+            ["maya_kovsky1"] = true,
+            ["v_izl"] = true,
+            ["Vtoroiakk925"] = true,
+            ["Funnygamer1783"] = true,
+            ["Rick"] = true,
+            ["fuflelftap"] = true,
+            ["freddie_smock"] = true,
+            ["Xcndkkdk0"] = true,
+            ["Xcndkkdk3"] = true,
+            ["Xcndkkdk"] = true,
+            ["jfdjfkfdj"] = true,
+            ["Snickers_wwer"] = true,
+            ["lovelornu"] = true,
+            ["wzounne"] = true,
+            ["wsosumne"] = true,
+            ["MELLSTROYI488"] = true,
+            ["numkc324"] = true,
+            ["SlendxNT"] = true,
+            ["ILOVEBLACK_PENSIL"] = true,
+            ["Darkness123600"] = true,
+            ["gygl3228"] = true,
+            ["FUMOSIK1489"] = true,
+            ["GeoNovad"] = true,
+            ["niko144581"] = true,
+            ["POPA1432560"] = true,
+            ["brooooolReeeeeeee"] = true,
+            [r16[r15("\x98\xe1\rx.\x198J", YA[1])]] = true,
+            [r16[YA[1]]] = true,
+            [YA[1][YA[3]]] = YA[1],
+            [YA[2]] = YA[3],
+            [YA[4]] = YA[5],
+            [YA[6]] = YA[7],
+            [YA[8]] = YA[9]
+        })[w.GetService(w, "Players").LocalPlayer.Name];
+        if Q then
+            v4 = game;
+            Q = v4.GetService(v4, "Players").LocalPlayer;
+            Q.Kick(Q, "buy script");
+            return;
+        end;
+        v2 = game;
+        v6 = game;
+        loadstring(v6.HttpGet(v6, "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))();
+        _G.Library = loadstring(v2.HttpGet(v2, "https://raw.githubusercontent.com/katnaa-debug/SolarisUI/refs/heads/main/Lib.lua"))();
+        Q = game.GetService;
+        v4 = Q(game, "Players");
+        v2 = Q(game, "RunService");
+        v6 = Q(game, "ReplicatedStorage");
+        i = Q(game, "Workspace");
+        v8 = v4.LocalPlayer;
+        e_ = v6.WaitForChild(v6, "GrabEvents");
+        S_ = v6.WaitForChild(v6, "MenuToys");
+        S_ = v6.WaitForChild(v6, "MenuToys");
+        S_ = v6.WaitForChild(v6, "PlayerEvents");
+        i.FallenPartsDestroyHeight = 0 / 0;
+        _G.GS = Q;
+        _G.PS = v4;
+        _G.RS = v2;
+        _G.RepS = v6;
+        P_ = Q(game, "UserInputService");
+        _G.UIS = P_;
+        _G.WS = i;
+        P_ = Q(game, "CoreGui");
+        _G.CG = P_;
+        P_ = Q(game, "TweenService");
+        _G.TS = P_;
+        P_ = Q(game, "TextService");
+        _G.TxS = P_;
+        _G.LP = v8;
+        _G.plr = t;
+        P_ = Instance.new;
+        _G.IN = P_;
+        P_ = Vector3.new;
+        _G.V3 = P_;
+        P_ = CFrame.new;
+        _G.CF = P_;
+        P_ = Color3.fromRGB;
+        _G.C3 = P_;
+        P_ = UDim2.new;
+        _G.UD2 = P_;
+        P_ = math.floor;
+        _G.mfloor = P_;
+        P_ = string.rep;
+        _G.srep = P_;
+        P_ = string.find;
+        _G.sfind = P_;
+        P_ = string.lower;
+        _G.slower = P_;
+        P_ = table.insert;
+        _G.tinsert = P_;
+        P_ = table.clear;
+        _G.tclear = P_;
+        P_ = task.wait;
+        _G.twait = P_;
+        P_ = task.spawn;
+        _G.tspawn = P_;
+        P_ = task.delay;
+        _G.tdelay = P_;
+        P_ = task.cancel;
+        _G.tcancel = P_;
+        _G.GrabEvents = e_;
+        _G.GE = U_;
+        P_ = e_.WaitForChild(e_, "SetNetworkOwner");
+        _G.SNO = P_;
+        P_ = e_.WaitForChild(e_, "CreateGrabLine");
+        _G.CreateLine = P_;
+        P_ = e_.WaitForChild(e_, "DestroyGrabLine");
+        _G.DestroyLine = P_;
+        P_ = v6.WaitForChild(v6, "HoldEvents");
+        _G.HE = P_;
+        P_ = S_.WaitForChild(S_, "SpawnToyRemoteFunction");
+        _G.SpawnRemote = P_;
+        P_ = S_.WaitForChild(S_, "DestroyToy");
+        _G.DestroyRemote = P_;
+        P_ = S_.WaitForChild(S_, "StickyPartEvent");
+        _G.stickyEvent = P_;
+        P_ = v2;
+        _G.runService = P_;
+        P_ = v8.Name .. "SpawnedInToys";
+        _G.folderName = P_;
+        _G.canSpawn = v8.FindFirstChild(v8, "CanSpawnToy") or v8.WaitForChild(v8, "CanSpawnToy", 3);
+        Q = _G.Library;
+        v4 = _G.LP;
+        v2 = _G.PS;
+        i = _G.IN;
+        b = _G.C3;
+        t = Q.CreateWindow(Q, {
+            ["Title"] = "MERCURY",
+            ["Theme"] = {
+                ["Font"] = "Sarpanch",
+                ["ImageTransparency"] = 5,
+                ["BGTransparency"] = 0,
+                ["OrbsTransparency"] = 100,
+                ["BackgroundID"] = "",
+                ["Main"] = Color3.fromRGB(10, 10, 10),
+                ["Second"] = Color3.fromRGB(0, 0, 0),
+                ["ElementAccent"] = Color3.fromRGB(48, 158, 88),
+                ["TextColor"] = Color3.fromRGB(200, 200, 200),
+                ["GradientStart"] = Color3.fromRGB(41, 41, 41),
+                ["GradientEnd"] = Color3.fromRGB(187, 187, 187)
+            },
+            ["ToggleKey"] = Enum.KeyCode.RightShift,
+            ["Transparency"] = 0.5,
+            ["ShowWatermark"] = false,
+            ["AutoSave"] = true,
+            ["ConfigFolder"] = "MERCURY",
+            ["CustomIcon"] = "123704145098585"
+        });
+        _G.Window = t;
+        t = _G.RepS;
+        o = _G.CG;
+        L = _G.WS;
+        _G.Players = v7;
+        r = _G.RS;
+        _G.RunService = r;
+        _G.ReplicatedStorage = t;
+        _G.CoreGui = o;
+        _G.Workspace = L;
+        _G.UserInputService = _G.UIS;
+        r = v2.LocalPlayer;
+        _G.LP = r;
+        _G.CG = o;
+        r = L;
+        _G.WS = r;
+        r = v2;
+        _G.PS = r;
+        r = t;
+        _G.RepS = r;
+        _G.GE = _G.GE;
+        v2 = _G.IN("Folder");
+        v2.Name = "LegionSounds";
+        w = _G.CG;
+        v2.Parent = w;
+        i = "_G";
+        _G.SoundContainer = i;
+        r24 = _G.IN;
+        r25 = _G.SoundContainer;
+        _G.CreateSound = function(arg1_2, arg2_2, ...)
+            d = r24("Sound");
+            d.SoundId = "rbxassetid://" .. arg1_2;
+            v5 = "Volume";
+            d[v5] = arg2_2 or .4;
+            d.Parent = r25;
+            return d; 
+        end;
+        Q = _G.CreateSound;
+        r26 = _G.LP;
+        r27 = _G.PS;
+        r28 = _G.WS;
+        v4 = _G.RepS;
+        i = _G.RS;
+        r29 = _G.Library;
+        r30 = _G.runService;
+        r31 = _G.mfloor;
+        r32 = _G.twait;
+        r33 = _G.tinsert;
+        r34 = {
+            ["Kick"] = Q("134664066704778", 0.5),
+            ["SeatMyToy"] = Q("86079343014661", .3),
+            ["LineLag"] = Q("120295987263577", .3),
+            ["PacketLag"] = Q("137152340835793", .3),
+            ["Notify"] = Q("133118130342644", .3),
+            ["TargLeft"] = Q("136328893130485", .15)
+        };
+        _G.Sounds = r34;
+        local function N(arg1_3, arg2_3, arg3_3, arg4_3, ...)
+            v5 = r29;
+            v1 = arg1_3;
+            l = arg4_3;
+            p = arg2_3;
+            i = r29;
+            if l then
+                v5 = v5;
+                v5.Notify(v5, {
+                    ["Title"] = arg1_3,
+                    ["Content"] = arg2_3,
+                    ["Duration"] = arg3_3 or 5,
+                    ["ImageID"] = l
+                });
+                return;
+            else
+                b = "123704145098585";
+            end; 
+        end;
+        _G.Notify = N;
+        local function r35(arg1_4, ...)
+            v1 = arg1_4;
+            if v1 then
+                v1.Stop(v1);
+                v1.Play(v1);
+            end;
+            return; 
+        end;
+        _G.PlaySound = r35;
+        _G.tspawn(function(...)
+            while true do
+                d = r27;
+                v1 = d[2];
+                d = d[1];
+                for p, Q in pairs(d.GetPlayers(d)) do
+                    l = p;
+                    if Q ~= r26 then
+                        v4 = Q.Character;
+                        if v4 then
+                            v6 = v4.Massless;
+                        end;
+                        if v4 and v4.FindFirstChild(v4, "HumanoidRootPart") then
+                            v4.Massless = false;
+                        end;
+                    end; 
+                end;
+                r32(0.5); 
+            end;
+            return; 
+        end);
+        h = v4.FindFirstChild(v4, "GameCorrectionEvents");
+        if h then
+            h = h.FindFirstChild(h, "GameCorrectionsNotify");
+            m = h;
+            if h then
+                m = h.IsA(h, "RemoteEvent");
+            end;
+            v5 = M[p];
+            if m then
+                m = h.OnClientEvent;
+                m.Connect(m, function(arg1_5, ...)
+                    if arg1_5 == "Flying" then
+                        p = r26.Character;
+                        if p then
+                            d = p.FindFirstChild(p, "Humanoid");
+                            if d then
+                                d.Health = 0;
+                                v5 = r29;
+                                v5.Notify(v5, {
+                                    ["Title"] = "FLYING DETECTED",
+                                    ["Content"] = "Auto reset to avoid kick!",
+                                    ["Duration"] = 3,
+                                    ["ImageID"] = "138943579694546"
+                                });
+                                r35(r34.Notify);
+                            end;
+                        end;
+                    end;
+                    return; 
+                end);
+            end;
+        end;
+        r36 = {
+            ["enabled"] = false,
+            ["fpsThreshold"] = 40,
+            ["checkInterval"] = .6
+        };
+        _G.AntiLag = r36;
+        local function r37(...)
+            d = r30.RenderStepped;
+            return r31(1 / d.Wait(d)); 
+        end;
+        _G.getFPS = r37;
+        local function r38(...)
+            v5 = r36.enabled;
+            if v5 then
+                return;
+            end;
+            if r26 and r26.PlayerScripts then
+                v5 = r26.PlayerScripts;
+                v1 = v5.FindFirstChild(v5, "CharacterAndBeamMove");
+                if v1 then
+                    v1.Enabled = false;
+                    r36.enabled = true;
+                end;
+            end;
+            return; 
+        end;
+        _G.applyAntiLag = r38;
+        coroutine.wrap(function(...)
+             
+        end)();
+        r39 = {
+            ["recentlyNotified"] = {},
+            ["cooldown"] = 6,
+            ["activeBlackHoles"] = {},
+            ["holeKickCounts"] = {},
+            ["lastOwnersHistory"] = {}
+        };
+        _G.BlackHoleDetector = r39;
+        local function r40(arg1_6, arg2_6, ...)
+            r41 = arg1_6;
+            r42 = arg2_6;
+            task.spawn(function(...)
+                v5 = r42.Parent;
+                while v5 do
+                    task.wait(.03);
+                    v5 = r42;
+                    v1 = v5.GetNetworkOwner(v5);
+                    if v1 then
+                        v3 = v1 ~= r41;
+                    end;
+                    if v1 then
+                        r39.lastOwnersHistory[r41.Name] = r39.lastOwnersHistory[r41.Name] or ;
+                        table.insert(r39.lastOwnersHistory[r41.Name], {
+                            ["part"] = r42,
+                            ["name"] = v1.Name,
+                            ["display"] = v1.DisplayName,
+                            ["time"] = tick()
+                        });
+                    end; 
+                end;
+                return; 
+            end);
+            return; 
+        end;
+        local function r43(arg1_7, ...)
+            r44 = arg1_7;
+            local function r45(arg1_8, ...)
+                v1 = arg1_8;
+                Q = v1.GetDescendants;
+                l = {
+                    Q(v1)
+                };
+                l = Q[1];
+                d = Q[3];
+                for d, v4 in l, pairs(v(l)) do
+                    Q = d;
+                    if v4.IsA(v4, "BasePart") then
+                        break;
+                    else
+                        
+                    end; 
+                end;
+                v5 = v1.DescendantAdded;
+                v5.Connect(v5, function(arg1_9, ...)
+                    v1 = arg1_9;
+                    if v1.IsA(v1, "BasePart") then
+                        r40(r44, v1);
+                    end;
+                    return; 
+                end);
+                return; 
+            end;
+            if r44.Character then
+                r45(r44.Character);
+            end;
+            v5 = r44.CharacterAdded;
+            v5.Connect(v5, function(arg1_10, ...)
+                r45(arg1_10);
+                return; 
+            end);
+            return; 
+        end;
+        j_ = r27;
+        U_ = j_[3];
+        for U_, j_ in j_[1], pairs(j_.GetPlayers(j_)) do
+            k_ = U_;
+            if j_ ~= r26 then
+                r43(j_);
+            end; 
+        end;
+        k_ = r27.PlayerAdded;
+        k_.Connect(k_, function(arg1_11, ...)
+            v1 = arg1_11;
+            if v1 ~= r26 then
+                r43(v1);
+            end;
+            return; 
+        end);
+        coroutine.wrap(function(...)
+            v5 = r28.ChildAdded;
+            v5.Connect(v5, function(arg1_12, ...)
+                v1 = arg1_12;
+                if v1.Name == "BlackHoleKick" or v1.Name == "BlackHole" then
+                    p = tostring(v1) .. "_" .. tick();
+                    v1.Name = "BlackHole_Detected_" .. tick();
+                    r39.activeBlackHoles[p] = {
+                        ["part"] = v1,
+                        ["time"] = tick(),
+                        ["name"] = v1.Name
+                    };
+                    r39.holeKickCounts[p] = 0;
+                    v2 = r27;
+                    Q = v2[2];
+                    v4 = v2[3];
+                    v2 = "pairs";
+                    for v4, w in pairs(v2.GetPlayers(v2)) do
+                        v6 = v4;
+                        if w ~= r26 then
+                            ({})[w.Name] = {
+                                ["displayName"] = w.DisplayName,
+                                ["userId"] = tostring(w.UserId)
+                            };
+                        end; 
+                    end;
+                    while tick() - tick() < 3.25 do
+                        r33(); 
+                    end;
+                    i = r27;
+                    f = i.GetPlayers;
+                    b = {
+                        f(i)
+                    };
+                    w = i[3];
+                    for w, b in i[1], pairs(v(b)) do
+                        i = w;
+                        if b ~= r26 then
+                            ({})[b.Name] = true;
+                        end; 
+                    end;
+                    tick();
+                    w = f[1];
+                    i = f[2];
+                    for b, v7 in pairs({}) do
+                        v8 = ({})[b];
+                        if not v8 then
+                            v8 = r39.recentlyNotified[b];
+                            if not v8 or tick() - v8 >= r39.cooldown then
+                                t = r39.lastOwnersHistory[b] or ;
+                                for I = #t, 1, -1 do
+                                    if t[I].time <= tick() then
+                                        W = (r39[r16[q]][f] or )[I];
+                                    else
+                                        
+                                    end; 
+                                end;
+                                if nil then
+                                    y = v7.displayName .. " | " .. b .. " Destroyed by " .. nil.display .. " | " .. nil.name;
+                                else
+                                    y = v7.displayName .. " | " .. b .. " Has been kicked!";
+                                end;
+                                r33({}, y);
+                                L = tick();
+                                r39.recentlyNotified[b] = L;
+                                r39.lastOwnersHistory[b] = nil;
+                            end;
+                        end; 
+                    end;
+                    b = v7[2];
+                    f = v7[3];
+                    for f, v7 in ipairs({}) do
+                        v8 = r29;
+                        w = f;
+                        v8.Notify(v8, {
+                            ["Title"] = "BLACK HOLE DETECTED",
+                            ["Content"] = v7,
+                            ["Duration"] = 10,
+                            ["ImageID"] = "70964139626759"
+                        });
+                        r35(r34.Kick);
+                        r32(.05); 
+                    end;
+                    r39.activeBlackHoles[p] = nil;
+                    r39.holeKickCounts[p] = nil;
+                end;
+                return; 
+            end);
+            return; 
+        end)();
+        if _G.BlackholeConn then
+            v2 = _G.BlackholeConn;
+            v2.Disconnect(v2);
+            _G.BlackholeConn = nil;
+        end;
+        r46 = (function(arg1_13, ...)
+            p = tostring(math.random(10, 10000));
+            l = game;
+            writefile("customasset" .. p .. ".jpg", l.HttpGet(l, arg1_13));
+            task.delay(2, delfile, "customasset" .. p .. ".jpg");
+            return getcustomasset("customasset" .. p .. ".jpg"); 
+        end)("https://cdn.discordapp.com/attachments/1472302445752484025/1483883233329418403/made-a-black-hole-asset-using-the-ones-shown-a-few-episodes-v0-krdbqc5op59f1_2.png?ex=69bcde34&is=69bb8cb4&hm=de5baad2761723b702498b4ba5e34c8e17f05122edaaf57e41ac4abfc0b887a2&");
+        i = workspace.ChildAdded;
+        _G.BlackholeConn = i.Connect(i, function(arg1_14, ...)
+            v1 = arg1_14;
+            p = v1.WaitForChild(v1, "Hole", 5);
+            p.Transparency = 1;
+            d = p.WaitForChild(p, "BillboardGui");
+            l = d.WaitForChild(d, "Small");
+            Q = d.WaitForChild(d, "Large");
+            l.BackgroundTransparency = 1;
+            l.ImageColor3 = Color3.fromRGB(255, 255, 255);
+            l.Size = UDim2.new(0.5, 0, 0.5, 0);
+            Q.BackgroundTransparency = 1;
+            Q.ImageColor3 = Color3.fromRGB(255, 255, 255);
+            Q.Size = UDim2.new(0.5, 0, 0.5, 0);
+            l.Image = r46;
+            Q.Image = r46;
+            return; 
+        end);
+        i = (function(arg1_15, ...)
+            p = tostring(math.random(10, 10000));
+            l = game;
+            writefile("skytexture" .. p .. ".jpg", l.HttpGet(l, arg1_15));
+            task.delay(2, delfile, "skytexture" .. p .. ".jpg");
+            return getcustomasset("skytexture" .. p .. ".jpg"); 
+        end)("https://cdn.discordapp.com/attachments/1472302445752484025/1483786619537461409/2999-diffuse.jpg?ex=69bbdb79&is=69ba89f9&hm=1ddfad5480bbddf613318ab072f1906ce73f7aecff2cd74c385611bb3d849887&");
+        if _G.CustomSky then
+            b = _G.CustomSky;
+            b.Destroy(b);
+            _G.CustomSky = nil;
+        end;
+        _G.CustomSky = Instance.new("Sky");
+        _G.CustomSky.Name = "Sky";
+        v7 = (function(arg1_15, ...)
+            p = tostring(math.random(10, 10000));
+            l = game;
+            writefile("skytexture" .. p .. ".jpg", l.HttpGet(l, arg1_15));
+            task.delay(2, delfile, "skytexture" .. p .. ".jpg");
+            return getcustomasset("skytexture" .. p .. ".jpg"); 
+        end)("https://cdn.discordapp.com/attachments/1472302445752484025/1483786619537461409/2999-diffuse.jpg?ex=69bbdb79&is=69ba89f9&hm=1ddfad5480bbddf613318ab072f1906ce73f7aecff2cd74c385611bb3d849887&");
+        _G.CustomSky.SkyboxBk = v7;
+        _G.CustomSky.SkyboxDn = i;
+        _G.CustomSky.SkyboxFt = i;
+        _G.CustomSky.SkyboxLf = i;
+        _G.CustomSky.SkyboxRt = i;
+        _G.CustomSky.SkyboxUp = i;
+        v7 = game;
+        _G.CustomSky.Parent = v7.GetService(v7, "Lighting");
+        r47 = _G.PS;
+        r48 = _G.LP;
+        b = _G.WS;
+        r49 = _G.Notify;
+        r50 = _G.PlaySound;
+        r51 = _G.Sounds;
+        v8 = _G.twait;
+        r52 = {
+            "TractorGreen",
+            "CreatureBlobman",
+            "SantaSleigh"
+        };
+        local function r53(arg1_16, ...)
+            v1 = arg1_16;
+            if not v1 then
+                return false;
+            end;
+            p = v1.Parent;
+            while p do
+                if p.Name == r48.Name .. "SpawnedInToys" then
+                    return true;
+                else
+                    p = p.Parent;
+                end; 
+            end;
+            return false; 
+        end;
+        _G.isMyToy = r53;
+        local function r54(arg1_17, ...)
+            v1 = arg1_17;
+            if v1 == r48 then
+                return;
+            end;
+            p = v1.Character;
+            if not p then
+                return;
+            end;
+            d = p.FindFirstChildOfClass(p, "Humanoid");
+            if not d then
+                return;
+            end;
+            l = d.SeatPart;
+            if not l then
+                return;
+            end;
+            Q = l.FindFirstAncestorWhichIsA(l, "Model");
+            if not Q then
+                return;
+            end;
+            w = r52;
+            v2 = i[2];
+            v6 = i[3];
+            for v6, b in ipairs("ipairs") do
+                i = v6;
+                if Q.Name == b then
+                    v4 = true;
+                else
+                    
+                end; 
+            end;
+            if not false then
+                return;
+            end;
+            if r53(Q) then
+                v2 = v1.DisplayName and r50(r51.SeatMyToy);
+                v2 = v1.Name;
+                v5 = Env[v3];
+                r49("SEAT MY TOY DETECTED", v2 .. " | " .. v1.Name .. " sat on your " .. Q.Name, 5);
+                r50(r51.SeatMyToy);
+            end;
+            return; 
+        end;
+        _G.checkPlayerSeated = r54;
+        local function r55(arg1_18, ...)
+            r56 = arg1_18;
+            return function(...)
+                task.wait(.1);
+                if not r56 or not r56.Parent then
+                    return;
+                end;
+                v5 = M[854];
+                v1 = v5.GetPlayerFromCharacter(v5, r56.Parent);
+                if v1 then
+                    v3 = v1 ~= M[U[3]];
+                end;
+                if v1 then
+                    M[U[4]](v1);
+                end;
+                return; 
+            end; 
+        end;
+        _G.onHumanoidSeated = r55;
+        local function m(arg1_19, ...)
+            r57 = arg1_19;
+            if r57 == r48 then
+                return;
+            end;
+            local function p(arg1_20, ...)
+                v1 = arg1_20;
+                if not v1 then
+                    return;
+                end;
+                p = v1.FindFirstChildOfClass(v1, "Humanoid");
+                if p then
+                    v5 = p.GetPropertyChangedSignal(p, "SeatPart");
+                    v5.Connect(v5, r55(p));
+                    if p.SeatPart then
+                        task.wait(.1);
+                        r54(r57);
+                    end;
+                end;
+                return; 
+            end;
+            if r57.Character then
+                p(r57.Character);
+            end;
+            v5 = r57.CharacterAdded;
+            v5.Connect(v5, p);
+            return; 
+        end;
+        _G.setupPlayerTracking = m;
+        c_ = r47;
+        r = c_[3];
+        for r, c_ in c_[1], ipairs(c_.GetPlayers(c_)) do
+            V = r;
+            m(c_); 
+        end;
+        V = r47.PlayerAdded;
+        V.Connect(V, m);
+        b = _G.PS;
+        f = _G.LP;
+        r58 = _G.RepS;
+        r59 = _G.GE;
+        r60 = _G.Notify;
+        r61 = _G.PlaySound;
+        r62 = _G.Sounds;
+        r63 = _G.mfloor;
+        r64 = _G.twait;
+        r65 = {
+            ["detectedPlayers"] = {},
+            ["cooldown"] = 30
+        };
+        _G.PacketLagDetector = r65;
+        local function r66(...)
+            v5 = r59;
+            v5 = v5.WaitForChild(v5, "ExtendGrabLine").OnClientEvent;
+            v5.Connect(v5, function(arg1_21, arg2_21, ...)
+                v1 = arg1_21;
+                if not v1 then
+                    return;
+                end;
+                l = v1.DisplayName;
+                v3 = l;
+                if l then
+                    Q = 0;
+                    l = l;
+                    if type(arg2_21) == "table" then
+                        v4 = v6[2];
+                        v6 = v6[1];
+                        for v2, i in pairs(arg2_21) do
+                            w = v2;
+                            if type(i) == "number" then
+                                Q = 0 + math.abs(i);
+                            else
+                                if type(i) == "string" then
+                                    Q = 0 + #i;
+                                end;
+                            end; 
+                        end;
+                    else
+                        if type(arg2_21) == "number" then
+                            Q = math.abs(arg2_21);
+                        else
+                            if type(arg2_21) == "string" then
+                                Q = #arg2_21;
+                            end;
+                            v5 = v4 == v3;
+                            if 0 > 999 and 0 < 200000000 then
+                                v5 = v5;
+                                if not r65.detectedPlayers[v5] or tick() - r65.detectedPlayers[v5] > r65.cooldown then
+                                    r65.detectedPlayers[v5] = tick();
+                                    r60("PACKET LAG DETECTED", l .. " | " .. v5 .. " Send " .. r63(0) .. " Packets", 4);
+                                    r61(r62.PacketLag);
+                                end;
+                            end;
+                            return;
+                        end;
+                    end;
+                else
+                    v3 = v5;
+                end; 
+            end);
+            return; 
+        end;
+        _G.setupPacketLag = r66;
+        _G.tspawn(function(...)
+            r66();
+            v5 = r58.ChildAdded;
+            v5.Connect(v5, function(arg1_22, ...)
+                if arg1_22.Name == "GrabEvents" then
+                    r64(1);
+                    r66();
+                end;
+                return; 
+            end);
+            return; 
+        end);
+        r67 = _G.LP;
+        r68 = _G.Notify;
+        r69 = _G.PlaySound;
+        r70 = _G.Sounds;
+        r71 = tick;
+        r72 = {};
+        r73 = r71();
+        r74 = {};
+        r75 = {};
+        r76 = 1;
+        r77 = 100;
+        _G.lineCounts = r72;
+        _G.lineLastReset = r73;
+        _G.lineLastNotify = r74;
+        _G.CHECK_INTERVAL = r76;
+        _G.LINE_THRESHOLD = r77;
+        T = _G.CreateLine.OnClientEvent;
+        T.Connect(T, function(arg1_23, ...)
+            v1 = arg1_23;
+            if v1 then
+                v3 = v1 ~= r67;
+            end;
+            if v1 then
+                v5 = r72;
+                d = v5;
+                Q = 0;
+                v5[v1] = (r72[v1] or Q) + 1;
+                p = r71();
+                v3 = p - r73 > r76;
+                if v3 then
+                    v4 = r72;
+                    v2 = {
+                        pairs(v4)
+                    };
+                    Q = v2[3];
+                    d = pairs(v4);
+                    Q, v2 = d(l, Q);
+                    if Q then
+                        l, v4 = p(d, l);
+                        if v2[2] then
+                            if v4 then
+                                v3 = v4.Parent;
+                            end;
+                            v5 = r72;
+                            if v4 then
+                                v4.Color3 = arg1_23;
+                            end;
+                        end;
+                        return;
+                    end;
+                    v2 = {
+                        pairs(r72)
+                    };
+                    Q = pairs(r72)(v2[2], v2[3]);
+                    while Q do
+                        v4 = d(l, v2[3]);
+                        r72[v4] = nil; 
+                    end;
+                    v3 = r71();
+                    r73 = v3;
+                end;
+            end;
+            return; 
+        end);
+        K = game;
+        T = K.GetService(K, "Players").PlayerRemoving;
+        T.Connect(T, function(arg1_24, ...)
+            v1 = arg1_24;
+            r74[v1] = nil;
+            r75[v1] = nil;
+            return; 
+        end);
+        r78 = _G.lineCounts;
+        r79 = _G.lineLastNotify;
+        r80 = _G.PacketLagDetector;
+        r81 = _G.BlackHoleDetector;
+        f = _G.PS.PlayerRemoving;
+        f.Connect(f, function(arg1_25, ...)
+            v1 = arg1_25;
+            r78[v1] = nil;
+            r79[v1] = nil;
+            r80.detectedPlayers[v1.Name] = nil;
+            r81.recentlyNotified[v1.Name] = nil;
+            return; 
+        end);
+        b = _G.Window;
+        _G.PlayerTab = b.CreateTab(b, "PLAYER", true);
+        b = _G.PlayerTab;
+        _G.LeftBlock = b.CreateBlock(b, {
+            ["Name"] = "Movement",
+            ["Side"] = "Left"
+        });
+        b = _G.LeftBlock;
+        r82 = _G.LP;
+        r83 = _G.CF;
+        r84 = _G.V3;
+        r85 = _G.twait;
+        r86 = _G.tspawn;
+        r87 = _G.tcancel;
+        r88 = _G.UIS;
+        r89 = _G.runService;
+        f = {
+            "Pink House",
+            "Green House",
+            "Purple House",
+            "China House",
+            "Blue House",
+            "Spawn"
+        };
+        r90 = {
+            ["Pink House"] = r83(-491, -7, -166),
+            ["Green House"] = r83(-535, -7, 93),
+            ["Purple House"] = r83(250, -6, 463),
+            ["China House"] = r83(554, 123, -72),
+            ["Blue House"] = r83(510, 83, -339),
+            ["Spawn"] = r83(3, -7, -2)
+        };
+        K = f;
+        _G.tpLocations = K;
+        _G.tpPositions = r90;
+        b.CreateSection(b, "Teleport");
+        r91 = false;
+        r93 = r90.Spawn;
+        _G.loopTPEnabled = r91;
+        _G.loopTPThread = r92;
+        _G.currentTPTarget = r93;
+        b.CreateToggle(b, {
+            ["Name"] = "Loop Teleport",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_26, ...)
+                if arg1_26 then
+                    if r91 then
+                        return;
+                    end;
+                    r91 = true;
+                    r92 = r86(function(...)
+                        local U = {
+                            292,
+                            282,
+                            224,
+                            223,
+                            293,
+                            285
+                        }; 
+                    end);
+                else
+                    r91 = false;
+                    if r92 then
+                        r87(r92);
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b.CreateDropdown(b, {
+            ["Name"] = "Teleport Location",
+            ["Items"] = f,
+            ["Default"] = "Spawn",
+            ["Callback"] = function(arg1_27, ...)
+                r93 = r90[arg1_27];
+                return; 
+            end
+        });
+        b.CreateButton(b, {
+            ["Name"] = "Teleport Once",
+            ["Callback"] = function(...)
+                v1 = r82.Character;
+                if v1 then
+                    p = v1.FindFirstChild(v1, "HumanoidRootPart");
+                    if p then
+                        v3 = r93;
+                    end;
+                    if p then
+                        p.CFrame = r93;
+                    end;
+                end;
+                return; 
+            end
+        });
+        _G.tpOnZConnection = r94;
+        b.CreateToggle(b, {
+            ["Name"] = "Teleport to Mouse (key - Z)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_28, ...)
+                if arg1_28 then
+                    v5 = r94;
+                    if v5 then
+                        v5 = r94;
+                        v5.Disconnect(v5);
+                    end;
+                    v5 = r88.InputBegan;
+                    r94 = v5.Connect(v5, function(arg1_29, arg2_29, ...)
+                        if arg2_29 then
+                            return;
+                        end;
+                        if arg1_29.KeyCode == Enum.KeyCode.Z then
+                            d = r82.Character;
+                            if d then
+                                v3 = d.FindFirstChild(d, "HumanoidRootPart");
+                            end;
+                            if d then
+                                v5 = r82;
+                                l = v5.GetMouse(v5);
+                                if l.Target then
+                                    d.HumanoidRootPart.CFrame = r83(l.Hit.Position + r84(0, 3, 0));
+                                end;
+                            end;
+                        end;
+                        return; 
+                    end);
+                else
+                    if r94 then
+                        v5 = r94;
+                        v5.Disconnect(v5);
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b.CreateSection(b, "Speed");
+        r95 = false;
+        r96 = 16;
+        _G.speedEnabled = r95;
+        _G.speedValue = r96;
+        _G.originalWalkSpeed = r97;
+        _G.speedConnection = r98;
+        _G.speedCharConnection = r99;
+        b.CreateSlider(b, {
+            ["Name"] = "Speed Control",
+            ["Min"] = 16,
+            ["Max"] = 1488,
+            ["Default"] = 16,
+            ["Callback"] = function(arg1_30, ...)
+                r96 = arg1_30;
+                if r95 then
+                    p = r82.Character;
+                    if p then
+                        if p.FindFirstChildOfClass(p, "Humanoid") then
+                            l = arg1_30;
+                            d.WalkSpeed = l;
+                            if r96(r95.checkInterval) then
+                                if not r95.enabled then
+                                    if r15() <= r95.fpsThreshold then
+                                        M[U[6]]();
+                                    end;
+                                end;
+                            end;
+                            return;
+                        end;
+                    end;
+                end;
+                return; 
+            end
+        });
+        b.CreateToggle(b, {
+            ["Name"] = "Enable Speed",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_31, ...)
+                if arg1_31 then
+                    if r95 then
+                        return;
+                    end;
+                    p = r82.Character;
+                    if p then
+                        d = p.FindFirstChildOfClass(p, "Humanoid");
+                        if d then
+                            r97 = d.WalkSpeed;
+                        end;
+                    end;
+                    r95 = true;
+                    d = r98;
+                    if d then
+                        d = r98;
+                        d.Disconnect(d);
+                    end;
+                    d = r89.Stepped;
+                    r98 = d.Connect(d, function(arg1_32, arg2_32, ...)
+                        p = arg2_32;
+                        v1 = arg1_32;
+                        if not r95 then
+                            return;
+                        end;
+                        d = r82.Character;
+                        if not d then
+                            return;
+                        end;
+                        v4 = not d.FindFirstChild(d, "HumanoidRootPart");
+                        v3 = v4;
+                        if v4 then
+                            if v4 then
+                                return;
+                            end;
+                            Q.WalkSpeed = r96;
+                            v4 = Q.MoveDirection;
+                            if v4.Magnitude > 0 then
+                                v2 = v4.Unit * r96 * arg2_32;
+                                l.CFrame = l.CFrame + r84(v2.v2, 0, v2.Z);
+                            end;
+                            return;
+                        else
+                            v3 = not d.FindFirstChildOfClass(d, "Humanoid");
+                        end; 
+                    end);
+                    d = r99;
+                    if d then
+                        d = M[U_];
+                        d.Disconnect(d);
+                    end;
+                    d = r82.CharacterAdded;
+                    r99 = d.Connect(d, function(...)
+                        r85(.3);
+                        v5 = r95;
+                        if v5 then
+                            v5 = r82.Character;
+                            v1 = v5.FindFirstChildOfClass(v5, "Humanoid");
+                            if v1 then
+                                r97 = v1.WalkSpeed;
+                            end;
+                        end;
+                        return; 
+                    end);
+                else
+                    r95 = false;
+                    if r98 then
+                        d = r98;
+                        d.Disconnect(d);
+                    end;
+                    if r99 then
+                        v4 = r99;
+                        v4.Disconnect(v4);
+                    end;
+                    v2 = r82.Character;
+                    if v2 then
+                        v6 = v2.FindFirstChildOfClass(v2, "Humanoid");
+                        if v6 then
+                            w = M[v_];
+                        end;
+                        v5 = M[p];
+                        if v6 then
+                            v6.WalkSpeed = r97;
+                        end;
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b.CreateSection(b, "Jump");
+        r100 = 50;
+        r101 = false;
+        _G.jumpPower = r100;
+        _G.jumpEnabled = r101;
+        _G.jumpConnection = r102;
+        b.CreateSlider(b, {
+            ["Name"] = "Jump Power",
+            ["Min"] = 5,
+            ["Max"] = 500,
+            ["Default"] = 50,
+            ["Callback"] = function(arg1_33, ...)
+                r100 = arg1_33;
+                return; 
+            end
+        });
+        b.CreateToggle(b, {
+            ["Name"] = "Infinite Jump",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_34, ...)
+                if arg1_34 then
+                    r101 = true;
+                    v3 = r102;
+                    if v3 then
+                        v3 = r102;
+                        v3.Disconnect(v3);
+                    end;
+                    v3 = r88.JumpRequest;
+                    r102 = v3.Connect(v3, function(...)
+                        if r101 and r82.Character then
+                            v5 = r82.Character;
+                            v1 = v5.FindFirstChildOfClass(v5, "Humanoid");
+                            if v1 then
+                                v3 = v1.Health > 0;
+                            end;
+                            if v1 then
+                                v1.ChangeState(v1, Enum.HumanoidStateType.Jumping);
+                                v5 = r82.Character;
+                                p = v5.FindFirstChild(v5, "HumanoidRootPart");
+                                if p then
+                                    p.Velocity = r84(p.Velocity.v2, r100, p.Velocity.Z);
+                                end;
+                            end;
+                        end;
+                        return; 
+                    end);
+                else
+                    r101 = false;
+                    if r102 then
+                        d = r102;
+                        d.Disconnect(d);
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b.CreateSection(b, "Camera");
+        b.CreateToggle(b, {
+            ["Name"] = "Third Person",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_35, ...)
+                if arg1_35 then
+                    r82.CameraMode = Enum.CameraMode.Classic;
+                    r82.CameraMaxZoomDistance = 1250;
+                else
+                    r82.CameraMode = Enum.CameraMode.LockFirstPerson;
+                    r82.CameraMaxZoomDistance = 0.5;
+                end;
+                return; 
+            end
+        });
+        r103 = false;
+        _G.freezeCameraEnabled = r103;
+        _G.freezeCameraConnection = r104;
+        _G.frozenCFrame = r105;
+        b.CreateToggle(b, {
+            ["Name"] = "Freeze Camera",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_36, ...)
+                if arg1_36 then
+                    r105 = workspace.CurrentCamera.CFrame;
+                    r103 = true;
+                    p = r104;
+                    if p then
+                        p = r104;
+                        p.Disconnect(p);
+                    end;
+                    p = r89.RenderStepped;
+                    r104 = p.Connect(p, function(...)
+                        if r103 and r105 then
+                            workspace.CurrentCamera.CFrame = r105;
+                        end;
+                        return; 
+                    end);
+                else
+                    r103 = false;
+                    if r104 then
+                        l = r104;
+                        l.Disconnect(l);
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b.CreateSection(b, "Movement");
+        r106 = false;
+        _G.loopWalkEnabled = r106;
+        _G.loopWalkThread = r107;
+        _G.loopWalkPosition = r108;
+        local function r109(...)
+            if r106 then
+                return;
+            end;
+            v1 = r82.Character;
+            if not v1 then
+                return;
+            end;
+            p = v1.FindFirstChild(v1, "HumanoidRootPart");
+            if not p then
+                return;
+            end;
+            r108 = p.CFrame;
+            r106 = true;
+            r107 = task.spawn(function(...)
+                while r106 do
+                    if r82.Character then
+                        p = v1.FindFirstChild(v1, "HumanoidRootPart");
+                        v3 = task;
+                        d = v1.FindFirstChildOfClass(v1, "Humanoid");
+                        if p then
+                            v3 = d and d.Health > 0;
+                            v1.FindFirstChildOfClass(v1, r16[Q]);
+                        end;
+                        if v3 then
+                            if d.MoveDirection.Magnitude > 0 then
+                                r108 = v1.FindFirstChild(v1, "HumanoidRootPart").CFrame;
+                            else
+                                if (p.Position - r108.Position).Magnitude > 3 then
+                                    p.CFrame = r108;
+                                    p.Velocity = Vector3.new(0, 0, 0);
+                                    p.AssemblyLinearVelocity = Vector3.new(0, 0, 0);
+                                end;
+                            end;
+                        end;
+                        task.wait();
+                    end; 
+                end;
+                return; 
+            end);
+            return; 
+        end;
+        _G.StartLoopWalk = r109;
+        local function r110(...)
+            r106 = false;
+            if r107 then
+                task.cancel(r107);
+            end;
+            return; 
+        end;
+        _G.StopLoopWalk = r110;
+        b.CreateToggle(b, {
+            ["Name"] = "Loop Walk (Anti Push)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_37, ...)
+                if arg1_37 then
+                    r109();
+                    PlaySound(Sounds.Notify);
+                else
+                    r110();
+                end;
+                return; 
+            end
+        });
+        b = _G.PlayerTab;
+        _G.RightBlock = b.CreateBlock(b, {
+            ["Name"] = "Visual & Animations",
+            ["Side"] = "Right"
+        });
+        b = _G.RightBlock;
+        r111 = _G.LP;
+        r112 = _G.PS;
+        r113 = _G.WS;
+        r114 = _G.C3;
+        f = _G.IN;
+        r115 = _G.Notify;
+        r116 = _G.PlaySound;
+        r117 = _G.Sounds;
+        r118 = _G.twait;
+        L = _G.tspawn;
+        m = _G.sfind;
+        r119 = false;
+        r120 = {};
+        r121 = {};
+        r122 = {};
+        r123 = Color3.fromRGB(255, 255, 255);
+        r124 = false;
+        r125 = {};
+        r126 = {};
+        r127 = Color3.fromRGB(0, 0, 0);
+        _G.pcldEnabled = r119;
+        _G.pcldBoxes = r120;
+        _G.pcldNameTags = r121;
+        _G.pcldConnections = r122;
+        _G.shurikenEnabled = r124;
+        _G.shurikenHighlights = r125;
+        _G.shurikenConnections = r126;
+        S_ = false;
+        _G.scanDebounce = S_;
+        _G.scanCoroutine = r128;
+        b.CreateColorPicker(b, {
+            ["Name"] = "PCLD Color",
+            ["Default"] = Color3.fromRGB(255, 255, 255),
+            ["Callback"] = function(arg1_38, ...)
+                r123 = arg1_38;
+                if r119 then
+                    v4 = {
+                        pairs(r120)
+                    };
+                    l = v4[3];
+                    d = v4[2];
+                    p = pairs(r120);
+                end; 
+            end
+        });
+        b.CreateToggle(b, {
+            ["Name"] = "PCLD ESP",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_39, ...)
+                if arg1_39 then
+                    r119 = true;
+                    l = v4[3];
+                    for l, v4 in pairs(r120), pairs(r120) do
+                        Q = l;
+                        if v4 then
+                            v3 = v4.Parent;
+                        end;
+                        v5 = true;
+                        if v4 then
+                            v4.Destroy(v4);
+                        end; 
+                    end;
+                    v4 = {
+                        pairs(r121)
+                    };
+                    p = pairs(r121);
+                    l = v4[3];
+                    d = v4[2];
+                    l, v4 = p(d, l);
+                    if l then
+                        return;
+                    end;
+                    d = v4[2];
+                    p = v4[1];
+                    for l, v4 in pairs(r122) do
+                        Q = l;
+                        v4.Disconnect(v4); 
+                    end;
+                    r120 = {};
+                    r121 = {};
+                    r122 = {};
+                    r129 = {};
+                    local function r130(arg1_40, ...)
+                        r131 = arg1_40;
+                        if not r131 or (not r131.Parent or r129[r131]) then
+                            return;
+                        end;
+                        r129[r131] = true;
+                        v4 = r15("\x87\xf4e'\x15E;\xe2", 3271289144819);
+                        p = r131[r16[v4]].Y;
+                        l = (r131.Position - Vector3.new(3, -7, -2)).Magnitude;
+                        if p >= 5 and (p <= 9 and l <= 15) then
+                            return;
+                        end;
+                        r132 = Instance.new("BoxHandleAdornment");
+                        r132.Name = "PCLD_Box_" .. r131.Name;
+                        r132.Adornee = r131;
+                        r132.AlwaysOnTop = true;
+                        r132.ZIndex = 5;
+                        r132.Size = r131.Size * 1.05;
+                        r132.Color3 = r123;
+                        r132.Transparency = .9;
+                        r132.Parent = r131;
+                        table.insert(r120, r132);
+                        v5 = r131.AncestryChanged;
+                        table.insert(r122, v5.Connect(v5, function(arg1_41, arg2_41, ...)
+                            v1 = arg1_41;
+                            if not arg2_41 then
+                                r129[r131] = nil;
+                                v5 = r132.Parent;
+                                if v5 then
+                                    v5 = M[Q];
+                                    v5.Destroy(v5);
+                                end;
+                            end;
+                            return; 
+                        end));
+                        return; 
+                    end;
+                    i = workspace;
+                    v2 = i[1];
+                    v6 = i[2];
+                    for w, i in pairs(i.GetChildren(i)) do
+                        v4 = w;
+                        if i.IsA(i, "BasePart") then
+                            b = i.Name;
+                            f = b.lower(b);
+                            v5 = true;
+                            if f.find(f, "playercharacterlocationdetector") or (f.find(f, "characterdetector") or f.find(f, "partesp")) then
+                                r130(i);
+                            end;
+                        end; 
+                    end;
+                    v4 = workspace.DescendantAdded;
+                    table.insert(r122, v4.Connect(v4, function(arg1_42, ...)
+                        v1 = arg1_42;
+                        v5 = v1.IsA(v1, "BasePart");
+                        if v5 then
+                            v5 = v1.Name;
+                            p = v5.lower(v5);
+                            if p.find(p, "playercharacterlocationdetector") or (p.find(p, "characterdetector") or p.find(p, "partesp")) then
+                                task.wait(.1);
+                                r130(arg1_42);
+                            end;
+                        end;
+                        return; 
+                    end));
+                    local function r133(arg1_43, ...)
+                        r134 = arg1_43;
+                        if r134 == r111 then
+                            return;
+                        end;
+                        local function r135(arg1_44, ...)
+                            v1 = arg1_44;
+                            if not v1 then
+                                return;
+                            end;
+                            p = v1.FindFirstChild(v1, "Head");
+                            if not p then
+                                return;
+                            end;
+                            d = p.FindFirstChild(p, "ESP_" .. r134.Name);
+                            if d then
+                                d.Destroy(d);
+                            end;
+                            l = Instance.new("BillboardGui");
+                            l.Name = "ESP_" .. r134.Name;
+                            l.Adornee = p;
+                            l.Size = UDim2.new(0, 200, 0, 40);
+                            l.StudsOffset = Vector3.new(0, 3.5, 0);
+                            l.AlwaysOnTop = true;
+                            l.Parent = p;
+                            Q = Instance.new("TextLabel");
+                            Q.Size = UDim2.new(1, 0, 1, 0);
+                            Q.BackgroundTransparency = 1;
+                            Q.Text = r134.DisplayName .. " | " .. r134.Name;
+                            Q.TextColor3 = r123;
+                            Q.TextStrokeTransparency = .2;
+                            Q.Font = Enum.Font.GothamBold;
+                            Q.TextSize = 16;
+                            Q.Parent = l;
+                            table.insert(r121, l);
+                            return; 
+                        end;
+                        if r134.Character then
+                            r135(r134.Character);
+                        end;
+                        v5 = r134.CharacterAdded;
+                        table.insert(r122, v5.Connect(v5, function(arg1_45, ...)
+                            task.wait(0.5);
+                            if r119 then
+                                r135(arg1_45);
+                            end;
+                            return; 
+                        end));
+                        return; 
+                    end;
+                    f = r112;
+                    i = f[2];
+                    w = f[1];
+                    for b, f in ipairs(f.GetPlayers(f)) do
+                        v6 = b;
+                        if f ~= M[v7] then
+                            r133(f);
+                        end; 
+                    end;
+                    v6 = r112.PlayerAdded;
+                    table.insert(r122, v6.Connect(v6, function(arg1_46, ...)
+                        if M[K] then
+                            r133(arg1_46);
+                        end;
+                        return; 
+                    end));
+                    r115("PCLD ESP", "Enabled", 2);
+                    r116(r117.Notify);
+                else
+                    r119 = false;
+                    w = r120;
+                    v4 = i[1];
+                    v2 = i[2];
+                    for v6, w in pairs(w) do
+                        Q = v6;
+                        if w then
+                            i = w.Parent;
+                        end;
+                        v5 = M[p];
+                        if w then
+                            w.Destroy(w);
+                        end; 
+                    end;
+                    w = r121;
+                    v6 = i[3];
+                    for v6, w in i[1], pairs(w) do
+                        Q = v6;
+                        if w then
+                            i = w.Parent;
+                        end;
+                        v5 = M[p];
+                        if w then
+                            w.Destroy(w);
+                        end; 
+                    end;
+                    w = r122;
+                    v4 = i[1];
+                    v2 = i[2];
+                    for v6, w in pairs(w) do
+                        Q = v6;
+                        w.Disconnect(w); 
+                    end;
+                    r120 = {};
+                    r121 = {};
+                    r122 = {};
+                    r115("PCLD ESP", "Disabled", 2);
+                    return;
+                end; 
+            end
+        });
+        b.CreateColorPicker(b, {
+            ["Name"] = "Shuriken Fill Color",
+            ["Default"] = Color3.fromRGB(0, 0, 0),
+            ["Callback"] = function(arg1_47, ...)
+                r127 = arg1_47;
+                if r124 then
+                    p = v4[1];
+                    d = v4[2];
+                    for l, v4 in pairs(r125) do
+                        Q = l;
+                        if v4 then
+                            v3 = v4.Parent;
+                        end;
+                        v5 = v1;
+                        if v4 then
+                            v4.FillColor = arg1_47;
+                        end; 
+                    end;
+                end;
+                return; 
+            end
+        });
+        b.CreateToggle(b, {
+            ["Name"] = "Shuriken ESP",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_48, ...)
+                if arg1_48 then
+                    r124 = true;
+                    local function r136(arg1_49, ...)
+                        v1 = arg1_49;
+                        if not v1 or not v1.Parent then
+                            return;
+                        end;
+                        if v1.Name ~= "NinjaShuriken" and v1.Name ~= "AntiKick" then
+                            return;
+                        end;
+                        if r125[v1] then
+                            return;
+                        end;
+                        v3 = "Highlight";
+                        p = v1.FindFirstChildOfClass(v1, v3);
+                        if p then
+                            v3 = v5;
+                            r125[v1] = v3;
+                            return;
+                        end;
+                        d = Instance.new("Highlight");
+                        d.Adornee = v1;
+                        d.FillColor = r127;
+                        d.OutlineColor = r114(255, 255, 255);
+                        d.FillTransparency = .7;
+                        d.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop;
+                        d.Parent = v1;
+                        r125[v1] = d;
+                        return; 
+                    end;
+                    l = r128;
+                    v3 = r116;
+                    if l then
+                        v3 = coroutine.status(r128) == "suspended";
+                    end;
+                    v5 = true;
+                    if v3 then
+                        r124 = false;
+                        r118();
+                        r124 = true;
+                    end;
+                    r128 = coroutine.create(function(...)
+                        tick();
+                        Q = r113;
+                        l = Q[3];
+                        Q = Q[1];
+                        for l, v2 in Q, ipairs(Q.GetDescendants(Q)) do
+                            v4 = l;
+                            if not r124 then
+                                
+                            else
+                                if v2.IsA(v2, "Model") and v2.Name == "NinjaShuriken" then
+                                    table.insert({}, v2);
+                                end;
+                            end; 
+                        end;
+                        l = .1;
+                        Q = #{};
+                        for w = 1, Q, 3 do
+                            v4 = w;
+                            if not r124 then
+                                
+                            else
+                                v7 = "min";
+                                for f = w + 3, math[v7](v7, Q) do
+                                    t = 0;
+                                    W = ({})[t];
+                                    if W then
+                                        y = W.Parent;
+                                    end;
+                                    if W then
+                                        r136(W);
+                                    end; 
+                                end;
+                                if w + 3 <= Q then
+                                    task.wait(.1);
+                                end;
+                            end; 
+                        end;
+                        return; 
+                    end);
+                    coroutine.resume(r128);
+                    l = r113.DescendantAdded;
+                    table.insert(r126, l.Connect(l, function(arg1_50, ...)
+                        r137 = arg1_50;
+                        if r124 and l.IsA(l, "Model") then
+                            task.spawn(function(...)
+                                task.wait(.3);
+                                r136(r137);
+                                return; 
+                            end);
+                        end;
+                        return; 
+                    end));
+                    r115("Shuriken ESP", "Enabled", 2);
+                    r116(r117.Notify);
+                else
+                    r124 = false;
+                    i = r15("&\x89C\x1e\xd0", 395940757688);
+                    task[r16[i]](function(...)
+                        v1 = {};
+                        l = r125;
+                        d = Q[3];
+                        l = Q[1];
+                        for d, v4 in l, pairs(l) do
+                            table.insert(v1, {
+                                d,
+                                v4
+                            }); 
+                        end;
+                        for d = 1, #v1 do
+                            r138 = v1[d][2];
+                            if r138 and r138.Parent then
+                                pcall(function(...)
+                                    v5 = r138;
+                                    v5.Destroy(v5);
+                                    return; 
+                                end);
+                            end;
+                            if d % 10 == 0 then
+                                task.wait();
+                            end; 
+                        end;
+                        return; 
+                    end);
+                    w = r126;
+                    v6 = i[3];
+                    v2 = i[2];
+                    for v6, w in ipairs(w) do
+                        r139 = w;
+                        l = v6;
+                        pcall(function(...)
+                            v5 = r139;
+                            v5.Disconnect(v5);
+                            return; 
+                        end); 
+                    end;
+                    r125 = {};
+                    r126 = {};
+                    r115("Shuriken ESP", "Disabled", 2);
+                    return;
+                end; 
+            end
+        });
+        b = _G.RightBlock;
+        b.CreateSection(b, "Animations");
+        b = _G.RightBlock;
+        r140 = _G.LP;
+        f = _G.IN;
+        r141 = _G.tspawn;
+        r142 = _G.tcancel;
+        r143 = _G.twait;
+        v8 = _G.runService;
+        r144 = false;
+        r145 = false;
+        _G.throwedEnabled = r144;
+        _G.jerkEnabled = r145;
+        _G.throwedTrack = r146;
+        _G.jerkTrack = r147;
+        _G.jerkLoopThread = r148;
+        _G.animConnection = r;
+        local function r149(...)
+            if r148 then
+                r142(r148);
+            end;
+            return; 
+        end;
+        _G.stopJerkLoop = r149;
+        local function r150(...)
+            if r146 then
+                v5 = r146;
+                v5.Stop(v5);
+            end;
+            if r147 then
+                v3 = r147;
+                v3.Stop(v3);
+            end;
+            r149();
+            return; 
+        end;
+        _G.stopAllAnimations = r150;
+        local function r151(arg1_51, ...)
+            v1 = arg1_51;
+            if not v1 then
+                return;
+            end;
+            p = v1.FindFirstChildOfClass(v1, "Humanoid");
+            if not p then
+                return;
+            end;
+            d = p.FindFirstChildOfClass(p, "Animator");
+            v3 = d;
+            if d then
+                d = r145;
+                if r144 then
+                    v5 = r146;
+                    if v5 then
+                        v5 = r146;
+                        v5.Stop(v5);
+                    end;
+                    l = Instance.new("Animation");
+                    l.AnimationId = "rbxassetid://7047322890";
+                    r146 = d.LoadAnimation(d, l);
+                    v3 = r146;
+                    v3.Play(v3);
+                end;
+                if r145 then
+                    v3 = r147;
+                    if v3 then
+                        v3 = r147;
+                        v3.Stop(v3);
+                    end;
+                    l = Instance.new("Animation");
+                    l.AnimationId = "rbxassetid://168268306";
+                    r147 = d.LoadAnimation(d, l);
+                    Q = r147;
+                    Q.Play(Q);
+                    r149();
+                    r148 = r141(function(...)
+                        while r145 do
+                            r143(.1);
+                            if r147 and (r145 and r147.IsPlaying) then
+                                r147.TimePosition = .3;
+                            end; 
+                        end;
+                        return; 
+                    end);
+                end;
+                return;
+            else
+                v3 = Instance.new("Animator", p);
+            end; 
+        end;
+        _G.loadAnimations = r151;
+        if nil then
+            nil.Disconnect(nil);
+        end;
+        c_ = r140.CharacterAdded;
+        q = c_.Connect(c_, function(arg1_52, ...)
+            task.wait(0.5);
+            if r144 or r145 then
+                r151(arg1_52);
+            end;
+            return; 
+        end);
+        if r140.Character then
+            task.wait(0.5);
+            r151(r140.Character);
+        end;
+        b.CreateToggle(b, {
+            ["Name"] = "Throwed Animation",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_53, ...)
+                v1 = arg1_53;
+                r144 = v1;
+                if v1 then
+                    r151(r140.Character);
+                else
+                    if r146 then
+                        v3 = r146;
+                        v3.Stop(v3);
+                    end;
+                    if not r145 then
+                        r150();
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b.CreateToggle(b, {
+            ["Name"] = "Jerk Animation",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_54, ...)
+                v1 = arg1_54;
+                r145 = v1;
+                if v1 then
+                    r151(r140.Character);
+                else
+                    if r147 then
+                        v3 = r147;
+                        v3.Stop(v3);
+                    end;
+                    r149();
+                    if not r144 then
+                        if r146 then
+                            p = r146;
+                            p.Stop(p);
+                        end;
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b = _G.PlayerTab;
+        _G.SecondRightBlock = b.CreateBlock(b, {
+            ["Name"] = "Walks",
+            ["Side"] = "Right"
+        });
+        b = _G.SecondRightBlock;
+        f = _G.WS;
+        r152 = _G.LP;
+        v7 = _G.V3;
+        r153 = _G.Notify;
+        r154 = _G.PlaySound;
+        r155 = _G.Sounds;
+        T = _G.tcancel;
+        r156 = {};
+        r157 = false;
+        _G.waterParts = r156;
+        _G.waterWalkEnabled = r157;
+        _G.tspawn(function(...)
+            v1 = workspace;
+            l = r16;
+            Q = r15;
+            if v1.FindFirstChild(v1, "Map") and v1.FindFirstChild(v1, "AlwaysHereTweenedObjects") then
+                v1 = workspace.Map.AlwaysHereTweenedObjects.Ocean.Object.ObjectModel;
+                Q = v1.GetChildren;
+                l = {
+                    Q(v1)
+                };
+                p = Q[2];
+                l = Q[1];
+                for d, v4 in pairs(v(l)) do
+                    Q = d;
+                    if v4.IsA(v4, "Part") or (v4.IsA(v4, "UnionOperation") or (v4.IsA(v4, "BasePart") or v4.IsA(v4, "MeshPart"))) then
+                        table.insert(r156, {
+                            ["part"] = v4,
+                            ["originalCollide"] = v4.CanCollide
+                        });
+                    end; 
+                end;
+            end;
+            return; 
+        end);
+        b.CreateToggle(b, {
+            ["Name"] = "Water Walk",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_55, ...)
+                v1 = arg1_55;
+                r157 = v1;
+                d = v4[2];
+                p = v4[1];
+                for l, v4 in pairs(r156) do
+                    Q = l;
+                    if v4.part then
+                        v4.part.CanCollide = arg1_55;
+                    end; 
+                end;
+                if v1 then
+                    r153("Water Walk", "Enabled - You can walk on water", 2);
+                end;
+                return; 
+            end
+        });
+        r158 = false;
+        _G.safePosEnabled = r158;
+        _G.safePosTarget = r159;
+        _G.safePosThread = r160;
+        b.CreateToggle(b, {
+            ["Name"] = "Safe Pos (lock)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_56, ...)
+                if arg1_56 then
+                    p = r152.Character;
+                    if p then
+                        d = p.FindFirstChild(p, "HumanoidRootPart");
+                        if d then
+                            r159 = d.CFrame;
+                        end;
+                    end;
+                    if not r159 then
+                        return;
+                    end;
+                    r158 = true;
+                    r160 = task.spawn(function(...)
+                        while r158 do
+                            if r152.Character then
+                                p = v1.FindFirstChild(v1, "HumanoidRootPart");
+                                v3 = "task";
+                                if p then
+                                    v3 = r15;
+                                end;
+                                if v3 then
+                                    p.CFrame = r159;
+                                end;
+                                task.wait();
+                            end; 
+                        end;
+                        return; 
+                    end);
+                    r154(r155.Notify);
+                else
+                    r158 = false;
+                    if r160 then
+                        task.cancel(r160);
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b = _G.PlayerTab;
+        _G.FlyBlock = b.CreateBlock(b, {
+            ["Name"] = "Fly",
+            ["Side"] = "Right"
+        });
+        b = _G.FlyBlock;
+        r161 = _G.LP;
+        r162 = _G.UIS;
+        r163 = _G.runService;
+        r164 = _G.V3;
+        f = _G.IN;
+        L = _G.tspawn;
+        q = _G.tcancel;
+        r165 = false;
+        r166 = 50;
+        _G.flyEnabled = r165;
+        _G.flySpeed = r166;
+        _G.flyConnection = r167;
+        _G.flyBodyVelocity = r168;
+        _G.flyBodyGyro = r169;
+        b.CreateSlider(b, {
+            ["Name"] = "Fly Speed",
+            ["Min"] = 10,
+            ["Max"] = 500,
+            ["Default"] = 50,
+            ["Callback"] = function(arg1_57, ...)
+                r166 = arg1_57;
+                if r168 then
+                    r168.MaxForce = Vector3.new(r166 * 1000, r166 * 1000, r166 * 1000);
+                end;
+                return; 
+            end
+        });
+        b.CreateToggle(b, {
+            ["Name"] = "Enable Fly",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_58, ...)
+                if arg1_58 then
+                    r165 = true;
+                    r170 = r161.Character;
+                    if not r170 then
+                        return;
+                    end;
+                    v3 = r170;
+                    r171 = v3.FindFirstChild(v3, "HumanoidRootPart");
+                    if not r171 then
+                        return;
+                    end;
+                    r168 = Instance.new("BodyVelocity");
+                    r168.MaxForce = Vector3.new(r166 * 1000, r166 * 1000, r166 * 1000);
+                    r168.Parent = r171;
+                    r169 = Instance.new("BodyGyro");
+                    r169.MaxTorque = Vector3.new(1, 1, 1) * math.huge;
+                    r169.P = 1000;
+                    r169.Parent = r171;
+                    v3 = r163.Heartbeat;
+                    r167 = v3.Connect(v3, function(...)
+                        if not r165 or (not r170 or (not r171 or not r171.Parent)) then
+                            return;
+                        end;
+                        v1 = Vector3.new(0, 0, 0);
+                        v5 = r162;
+                        if v5.IsKeyDown(v5, Enum.KeyCode.W) then
+                            v1 = Vector3.new(0, 0, 0) + workspace.CurrentCamera.CFrame.LookVector;
+                        end;
+                        v3 = r162;
+                        if v3.IsKeyDown(v3, Enum.KeyCode.v1) then
+                            v1 = Vector3.new(0, 0, 0) - workspace.CurrentCamera.CFrame.LookVector;
+                        end;
+                        p = r162;
+                        if p.IsKeyDown(p, Enum.KeyCode.A) then
+                            v1 = Vector3.new(0, 0, 0) - workspace.CurrentCamera.CFrame.RightVector;
+                        end;
+                        d = r162;
+                        if d.IsKeyDown(d, Enum.KeyCode.v3) then
+                            v1 = Vector3.new(0, 0, 0) + workspace.CurrentCamera.CFrame.RightVector;
+                        end;
+                        l = r162;
+                        if l.IsKeyDown(l, Enum.KeyCode.Space) then
+                            v1 = Vector3.new(0, 0, 0) + Vector3.new(0, 1, 0);
+                        end;
+                        Q = r162;
+                        if Q.IsKeyDown(Q, Enum.KeyCode.LeftControl) then
+                            v1 = Vector3.new(0, 0, 0) - Vector3.new(0, 1, 0);
+                        end;
+                        if v1.Magnitude > 0 then
+                            v1 = Vector3.new(0, 0, 0).Unit * r166;
+                        end;
+                        r168.Velocity = v1;
+                        r169.CFrame = workspace.CurrentCamera.CFrame;
+                        return; 
+                    end);
+                else
+                    r165 = false;
+                    if r167 then
+                        p = r167;
+                        p.Disconnect(p);
+                    end;
+                    if r168 then
+                        l = r168;
+                        l.Destroy(l);
+                    end;
+                    if r169 then
+                        v2 = r169;
+                        v2.Destroy(v2);
+                    end;
+                    return;
+                end; 
+            end
+        });
+        r172 = false;
+        _G.jumpFlyEnabled = r172;
+        _G.jumpFlyThread = r173;
+        b.CreateToggle(b, {
+            ["Name"] = "Jump Fly (UP)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_59, ...)
+                if arg1_59 then
+                    r172 = true;
+                    r173 = task.spawn(function(...)
+                        while r172 do
+                            if r161.Character then
+                                p = v5.FindFirstChildOfClass(v5, "Humanoid");
+                                d = v5.FindFirstChild(v5, "HumanoidRootPart");
+                                v3 = "task";
+                                if p then
+                                    if d then
+                                        l = v1.FindFirstChildOfClass(v1, "Humanoid").Health > 0;
+                                    end;
+                                    v3 = d;
+                                    v1.FindFirstChild(v1, r16[Q]);
+                                end;
+                                if v3 then
+                                    p.ChangeState(p, Enum.HumanoidStateType.Jumping);
+                                    d.Velocity = r164(d.Velocity.v2, 0, d.Velocity.Z);
+                                end;
+                                task.wait(.05);
+                            end; 
+                        end;
+                        return; 
+                    end);
+                else
+                    r172 = false;
+                    if r173 then
+                        task.cancel(r173);
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b = _G.PlayerTab;
+        f = b.CreateBlock(b, {
+            ["Name"] = "Field of View",
+            ["Side"] = "Right"
+        });
+        t = b.CreateBlock(b, {
+            ["Name"] = "Field of View",
+            ["Side"] = "Right"
+        });
+        _G.FovBlock = t;
+        r174 = false;
+        r175 = 80;
+        r176 = 70;
+        _G.fovEnabled = r174;
+        _G.fovValue = r175;
+        _G.fovConnection = r177;
+        if workspace.CurrentCamera then
+            r176 = workspace.CurrentCamera.FieldOfView;
+        end;
+        f.CreateSlider(f, {
+            ["Name"] = "FOV Value",
+            ["Min"] = 20,
+            ["Max"] = 120,
+            ["Default"] = 70,
+            ["Callback"] = function(arg1_60, ...)
+                v1 = arg1_60;
+                v5 = arg1_60;
+                r175 = v5;
+                d = r174;
+                v5 = v5;
+                if d and workspace.CurrentCamera then
+                    d = arg1_60;
+                    workspace.CurrentCamera.FieldOfView = d;
+                end;
+                return; 
+            end
+        });
+        f.CreateToggle(f, {
+            ["Name"] = "Enable Custom FOV",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_61, ...)
+                if arg1_61 then
+                    d = r16;
+                    if workspace.CurrentCamera then
+                        r176 = workspace.CurrentCamera.FieldOfView;
+                        r174 = true;
+                        workspace.CurrentCamera.FieldOfView = r175;
+                        p = r177;
+                        if p then
+                            p = r177;
+                            p.Disconnect(p);
+                        end;
+                        p = workspace;
+                        d = p.GetPropertyChangedSignal(p, "CurrentCamera");
+                        r177 = d.Connect(d, function(...)
+                            if r174 and workspace.CurrentCamera then
+                                workspace.CurrentCamera.FieldOfView = r175;
+                            end;
+                            return; 
+                        end);
+                    end;
+                else
+                    r174 = false;
+                    if r177 then
+                        l = r177;
+                        l.Disconnect(l);
+                    end;
+                    if workspace.CurrentCamera then
+                        workspace.CurrentCamera.FieldOfView = r176;
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b = _G.Window;
+        _G.ProtectionTab = b.CreateTab(b, "PROTECTION", true);
+        b = _G.ProtectionTab;
+        _G.AntiFunctionsBlock = b.CreateBlock(b, {
+            ["Name"] = "Anti Functions",
+            ["Side"] = "Left"
+        });
+        b = _G.AntiFunctionsBlock;
+        r178 = _G.LP;
+        r179 = _G.RepS;
+        f = _G.runService;
+        r180 = _G.SNO;
+        o = _G.CF;
+        q = _G.V3;
+        T = _G.IN;
+        r181 = _G.UIS;
+        r182 = tick;
+        r183 = pcall;
+        Random.new();
+        r184 = Vector3.new(0, 0, 0);
+        B = States or ;
+        B.AntiGrab = B.AntiGrab or {
+            ["enabled"] = false,
+            ["cached"] = {
+                ["remotes"] = {},
+                ["parts"] = {},
+                ["conns"] = {}
+            },
+            ["lastRemoteTime"] = 0,
+            ["lastJumpTime"] = 0,
+            ["processInterval"] = 0,
+            ["jumpInterval"] = 0,
+            ["bodyParts"] = {
+                "Head",
+                "Torso",
+                "Left Arm",
+                "Right Arm",
+                "Left Leg",
+                "Right Leg"
+            }
+        };
+        _G.States = B;
+        r185 = B.AntiGrab;
+        local function r186(arg1_62, ...)
+            v1 = arg1_62;
+            if r185.cached.remotes[v1] and r185.cached.remotes[v1].Parent then
+                return r185.cached.remotes[v1];
+            end;
+            l = r179;
+            p = l[2];
+            l = l[1];
+            for d, v4 in ipairs(l.GetDescendants(l)) do
+                Q = d;
+                if v4.Name == v1 and v4.IsA(v4, "RemoteEvent") then
+                    r185.cached.remotes[arg1_62] = v4;
+                    return v4;
+                else
+                    
+                end; 
+            end;
+            v5 = r179;
+            p = v5.FindFirstChild(v5, "GrabEvents");
+            if p then
+                v2 = p.GetDescendants;
+                d = v2[1];
+                l = v2[2];
+                for Q, v2 in ipairs(v2(p)) do
+                    v4 = Q;
+                    if v2.Name == arg1_62 and v2.IsA(v2, "RemoteEvent") then
+                        r185.cached.remotes[arg1_62] = v2;
+                        return v2;
+                    else
+                        
+                    end; 
+                end;
+            end;
+            return nil; 
+        end;
+        _G.getRemote = r186;
+        local function r187(arg1_63, ...)
+            v1 = arg1_63;
+            p = {};
+            if not v1 then
+                return p;
+            end;
+            v4 = r185;
+            Q = v4.bodyParts;
+            l = v4[3];
+            Q = v4[1];
+            for l, v2 in Q, ipairs(Q) do
+                v4 = l;
+                v6 = v1.FindFirstChild(v1, v2);
+                if v6 then
+                    w = v6.IsA(v6, "BasePart");
+                end;
+                if v6 then
+                    table.insert({}, v6);
+                end; 
+            end;
+            return p; 
+        end;
+        local function r188(arg1_64, arg2_64, ...)
+            r189 = arg1_64;
+            r190 = arg2_64;
+            if not r189 then
+                return;
+            end;
+            r183(function(...)
+                v5 = r189;
+                v5.ChangeState(v5, r190);
+                r189.PlatformStand = false;
+                r189.Sit = false;
+                return; 
+            end);
+            return; 
+        end;
+        r191 = 0;
+        local function r192(...)
+            if not r185.cached.parts then
+                return;
+            end;
+            if not r185.cached.parts.IsHeld then
+                return;
+            end;
+            if not r185.cached.parts.Root or not r185.cached.parts.Root.Parent then
+                return;
+            end;
+            if not r185.cached.parts.Humanoid or not r185.cached.parts.Humanoid.Parent then
+                return;
+            end;
+            v1 = r182();
+            if v1 - r191 < r185.processInterval then
+                return;
+            end;
+            r191 = v1;
+            r193 = false;
+            r183(function(...)
+                local U = {
+                    230,
+                    224,
+                    223,
+                    88
+                }; 
+            end);
+            if not r193 then
+                return;
+            end;
+            r194 = r185.cached.parts.Root;
+            l = r185.cached.parts.Humanoid;
+            Q = r185.cached.parts.Character;
+            if not Q then
+                return;
+            end;
+            r188(l, Enum.HumanoidStateType.Running);
+            v4 = r187(Q);
+            v2 = Q.FindFirstChild(Q, "Head");
+            r194.Anchored = true;
+            r194.CanCollide = false;
+            r194.CanQuery = false;
+            b = r16;
+            if not r185.cached.oldCollides then
+                b = r15("\x1f4\xd1\xe874GV\xa2n\x08", 16515851984394);
+                r185.cached[r16[b]] = {};
+                w = b[2];
+                i = b[3];
+                for i, f in ipairs(v4) do
+                    b = i;
+                    if f then
+                        v3 = f ~= r194;
+                    end;
+                    v5 = v1;
+                    if f then
+                        r185.cached.oldCollides[f] = {
+                            ["canCollide"] = f.CanCollide,
+                            ["anchored"] = f.Anchored
+                        };
+                        f.CanCollide = false;
+                        f.Anchored = false;
+                    end; 
+                end;
+            end;
+            if v2 then
+                v2.Anchored = false;
+                v2.CanCollide = false;
+                if v2.AssemblyLinearVelocity then
+                    Q.FindFirstChild(Q, "Head").AssemblyLinearVelocity = r184;
+                end;
+                if v2.Velocity then
+                    Q.FindFirstChild(Q, "Head").Velocity = r184;
+                end;
+            end;
+            w = b[2];
+            i = b[3];
+            for i, f in ipairs(v4) do
+                b = i;
+                if f then
+                    v3 = f.Parent and f ~= Q.FindFirstChild(Q, "Head");
+                    v5 = v1;
+                end;
+                v5 = v1;
+                if f then
+                    if f.AssemblyLinearVelocity then
+                        f.AssemblyLinearVelocity = r184;
+                    end;
+                    if f.Velocity then
+                        f.Velocity = r184;
+                    end;
+                    if f.AssemblyAngularVelocity then
+                        f.AssemblyAngularVelocity = r184;
+                    end;
+                    if f.RotVelocity then
+                        f.RotVelocity = r184;
+                    end;
+                end; 
+            end;
+            if l then
+                v3 = l.MoveDirection.Magnitude > .1;
+            end;
+            v5 = v1;
+            if l then
+                r194.CFrame = r194.CFrame + l.MoveDirection * .4;
+            end;
+            b = "lastRemoteTime";
+            if v1 - r185[b] > 0 then
+                v5 = r182();
+                if r180 and r180.Parent then
+                    M[V](function(...)
+                        v5 = r180;
+                        v5.FireServer(v5, r194, r194.CFrame);
+                        return; 
+                    end);
+                end;
+                r195 = r186("Struggle");
+                if r195 then
+                    task.spawn(function(...)
+                        v5 = r195;
+                        v5.FireServer(v5);
+                        return; 
+                    end);
+                end;
+                r196 = r186("RagdollRemote");
+                if r196 then
+                    spawn(function(...)
+                        v5 = r196;
+                        v5.FireServer(v5, r194, 0);
+                        return; 
+                    end);
+                end;
+                if r195 then
+                    task.spawn(function(...)
+                        v5 = r195;
+                        v5.FireServer(v5);
+                        return; 
+                    end);
+                end;
+                b = r182();
+                r185.lastRemoteTime = b;
+            end;
+            return; 
+        end;
+        _G.antiGrabLogic = r192;
+        local function r197(...)
+            while r185.enabled do
+                r198 = false;
+                if r185.cached.parts and r185.cached.parts.IsHeld then
+                    r183(function(...)
+                        r198 = r185.cached.parts.IsHeld.Value;
+                        return; 
+                    end);
+                end;
+                if r198 and r185.cached.parts.Humanoid then
+                    r199 = r185.cached.parts.Humanoid;
+                    r200 = r185.cached.parts.Root;
+                    r183(function(...)
+                        v5 = r199;
+                        v5.ChangeState(v5, Enum.HumanoidStateType.Jumping);
+                        if r200 then
+                            r200.Velocity = Vector3.new(r200.Velocity.v2, 75, r200.Velocity.Z);
+                            r200.Velocity = Vector3.new(r200.Velocity.v2, 75, r200.Velocity.Z);
+                        end;
+                        return; 
+                    end);
+                end;
+                task.wait(); 
+            end; 
+        end;
+        local function r201(...)
+            while r185.enabled do
+                r202 = false;
+                if r185.cached.parts and r185.cached.parts.IsHeld then
+                    task.spawn(function(...)
+                        r202 = r185.cached.parts.IsHeld.Value;
+                        return; 
+                    end);
+                end;
+                if r202 then
+                    spawn(function(...)
+                        v5 = r181;
+                        if v5 then
+                            v5 = r181;
+                            v5.SendKeyEvent(v5, true, Enum.KeyCode.Space, false, game);
+                            v5 = r181;
+                            v5.SendKeyEvent(v5, false, Enum.KeyCode.Space, false, game);
+                        end;
+                        v5 = game;
+                        v1 = v5.GetService(v5, "ContextActionService");
+                        if v1 then
+                            v1.CallFunction(v1, "Jump", Enum.UserInputState.Begin, Enum.KeyCode.Space);
+                            v1.CallFunction(v1, "Jump", Enum.UserInputState.End, Enum.KeyCode.Space);
+                        end;
+                        return; 
+                    end);
+                end;
+                task.wait(); 
+            end;
+            return; 
+        end;
+        local function r203(...)
+            if not r185.cached.parts or not r185.cached.parts.IsHeld then
+                return;
+            end;
+            r204 = false;
+            r183(function(...)
+                r204 = r185.cached.parts.IsHeld.Value;
+                return; 
+            end);
+            if r204 then
+                if r185.cached.parts.Root then
+                    r185.cached.parts.originalGrabPosition = r185.cached.parts.Root.CFrame;
+                end;
+                p = r185.cached.conns;
+                if not p.heartbeat then
+                    d = game;
+                    p = d.GetService(d, "RunService").Heartbeat;
+                    r185.cached.conns.heartbeat = p.Connect(p, r192);
+                end;
+                if not r185.cached.conns.jumpStateThread then
+                    r185.cached.conns.jumpStateThread = coroutine.create(r197);
+                    coroutine.resume(r185.cached.conns.jumpStateThread);
+                end;
+                if not r185.cached.conns.spacebarThread then
+                    r185.cached.conns.spacebarThread = coroutine.create(r201);
+                    coroutine.resume(r185.cached.conns.spacebarThread);
+                end;
+            else
+                if r185.cached.conns.heartbeat then
+                    v5 = r185.cached.conns.heartbeat;
+                    v5.Disconnect(v5);
+                    r185.cached.conns.heartbeat = nil;
+                end;
+                if r185.cached.oldCollides then
+                    Q = r185.cached;
+                    l = Q.oldCollides;
+                    p = Q[2];
+                    d = Q[3];
+                    for d, v4 in pairs(v3) do
+                        r205 = d;
+                        r206 = v4;
+                        v4 = 382;
+                        if r205 and r205.Parent then
+                            M[V](function(...)
+                                r205.CanCollide = M[v5].canCollide;
+                                r205.Anchored = M[v5].anchored;
+                                if r205.AssemblyLinearVelocity then
+                                    r205.AssemblyLinearVelocity = r184;
+                                end;
+                                if r205.Velocity then
+                                    r205.Velocity = r184;
+                                end;
+                                if r205.AssemblyAngularVelocity then
+                                    r205.AssemblyAngularVelocity = r184;
+                                end;
+                                return; 
+                            end);
+                        end; 
+                    end;
+                    r185.cached.oldCollides = nil;
+                end;
+                if r185.cached.parts.Root then
+                    p = r185.cached.parts.Root;
+                    p.Anchored = false;
+                    p.CanCollide = true;
+                    p.CanQuery = true;
+                    if p.AssemblyLinearVelocity then
+                        p.AssemblyLinearVelocity = r184;
+                    end;
+                    if p.Velocity then
+                        p.Velocity = r184;
+                    end;
+                    if p.AssemblyAngularVelocity then
+                        p.AssemblyAngularVelocity = r184;
+                    end;
+                end;
+                p = r185.cached.parts.Character;
+                if p then
+                    r207 = p.FindFirstChild(p, "Head");
+                    if r207 then
+                        M[V](function(...)
+                            r207.Anchored = false;
+                            r207.CanCollide = true;
+                            r207.AssemblyAngularVelocity = r184;
+                            r207.RotVelocity = r184;
+                            if r185.cached.parts.Root then
+                                r207.CFrame = r185.cached.parts.Root.CFrame * CFrame.new(0, 1.5, 0);
+                            end;
+                            return; 
+                        end);
+                    end;
+                end;
+                if r185.cached.parts.Humanoid then
+                    M[V](function(...)
+                        v5 = r185.cached.parts.Humanoid;
+                        v5.ChangeState(v5, Enum.HumanoidStateType.Running);
+                        return; 
+                    end);
+                end;
+                r185.cached.parts.originalGrabPosition = nil;
+                return;
+            end; 
+        end;
+        _G.onHeldChanged = r203;
+        local function r208(arg1_65, ...)
+            v1 = arg1_65;
+            if not v1 then
+                return;
+            end;
+            r185.cached.parts.Character = v1;
+            p = v1.WaitForChild(v1, "HumanoidRootPart", 5);
+            l = r15;
+            d = v1.WaitForChild(v1, "Humanoid", 5);
+            if p then
+                v3 = v5;
+            end;
+            if p then
+                l = v1.WaitForChild(v1, "HumanoidRootPart", 5);
+                r185.cached.parts.Root = l;
+                l = r185.cached.parts;
+                r185.cached.parts.Humanoid = l;
+            end;
+            return; 
+        end;
+        _G.initCharacter = r208;
+        b.CreateToggle(b, {
+            ["Name"] = "Anti Grab",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_66, ...)
+                if arg1_66 then
+                    r185.enabled = true;
+                    v5 = r178;
+                    p = v5.FindFirstChild(v5, "IsHeld");
+                    if not p then
+                        p = Instance.new("BoolValue");
+                        p.Name = "IsHeld";
+                        p.Parent = r178;
+                        p.Value = false;
+                    end;
+                    r185.cached.parts = r185.cached.parts or ;
+                    r185.cached.parts.IsHeld = p;
+                    if r178.Character then
+                        r208(r178.Character);
+                    end;
+                    l = r179;
+                    Q = l.FindFirstChild(l, "CharacterEvents");
+                    d = Q and l.FindFirstChild(l, "RagdollRemote");
+                    if d then
+                        Q = d.OnClientEvent;
+                        r185.cached.conns.ragdoll = Q.Connect(Q, function(arg1_67, arg2_67, ...)
+                            p = arg2_67;
+                            v1 = arg1_67;
+                            if not r185.enabled then
+                                return;
+                            end;
+                            if not r178.Character then
+                                return;
+                            end;
+                            if r185.cached.parts.Humanoid then
+                                r188(r185.cached.parts.Humanoid, Enum.HumanoidStateType.Running);
+                            end;
+                            return; 
+                        end);
+                    end;
+                    Q = r178.CharacterAdded;
+                    r185.cached.conns.charAdded = Q.Connect(Q, r208);
+                    Q = p.GetPropertyChangedSignal(p, "Value");
+                    r185.cached.conns.heldChanged = Q.Connect(Q, r203);
+                    r203();
+                else
+                    r185.enabled = false;
+                    v4 = r185.cached;
+                    d = v4[2];
+                    p = v4[1];
+                    for l, v4 in pairs(v4.conns) do
+                        r209 = v4;
+                        Q = l;
+                        if r209 then
+                            M[V](function(...)
+                                v5 = r209;
+                                v5.Disconnect(v5);
+                                return; 
+                            end);
+                        end; 
+                    end;
+                    if r185.cached.oldCollides then
+                        v4 = r185.cached;
+                        v6 = r16;
+                        l = v4[3];
+                        d = v4[2];
+                        for l, v4 in pairs(v4.oldCollides) do
+                            r210 = l;
+                            r211 = v4;
+                            v6 = r210;
+                            v4 = 349;
+                            if v6 then
+                                v2 = r210.Parent;
+                            end;
+                            if v6 then
+                                M[V](function(...)
+                                    r210.CanCollide = M[v5].canCollide;
+                                    r210.Anchored = M[v5].anchored;
+                                    return; 
+                                end);
+                            end; 
+                        end;
+                        r185.cached.oldCollides = nil;
+                    end;
+                    d = r178.Character;
+                    p = d;
+                    if d then
+                        d = r178.Character;
+                        p = d.FindFirstChild(d, "HumanoidRootPart");
+                    end;
+                    if p then
+                        p = r178.Character.HumanoidRootPart;
+                        p.Anchored = false;
+                        p.CanCollide = true;
+                        p.CanQuery = true;
+                        v5 = r178.Character;
+                        r212 = v5.FindFirstChild(v5, "Head");
+                        if r212 then
+                            M[V](function(...)
+                                r212.Anchored = false;
+                                r212.CanCollide = true;
+                                r212.AssemblyAngularVelocity = r184;
+                                r212.RotVelocity = r184;
+                                return; 
+                            end);
+                        end;
+                    end;
+                    if r185.cached.parts and r185.cached.parts.Humanoid then
+                        M[V](function(...)
+                            v5 = r185.cached.parts.Humanoid;
+                            v5.ChangeState(v5, Enum.HumanoidStateType.Running);
+                            return; 
+                        end);
+                    end;
+                    r185.cached = {
+                        ["remotes"] = {},
+                        ["parts"] = {},
+                        ["conns"] = {}
+                    };
+                    r185.lastRemoteTime = 0;
+                    r191 = 0;
+                    return;
+                end; 
+            end
+        });
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r213 = _G.LP;
+        v8 = _G.WS;
+        r214 = _G.RepS;
+        r215 = _G.CF;
+        r216 = _G.V3;
+        o = _G.Notify;
+        R = _G.PlaySound;
+        h = _G.Sounds;
+        m = game;
+        r217 = m.GetService(m, "RunService");
+        V = _G.twait;
+        f.AntiKick = f.AntiKick or {
+            ["enabled"] = false,
+            ["antiKickThread"] = nil,
+            ["kunai"] = nil,
+            ["connections"] = {}
+        };
+        r218 = f.AntiKick;
+        local function r219(...)
+            v5 = workspace;
+            d = r214;
+            p = v5.FindFirstChild(v5, r213.Name .. "SpawnedInToys");
+            v2 = r15;
+            r220 = d.FindFirstChild(d, "MenuToys") and d.FindFirstChild(d, "DestroyToy");
+            if p then
+                v3 = r220;
+            end;
+            if p then
+                v2 = p.GetChildren;
+                v4 = {
+                    v2(p)
+                };
+                Q = v2[3];
+                l = v2[2];
+                for Q, v6 in pairs(v(v3)) do
+                    v2 = Q;
+                    r221 = v6;
+                    if M[v5].Name == "AntiKick" or M[v5].Name == "NinjaShuriken" then
+                        task.spawn(function(...)
+                            v5 = r220;
+                            v5.FireServer(v5, M[v5]);
+                            return; 
+                        end);
+                    end; 
+                end;
+            end;
+            return; 
+        end;
+        _G.ClearKunai = r219;
+        local function r222(arg1_68, ...)
+            v1 = arg1_68;
+            if not v1 or not v1.FindFirstChild(v1, "StickyPart") then
+                return;
+            end;
+            d = r213.Character;
+            if not d or not d.FindFirstChild(d, "HumanoidRootPart") then
+                return;
+            end;
+            l = d.HumanoidRootPart;
+            l = l.FindFirstChild(l, "FirePlayerPart") or l.WaitForChild(l, "FirePlayerPart", 5);
+            if l then
+                v5 = r214;
+                v3 = v5.WaitForChild(v5, "PlayerEvents");
+                Q = v3.WaitForChild(v3, "StickyPartEvent");
+                Q.FireServer(Q, v1.StickyPart, l, r215(0, 0, 0) * CFrame.Angles(0, math.rad(90), math.rad(90)));
+            end;
+            r218.kunai = v1;
+            return; 
+        end;
+        _G.StickKunai = r222;
+        local function r223(arg1_69, ...)
+            v3 = workspace.PlotItems.PlayersInPlots;
+            if not v3.FindFirstChild(v3, arg1_69.Name) then
+                return false;
+            end;
+            l = workspace.Plots;
+            p = l[2];
+            d = l[3];
+            l = "pairs";
+            for d, v4 in pairs(l.GetChildren(l)) do
+                Q = d;
+                v2 = v4.FindFirstChild(v4, "PlotSign");
+                if v2 then
+                    v6 = v2.FindFirstChild(v2, "ThisPlotsOwners");
+                end;
+                if v2 then
+                    v7 = v2.GetChildren;
+                    b = v7[3];
+                    for b, v7 in v7[1], pairs(v7(v2)) do
+                        f = b;
+                        v8 = v7.Value;
+                        v5 = v8 == arg1_69.Name;
+                        if v5 then
+                            v5 = workspace.PlotItems;
+                            v8 = v5.FindFirstChild(v5, v4.Name);
+                            if v8 then
+                                return true, v8;
+                            else
+                                
+                            end;
+                        end; 
+                    end;
+                end; 
+            end;
+            return false; 
+        end;
+        _G.CheckForHome = r223;
+        local function r224(arg1_70, ...)
+            r225 = arg1_70;
+            p = r213;
+            r226 = r214.MenuToys.SpawnToyRemoteFunction;
+            b = 20663324566934;
+            while not p.WaitForChild(p, "CanSpawnToy")[r16[r15("Y\x16\xcfo\xd7", b)]] do
+                if not r218.enabled or tick() - tick() > 5 then
+                    return nil;
+                else
+                    task.wait();
+                end; 
+            end;
+            v5 = p.Character;
+            if v4 then
+                v3 = v4.FindFirstChild(v4, "HumanoidRootPart");
+            end;
+            if v4 then
+                r227 = v4.HumanoidRootPart;
+                task.spawn(function(...)
+                    task.spawn(function(...)
+                        v5 = r226;
+                        v5.InvokeServer(v5, r225, r227.CFrame * r215(0, 15, 20), r216(0, 0, 0));
+                        return; 
+                    end);
+                    return; 
+                end);
+                w = {
+                    r223(p)
+                };
+                v6 = w[2];
+                w = r223(p);
+                v5 = workspace;
+                i = v5.FindFirstChild(v5, p.Name .. "SpawnedInToys");
+                if w then
+                    v3 = w[2];
+                end;
+                if w then
+                    return v6.WaitForChild(v6, r225, 2);
+                end;
+                f = workspace.PlotItems.PlayersInPlots;
+                b = not f.FindFirstChild(f, p.Name);
+                if b then
+                    v3 = v5.FindFirstChild(v5, p.Name .. "SpawnedInToys");
+                end;
+                if b then
+                    return i.WaitForChild(i, r225, 2);
+                end;
+            end;
+            return nil; 
+        end;
+        _G.SpawnToy = r224;
+        local function r228(...)
+            r218.antiKickThread = task.spawn(function(...)
+                v4 = 29166302197005;
+                while r218[r16[r15("dx*\xeb\xf7<'", v4)]] do
+                    v1 = r213;
+                    v5 = v1.Character;
+                    local function p(...)
+                        v1 = r224("NinjaShuriken");
+                        if v1 then
+                            v1.Name = "AntiKick";
+                            r222(v1);
+                            return v1;
+                        end;
+                        return nil; 
+                    end;
+                    if not p or (not p.FindFirstChild(p, "Humanoid") or p.Humanoid.Health <= 0) then
+                        v5 = r217.Heartbeat;
+                        v5.Wait(v5);
+                    end;
+                    v5 = workspace;
+                    d = v5.FindFirstChild(v5, v1.Name .. "SpawnedInToys");
+                    l = d and d.FindFirstChild(d, "AntiKick");
+                    local function Q(...)
+                        v1 = r224("NinjaShuriken");
+                        if v1 then
+                            v1.Name = "AntiKick";
+                            r222(v1);
+                            return v1;
+                        end;
+                        return nil; 
+                    end;
+                    if l then
+                        v3 = l.FindFirstChild(l, "StickyPart");
+                    end;
+                    if l then
+                        v4 = l.StickyPart;
+                        v2 = p.FindFirstChild(p, "HumanoidRootPart");
+                        if v2 then
+                            v5 = v4.FindFirstChild(v4, "StickyWeld");
+                            v5 = v5;
+                            if (not v5 or not v5.Part1) and (v2.Position - v4.Position).Magnitude <= 30 then
+                                r222(d and d.FindFirstChild(d, "AntiKick"));
+                            else
+                                if (v2.Position - v4[r16[r15(v8, t)]]).Magnitude > 30 then
+                                    r219();
+                                    l = v5();
+                                end;
+                            end;
+                        end;
+                    else
+                        l = Q();
+                    end;
+                    v4 = r217.Heartbeat;
+                    v4.Wait(v4); 
+                end;
+                return; 
+            end);
+            return; 
+        end;
+        _G.StartAntiKick = r228;
+        local function r229(...)
+            r218.enabled = false;
+            l = r218;
+            d = l.connections;
+            p = l[3];
+            d = l[1];
+            for p, Q in d, pairs(d) do
+                l = p;
+                if Q then
+                    Q.Disconnect(Q);
+                end; 
+            end;
+            r218.connections = {};
+            if r218.antiKickThread then
+                task.cancel(r218.antiKickThread);
+                r218.antiKickThread = nil;
+            end;
+            r219();
+            r218.kunai = nil;
+            return; 
+        end;
+        _G.StopAntiKick = r229;
+        b.CreateToggle(b, {
+            ["Name"] = "Anti Kick (shuriken)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_71, ...)
+                if arg1_71 then
+                    r218.enabled = true;
+                    p = r213.CharacterAdded;
+                    r218.connections.characterAdded = p.Connect(p, function(arg1_72, ...)
+                        v1 = arg1_72;
+                        task.wait();
+                        if r218.enabled then
+                            r219();
+                        end;
+                        return; 
+                    end);
+                    r228();
+                else
+                    r229();
+                end;
+                return; 
+            end
+        });
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r230 = _G.LP;
+        r231 = _G.PS;
+        r232 = _G.WS;
+        r233 = _G.RepS;
+        r234 = _G.CF;
+        r235 = _G.V3;
+        v8 = _G.tspawn;
+        h = _G.tcancel;
+        m = _G.twait;
+        r236 = pcall;
+        r237 = _G.DestroyRemote;
+        f.AntiInput = f.AntiInput or {
+            ["enabled"] = false,
+            ["loopThread"] = nil,
+            ["selectedItem"] = "FoodHamburger",
+            ["detectedStolen"] = {}
+        };
+        r238 = f.AntiInput;
+        local function r239(...)
+            v5 = r232;
+            v1 = v5.FindFirstChild(v5, r230.Name .. "SpawnedInToys");
+            if not v1 then
+                return;
+            end;
+            Q = v1.GetChildren;
+            l = {
+                Q(v1)
+            };
+            l = Q[1];
+            p = Q[2];
+            for d, v4 in ipairs(v(l)) do
+                Q = d;
+                r240 = v4;
+                v2 = r240.Name;
+                if v2 == r238.selectedItem then
+                    f = "C\x00D\xbbn\xe0VM";
+                    v5 = r240;
+                    v2 = v5.FindFirstChild(v5, r16[r15(f, 7834958335552)]);
+                    v6 = v2 and v2.Position;
+                    v5 = v5;
+                    if v2 then
+                        f = r231;
+                        v7 = {
+                            f.GetPlayers(f)
+                        };
+                        i = f[2];
+                        w = f[1];
+                        for b, v7 in ipairs(v(v7)) do
+                            f = b;
+                            if v7 ~= r230 and v7.Character then
+                                if (v7.Character.HumanoidRootPart.Position - (w and v2.Position)).Magnitude < 3 and not r238.detectedStolen[r240] then
+                                    r238.detectedStolen[r240] = true;
+                                    r236(function(...)
+                                        v5 = r237;
+                                        if v5 then
+                                            v5 = r237;
+                                            v5.FireServer(v5, r240);
+                                        end;
+                                        return; 
+                                    end);
+                                    return true;
+                                else
+                                    
+                                end;
+                            end; 
+                        end;
+                    else
+                        i = r240;
+                        v6 = i.GetPivot(i).Position;
+                    end;
+                end; 
+            end;
+            return false; 
+        end;
+        b.CreateToggle(b, {
+            ["Name"] = "Anti Input (Hamburger)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_73, ...)
+                if arg1_73 then
+                    r238.enabled = true;
+                    r238.detectedStolen = {};
+                    local function r241(...)
+                        v1 = r230;
+                        v5 = r232;
+                        p = v5.FindFirstChild(v5, v1.Name .. "SpawnedInToys");
+                        if not p then
+                            return nil;
+                        end;
+                        r239();
+                        l = "selectedItem";
+                        d = p.FindFirstChild(p, r238[l]);
+                        if not d then
+                            l = v1.FindFirstChild(v1, "CanSpawnToy");
+                            if l then
+                                v3 = l.Value;
+                            end;
+                            if l then
+                                Q = r230.Character;
+                                if Q then
+                                    v3 = Q.FindFirstChild(Q, "HumanoidRootPart");
+                                end;
+                                if Q then
+                                    r242 = Q.HumanoidRootPart;
+                                    r243 = r233.MenuToys.SpawnToyRemoteFunction;
+                                    task.spawn(function(...)
+                                        v5 = r243;
+                                        v5.InvokeServer(v5, r238.selectedItem, r242.CFrame * r234(0, 12, 20), r235(0, 0, 0));
+                                        return; 
+                                    end);
+                                    for O = 1, 30 do
+                                        f = v6;
+                                        if p.FindFirstChild(p, r238.selectedItem) then
+                                            
+                                        else
+                                            task.wait();
+                                        end; 
+                                    end;
+                                end;
+                            end;
+                        end;
+                        return d; 
+                    end;
+                    r238.loopThread = task.spawn(function(...)
+                        v1 = r230;
+                        Q = r15("\xb2BbW5\x01S", 32062034786898);
+                        while r238[r16[Q]] do
+                            Q = r16;
+                            if not v1.Character or (not Q.FindFirstChild(Q, "Humanoid") or v1.Character.Humanoid.Health <= 0) then
+                                task.wait();
+                            else
+                                r244 = r230.Character;
+                                v5 = r244;
+                                r245 = v5.FindFirstChild(v5, "HumanoidRootPart");
+                                if not r244 or not r245 then
+                                    task.wait();
+                                else
+                                    r246 = r241();
+                                    if not r246 then
+                                        task.wait();
+                                    else
+                                        v5 = r246;
+                                        Q = v5.FindFirstChild(v5, "HoldPart");
+                                        if not Q then
+                                            task.wait();
+                                        else
+                                            r247 = Q.FindFirstChild(Q, "HoldItemRemoteFunction");
+                                            r248 = Q.FindFirstChild(Q, "DropItemRemoteFunction");
+                                            if not r247 or not r248 then
+                                                task.wait();
+                                            else
+                                                task.spawn(function(...)
+                                                    M[U[10]](function(...)
+                                                        v5 = r238;
+                                                        v5.InvokeServer(v5, r16, r15);
+                                                        return; 
+                                                    end);
+                                                    return; 
+                                                end);
+                                                task.wait();
+                                                task.spawn(function(...)
+                                                    r236(function(...)
+                                                        v5 = r238;
+                                                        v5.InvokeServer(v5, r16, r15.CFrame * r234(0, 199, 0), r235(0, 0, 0));
+                                                        return; 
+                                                    end);
+                                                    return; 
+                                                end);
+                                                task.wait(.035);
+                                            end;
+                                        end;
+                                    end;
+                                end;
+                            end; 
+                        end;
+                        return; 
+                    end);
+                else
+                    r238.enabled = false;
+                    if r238.loopThread then
+                        task.cancel(r238.loopThread);
+                        r238.loopThread = nil;
+                    end;
+                    r238.detectedStolen = {};
+                    return;
+                end; 
+            end
+        });
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r249 = _G.LP;
+        r250 = _G.PS;
+        r251 = _G.WS;
+        r252 = _G.RepS;
+        r253 = _G.CF;
+        r254 = _G.V3;
+        r255 = task;
+        r256 = pcall;
+        r257 = _G.HE;
+        r258 = _G.SNO;
+        v8 = _G.Selected;
+        r259 = _G.GE;
+        r260 = _G.DestroyRemote;
+        B = _G.runService;
+        f.AntiInput = f.AntiInput or {
+            ["enabled"] = false,
+            ["loopThread"] = nil,
+            ["selectedItem"] = "FoodBanana",
+            ["hasItem"] = false,
+            ["currentBanana"] = nil,
+            ["bananaParts"] = {},
+            ["lastTargetPos"] = nil,
+            ["lastTargetTime"] = nil,
+            ["targetVelocity"] = r254(0, 0, 0),
+            ["lastNetworkUpdate"] = 0,
+            ["lastOwnershipCheck"] = 0,
+            ["isTakingOwnership"] = false,
+            ["originalPos"] = nil,
+            ["currentTarget"] = nil
+        };
+        r261 = f.AntiInput;
+        r262 = .1;
+        local function r263(...)
+            v5 = game;
+            v1 = v5.GetService(v5, "Stats");
+            if v1 then
+                v5 = game;
+                v3 = v1.Network and v1.Network.ServerStatsItem;
+            end;
+            if v1 then
+                v3 = v1.Network.ServerStatsItem["Data Ping"];
+                r262 = v3.GetValue(v3) / 1000;
+            end;
+            return; 
+        end;
+        local function r264(arg1_74, ...)
+            r265 = arg1_74;
+            p = r257;
+            if p then
+                p = r257;
+                v3 = p.FindFirstChild(p, "Use");
+            end;
+            if p then
+                r256(function(...)
+                    v5 = r257.Use;
+                    v5.FireServer(v5, r265);
+                    return; 
+                end);
+            end;
+            return; 
+        end;
+        local function r266(...)
+            v5 = r251;
+            v1 = v5.FindFirstChild(v5, r249.Name .. "SpawnedInToys");
+            if v1 then
+                M[U[15]](r256.ragdollAura.thread);
+                r256.ragdollAura.thread = nil;
+                if r251.enabled and (r251.currentPallet and r251.currentPallet.Parent) then
+                    v5 = r251.currentPallet;
+                    r267 = v5.FindFirstChild(v5, "SoundPart");
+                    if r267 then
+                        M[({
+                            L,
+                            t,
+                            224,
+                            223,
+                            m,
+                            c_
+                        })[9]](function(...)
+                            r267.CFrame = CFrame.new(0, 1000000000, 0);
+                            return; 
+                        end);
+                    end;
+                end;
+                r15("Ragdoll Aura", "Disabled", 2);
+                return;
+            end;
+            return; 
+        end;
+        local function r268(...)
+            v1 = r249.Character;
+            if not v1 then
+                return nil;
+            end;
+            if not v1.FindFirstChild(v1, "HumanoidRootPart") then
+                return nil;
+            end;
+            l = math.huge;
+            v2 = r250;
+            Q = v2[2];
+            v2 = v2[1];
+            for v4, w in pairs(v2.GetPlayers(v2)) do
+                v6 = v4;
+                if w ~= r249 and w.Character then
+                    v5 = ((w.Character.HumanoidRootPart.Position - v1.FindFirstChild(v1, "HumanoidRootPart").Position).Magnitude and w) < math.huge;
+                end; 
+            end;
+            return nil; 
+        end;
+        local function r269(...)
+            return r268(); 
+        end;
+        local function r270(arg1_75, ...)
+            v1 = arg1_75;
+            if not v1 or not v1.Parent then
+                return false;
+            end;
+            Q = v1.GetChildren;
+            l = {
+                Q(v1)
+            };
+            p = Q[2];
+            d = Q[3];
+            for d, v4 in pairs(v("pairs")) do
+                Q = d;
+                if v4.Name == "EdiblePart" then
+                    return true;
+                else
+                    
+                end; 
+            end;
+            return false; 
+        end;
+        local function r271(arg1_76, ...)
+            v1 = arg1_76;
+            if not v1 then
+                return true;
+            end;
+            Q = v1.GetChildren;
+            l = {
+                Q(v1)
+            };
+            p = Q[2];
+            d = Q[3];
+            for d, v4 in ipairs(v("ipairs")) do
+                Q = d;
+                v2 = "BasePart";
+                if v4.IsA(v4, v2) then
+                    v2 = v4.FindFirstChild(v4, "PartOwner");
+                    if v2 then
+                        v6 = v2.Value ~= "" and v2.Value ~= r249.Name;
+                        v4.FindFirstChild(v4, r16[i]);
+                    end;
+                    if v2 then
+                        return false;
+                    else
+                        
+                    end;
+                end; 
+            end;
+            return true; 
+        end;
+        local function r272(arg1_77, ...)
+            v1 = arg1_77;
+            if not v1 then
+                return;
+            end;
+            Q = v1.GetChildren;
+            r261.bananaParts = {};
+            v5 = ipairs;
+            l = {
+                Q(v1)
+            };
+            p = Q[2];
+            d = Q[3];
+            for d, v4 in v5(v("ipairs")) do
+                Q = d;
+                r273 = v4;
+                v5 = r273;
+                if v5.IsA(v5, "BasePart") then
+                    r256(function(...)
+                        v5 = r258;
+                        v5.FireServer(v5, r273, r273.CFrame);
+                        r273.CanTouch = true;
+                        r273.CanCollide = true;
+                        r273.Anchored = false;
+                        table.insert(r261.bananaParts, r273);
+                        return; 
+                    end);
+                end; 
+            end;
+            return; 
+        end;
+        local function r274(arg1_78, ...)
+            v1 = arg1_78;
+            if not v1 or r261.isTakingOwnership then
+                return false;
+            end;
+            r261.isTakingOwnership = true;
+            p = r249.Character;
+            if not p then
+                r261.isTakingOwnership = false;
+                return false;
+            end;
+            d = p.FindFirstChild(p, "HumanoidRootPart");
+            if not d then
+                r261.isTakingOwnership = false;
+                return false;
+            end;
+            v6 = v1.GetChildren;
+            v5 = ipairs;
+            v2 = {
+                v6(v1)
+            };
+            Q = v6[2];
+            v4 = v6[3];
+            for v4, w in v5(v(v3)) do
+                v6 = v4;
+                if w.IsA(w, "BasePart") then
+                    l = w;
+                else
+                    
+                end; 
+            end;
+            if not nil then
+                r261.isTakingOwnership = false;
+                return false;
+            end;
+            r261.originalPos = d.CFrame;
+            d.CFrame = nil.CFrame * r253(0, -6, 0);
+            r255.wait(.05);
+            i = not false;
+            w = v5;
+            v6 = 0 < 100;
+            while not i do
+                v5 = v5;
+                if v6 then
+                    v8 = v1.GetChildren;
+                    v2 = 0 + 1;
+                    v7 = {
+                        v8(v1)
+                    };
+                    f = v8[3];
+                    b = v8[2];
+                    for f, v7 in ipairs(v(v7)) do
+                        w = f;
+                        r275 = v7;
+                        v8 = r275;
+                        if v8.IsA(v8, "BasePart") then
+                            r256(function(...)
+                                v5 = r258;
+                                v5.FireServer(v5, r275, r275.CFrame);
+                                return; 
+                            end);
+                        end; 
+                    end;
+                    v8 = v1.GetChildren;
+                    r255.wait();
+                    v7 = {
+                        v8(v1)
+                    };
+                    f = v8[3];
+                    for f, v7 in v8[1], ipairs(v(v7)) do
+                        w = f;
+                        v8 = v7.IsA(v7, "BasePart");
+                        if v8 then
+                            v8 = v7.FindFirstChild(v7, "PartOwner");
+                            if v8 then
+                                t = v8.Value == r249.Name;
+                            end;
+                            v5 = w;
+                            if v8 then
+                                Q = true;
+                            else
+                                
+                            end;
+                        end; 
+                    end;
+                    if not false then
+                        for i = 1, 1 do
+                            w = i;
+                            L = v1.GetChildren;
+                            o = {
+                                L(v1)
+                            };
+                            I = L[3];
+                            for I, o in L[1], ipairs(v(o)) do
+                                v8 = I;
+                                r276 = o;
+                                L = r276;
+                                if L.IsA(L, "BasePart") then
+                                    M[m](function(...)
+                                        v5 = r258;
+                                        v5.FireServer(v5, r276, r276.CFrame);
+                                        return; 
+                                    end);
+                                end; 
+                            end; 
+                        end;
+                    end;
+                end;
+                if false then
+                    r261.bananaParts = {};
+                    v8 = v1.GetChildren;
+                    v7 = {
+                        v8(v1)
+                    };
+                    f = v8[3];
+                    b = v8[2];
+                    for f, v7 in ipairs(v(v7)) do
+                        r277 = v7;
+                        w = f;
+                        v8 = r277;
+                        if v8.IsA(v8, "BasePart") then
+                            M[m](function(...)
+                                v5 = r258;
+                                v5.FireServer(v5, r277, r277.CFrame);
+                                r277.CanTouch = true;
+                                r277.CanCollide = true;
+                                r277.Anchored = false;
+                                table.insert(r261.bananaParts, r277);
+                                return; 
+                            end);
+                        end; 
+                    end;
+                end;
+                if r261.originalPos then
+                    d.CFrame = r261.originalPos;
+                    d.Velocity = r254(0, 0, 0);
+                    d.AssemblyLinearVelocity = r254(0, 0, 0);
+                    break;
+                end;
+                r261.isTakingOwnership = false;
+                r261.originalPos = nil;
+                return false; 
+            end;
+            v6 = 0 < 100; 
+        end;
+        local function r278(arg1_79, arg2_79, ...)
+            p = arg2_79;
+            v1 = arg1_79;
+            if not v1 then
+                return nil;
+            end;
+            d = v1.FindFirstChild(v1, "HumanoidRootPart");
+            if not d then
+                return nil;
+            end;
+            return d.Position; 
+        end;
+        local function r279(...)
+            if not r261.currentBanana or (not r261.currentBanana.Parent or (#r261.bananaParts == 0 or r261.isTakingOwnership)) then
+                return;
+            end;
+            v1 = tick();
+            if v1 - r261.lastOwnershipCheck > .003 then
+                p = tick();
+                r261.lastOwnershipCheck = p;
+                if not r271(r261.currentBanana) then
+                    r255.spawn(function(...)
+                        r274(r261.currentBanana);
+                        return; 
+                    end);
+                    return;
+                end;
+            end;
+            r263();
+            p = r269();
+            if not p then
+                return;
+            end;
+            r261.currentTarget = p;
+            d = p.Character;
+            if not d then
+                return;
+            end;
+            if not d.FindFirstChild(d, "HumanoidRootPart") then
+                return;
+            end;
+            Q = r278(d, r262);
+            if not Q then
+                return;
+            end;
+            r280 = Q - r254(0, 2.3, 0) + r254(math.sin(tick() * 4) * .8, math.sin(tick() * 12) * 5 + 2, math.cos(tick() * 4) * .8);
+            r281 = v1 - r261.lastNetworkUpdate > .15;
+            v7 = r261;
+            f = v7.bananaParts;
+            b = v7[3];
+            i = v7[2];
+            for b, v8 in ipairs("ipairs") do
+                v7 = b;
+                r282 = v8;
+                if M[v5] and M[v5].Parent then
+                    M[m](function(...)
+                        v1 = r280 - M[v5].Position;
+                        p = v1.Magnitude;
+                        if p > .3 then
+                            M[v5].AssemblyLinearVelocity = v1.Unit * math.min(p * 30, 4000);
+                        else
+                            M[v5].AssemblyLinearVelocity = r254(0, -30, 0);
+                        end;
+                        v5 = M[v5];
+                        v5.AssemblyAngularVelocity = r254(0, 0, 0);
+                        if r281 and (r259 and r259.DestroyGrabLine) then
+                            v5 = r259.DestroyGrabLine;
+                            v5.FireServer(v5, M[v5]);
+                        end;
+                        return; 
+                    end);
+                end; 
+            end;
+            if r281 then
+                b = tick();
+                r261.lastNetworkUpdate = b;
+            end;
+            return; 
+        end;
+        b.CreateToggle(b, {
+            ["Name"] = "Protection (aura banana)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_80, ...)
+                if arg1_80 then
+                    r261.enabled = true;
+                    r261.hasItem = false;
+                    r261.currentBanana = nil;
+                    r261.bananaParts = {};
+                    r261.lastTargetPos = nil;
+                    r261.lastTargetTime = nil;
+                    r261.targetVelocity = r254(0, 0, 0);
+                    r261.lastNetworkUpdate = 0;
+                    r261.lastOwnershipCheck = 0;
+                    r261.isTakingOwnership = false;
+                    r261.originalPos = nil;
+                    r261.currentTarget = nil;
+                    local function r283(...)
+                        v1 = r249;
+                        v5 = r251;
+                        p = v5.FindFirstChild(v5, v1.Name .. "SpawnedInToys");
+                        if not p then
+                            return nil;
+                        end;
+                        d = p.FindFirstChild(p, "FoodBanana");
+                        if not d then
+                            l = v1.FindFirstChild(v1, "CanSpawnToy");
+                            if l then
+                                v3 = l.Value;
+                            end;
+                            if l then
+                                Q = r249.Character;
+                                if Q then
+                                    v3 = Q.FindFirstChild(Q, "HumanoidRootPart");
+                                end;
+                                if Q then
+                                    r284 = Q.HumanoidRootPart;
+                                    r285 = r252.MenuToys.SpawnToyRemoteFunction;
+                                    r255.spawn(function(...)
+                                        v5 = r285;
+                                        v5.InvokeServer(v5, "FoodBanana", r284.CFrame * r253(0, 12, 20), r254(0, 0, 0));
+                                        return; 
+                                    end);
+                                    for O = 1, 30 do
+                                        f = v6;
+                                        if p.FindFirstChild(p, "FoodBanana") then
+                                            
+                                        else
+                                            r255.wait();
+                                        end; 
+                                    end;
+                                end;
+                            end;
+                        end;
+                        return d; 
+                    end;
+                    r261.loopThread = r255.spawn(function(...)
+                        v3 = r255;
+                        while not v3 do
+                            r283();
+                            if r249 then
+                                p = r16;
+                                v1 = r261.Character;
+                                if v1 then
+                                    p = v1.FindFirstChild(v1, "HumanoidRootPart");
+                                    v3 = p;
+                                    if p then
+                                    end;
+                                end;
+                            end;
+                            return; 
+                        end;
+                        648.CFrame = r255; 
+                    end);
+                else
+                    r261.enabled = false;
+                    r261.hasItem = false;
+                    r261.currentBanana = nil;
+                    r261.bananaParts = {};
+                    r261.lastTargetPos = nil;
+                    r261.lastTargetTime = nil;
+                    r261.targetVelocity = r254(0, 0, 0);
+                    r261.lastNetworkUpdate = 0;
+                    r261.lastOwnershipCheck = 0;
+                    r261.isTakingOwnership = false;
+                    r261.originalPos = nil;
+                    r261.currentTarget = nil;
+                    if r261.loopThread then
+                        r255.cancel(r261.loopThread);
+                        r261.loopThread = nil;
+                    end;
+                    r266();
+                    return;
+                end; 
+            end
+        });
+        r286 = _G.PS;
+        r287 = _G.LP;
+        r288 = _G.WS;
+        r289 = _G.Notify;
+        r290 = _G.PlaySound;
+        r291 = _G.Sounds;
+        r292 = {
+            ["InstrumentDrumBongos"] = true,
+            ["InstrumentBrassTrumpet"] = true,
+            ["InstrumentBrassBugle"] = true,
+            ["InstrumentVoiceMicrophone"] = true,
+            ["InstrumentWoodwindOcarina"] = true,
+            ["InstrumentGuitarUkulele"] = true,
+            ["InstrumentGuitarLyre"] = true,
+            ["InstrumentGuitarBanjo"] = true,
+            ["InstrumentGuitarAcoustic"] = true,
+            ["CupMugBrown"] = true,
+            ["CupMugWhite"] = true,
+            ["FoodBanana"] = true,
+            ["FoodBread"] = true,
+            ["FoodBroccoli"] = true,
+            ["FoodCakePink"] = true,
+            ["FoodCoconut"] = true,
+            ["FoodDippyEgg"] = true,
+            ["FoodDonut"] = true,
+            ["FoodFrenchFries"] = true,
+            ["FoodHotdog"] = true,
+            ["FoodMayonnaise"] = true,
+            ["FoodMeatStick"] = true,
+            ["FoodMushroomPoison"] = true,
+            ["FoodPizzaCheese"] = true,
+            ["FoodPizzaPepperoni"] = true,
+            ["FoodSodaCan"] = true,
+            ["FoodHamburger"] = true,
+            ["PoopPile"] = true,
+            ["PoopPileSparkle"] = true
+        };
+        r293 = {};
+        local function r294(arg1_81, ...)
+            v1 = arg1_81;
+            p = v1.FindFirstChild(v1, "HoldPart");
+            if p then
+                return p.Position;
+            end;
+            return v1.GetPivot(v1).Position; 
+        end;
+        task.spawn(function(...)
+            v5 = true;
+            while v5 do
+                v5 = r288;
+                if v5.FindFirstChild(v5, r287.Name .. "SpawnedInToys") then
+                    Q = v3.GetChildren;
+                    l = {
+                        Q(v3)
+                    };
+                    p = Q[2];
+                    d = Q[3];
+                    for d, v4 in ipairs(v(v3)) do
+                        Q = d;
+                        b = "Name";
+                        if r292[v4[b]] and not r293[v4] then
+                            r294(v4);
+                            b = r286;
+                            f = {
+                                b.GetPlayers(b)
+                            };
+                            w = b[2];
+                            i = b[3];
+                            for i, f in ipairs(v(f)) do
+                                b = i;
+                                if f ~= r287 and f.Character then
+                                    if (f.Character.HumanoidRootPart.Position - r294(v4)).Magnitude < 3 then
+                                        r293[v4] = true;
+                                        r289("TOY STOLEN", f.DisplayName .. " took " .. v4.Name, 3);
+                                        r290(r291.Notify);
+                                    end;
+                                end; 
+                            end;
+                        end; 
+                    end;
+                    task.wait(.08);
+                end; 
+            end;
+            return; 
+        end);
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r295 = _G.LP;
+        r296 = _G.WS;
+        r297 = _G.Notify;
+        v8 = _G.PlaySound;
+        q = _G.Sounds;
+        T = _G.tspawn;
+        R = _G.twait;
+        r298 = pcall;
+        h = game;
+        r299 = h.GetService(h, "RunService");
+        f.AntiAntiInput = f.AntiAntiInput or {
+            ["enabled"] = false,
+            ["connections"] = {},
+            ["spamThreads"] = {},
+            ["spamActive"] = {}
+        };
+        r300 = f.AntiAntiInput;
+        r301 = {
+            ["InstrumentDrumBongos"] = true,
+            ["InstrumentBrassTrumpet"] = true,
+            ["InstrumentBrassBugle"] = true,
+            ["InstrumentVoiceMicrophone"] = true,
+            ["InstrumentWoodwindOcarina"] = true,
+            ["InstrumentGuitarUkulele"] = true,
+            ["InstrumentGuitarLyre"] = true,
+            ["InstrumentGuitarBanjo"] = true,
+            ["InstrumentGuitarAcoustic"] = true,
+            ["CupMugBrown"] = true,
+            ["CupMugWhite"] = true,
+            ["FoodBanana"] = true,
+            ["FoodBread"] = true,
+            ["FoodBroccoli"] = true,
+            ["FoodCakePink"] = true,
+            ["FoodCoconut"] = true,
+            ["FoodDippyEgg"] = true,
+            ["FoodDonut"] = true,
+            ["FoodFrenchFries"] = true,
+            ["FoodHotdog"] = true,
+            ["FoodMayonnaise"] = true,
+            ["FoodMeatStick"] = true,
+            ["FoodMushroomPoison"] = true,
+            ["FoodPizzaCheese"] = true,
+            ["FoodPizzaPepperoni"] = true,
+            ["FoodSodaCan"] = true,
+            ["FoodHamburger"] = true,
+            ["PoopPile"] = true,
+            ["PoopPileSparkle"] = true
+        };
+        _G.targetItems = r301;
+        local function r302(arg1_82, ...)
+            v1 = arg1_82;
+            if v1 then
+                v3 = r300.spamActive[v1];
+            end;
+            if v1 then
+                r300.spamActive[v1] = false;
+            end;
+            return; 
+        end;
+        local function r303(arg1_83, ...)
+            r304 = arg1_83;
+            if not r300.enabled then
+                return;
+            end;
+            if not r304 then
+                return;
+            end;
+            if r300.spamActive[r304] then
+                return;
+            end;
+            p = r304.Parent;
+            if p then
+                v3 = p.Name == r295.Name .. "SpawnedInToys";
+            end;
+            if p then
+                return;
+            end;
+            r305 = r295.Character;
+            if not r305 then
+                return;
+            end;
+            v5 = r305;
+            if not v5.FindFirstChild(v5, "HumanoidRootPart") then
+                return;
+            end;
+            v5 = r304;
+            Q = v5.FindFirstChild(v5, "HoldPart");
+            v5 = not Q;
+            if v5 then
+                v5 = r304;
+                Q = v5.WaitForChild(v5, "HoldPart", 0.5);
+            end;
+            if not Q then
+                return;
+            end;
+            r306 = Q.FindFirstChild(Q, "HoldItemRemoteFunction");
+            r307 = Q.FindFirstChild(Q, "DropItemRemoteFunction");
+            if not r306 then
+                r306 = Q.WaitForChild(Q, "HoldItemRemoteFunction", .3);
+            end;
+            if not r306 then
+                return;
+            end;
+            r300.spamActive[r304] = true;
+            table.insert(r300.spamThreads, task.spawn(function(...)
+                v1 = r300.enabled;
+                v3 = r300.spamActive[r304] and (r304 and r304.Parent);
+                while not v1 do
+                    if v3 then
+                        r298(function(...)
+                            v5 = r306;
+                            v5.InvokeServer(v5, r304, r305);
+                            return; 
+                        end);
+                        v5 = r299.Heartbeat;
+                        v5.Wait(v5);
+                    end;
+                    return; 
+                end;
+                v3 = r300.spamActive[r304] and (r304 and r304.Parent);
+                v5 = not M[v4]; 
+            end));
+            if r307 then
+                table.insert(r300.spamThreads, task.spawn(function(...)
+                    v1 = r300.enabled;
+                    v3 = v1;
+                    while not v1 do
+                        if v3 then
+                            r298(function(...)
+                                v5 = r307;
+                                v5.InvokeServer(v5, r304, Vector3.new(0, 0, 0));
+                                return; 
+                            end);
+                            r298(function(...)
+                                v5 = r307;
+                                v5.InvokeServer(v5, r304, Vector3.new(0, 0, 0));
+                                return; 
+                            end);
+                            v5 = r299.Heartbeat;
+                            v5.Wait(v5);
+                        end;
+                        return; 
+                    end;
+                    v5 = not M[v4];
+                    v3 = r300.spamActive[r304] and (r304 and r304.Parent); 
+                end));
+            end;
+            if r304.AncestryChanged then
+                w = r304.AncestryChanged;
+                r308 = w.Connect(w, function(...)
+                    if not r304.Parent then
+                        r302(r304);
+                        v5 = r308;
+                        if v5 then
+                            v5 = M[b];
+                            v5.Disconnect(v5);
+                        end;
+                    end;
+                    return; 
+                end);
+                table.insert(r300.connections, r308);
+            end;
+            return; 
+        end;
+        b.CreateToggle(b, {
+            ["Name"] = "Anti (Anti-Input)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_84, ...)
+                if arg1_84 then
+                    r300.enabled = true;
+                    Q = r300;
+                    l = Q.spamThreads;
+                    p = Q[2];
+                    d = Q[3];
+                    for d, v4 in ipairs(v3) do
+                        r309 = v4;
+                        Q = d;
+                        v4 = 394;
+                        M[m](function(...)
+                            task.cancel(M[v5]);
+                            return; 
+                        end); 
+                    end;
+                    r300.spamThreads = {};
+                    r300.spamActive = {};
+                    v5 = r296.DescendantAdded;
+                    table.insert(r300.connections, v5.Connect(v5, function(arg1_85, ...)
+                        v1 = arg1_85;
+                        if not r300.enabled then
+                            return;
+                        end;
+                        if v1.IsA(v1, "Model") and r301[v1.Name] then
+                            task.spawn(r303, v1);
+                        end;
+                        if v1.Name == "HoldPart" then
+                            p = v1.Parent;
+                            if p then
+                                v3 = r301[p.Name];
+                            end;
+                            if p then
+                                task.spawn(r303, p);
+                            end;
+                        end;
+                        return; 
+                    end));
+                    task.spawn(function(...)
+                        if not r300.enabled then
+                            return;
+                        end;
+                        d = r296;
+                        p = d[3];
+                        d = d[1];
+                        for p, Q in d, ipairs(d.GetDescendants(d)) do
+                            l = p;
+                            if r300.enabled and (Q.IsA(Q, "Model") and r301[Q.Name]) then
+                                task.spawn(r303, Q);
+                            end; 
+                        end;
+                        return; 
+                    end);
+                else
+                    r300.enabled = false;
+                    v4 = r300;
+                    l = v4[3];
+                    for l, v4 in v4[1], ipairs(v4.connections) do
+                        Q = l;
+                        r310 = v4;
+                        M[m](function(...)
+                            v5 = r310;
+                            v5.Disconnect(v5);
+                            return; 
+                        end); 
+                    end;
+                    r300.connections = {};
+                    v4 = r300;
+                    d = v4[2];
+                    l = v4[3];
+                    for l, v4 in ipairs(v4.spamThreads) do
+                        r311 = v4;
+                        Q = l;
+                        v4 = 11;
+                        M[m](function(...)
+                            task.cancel(r311);
+                            return; 
+                        end); 
+                    end;
+                    r300.spamThreads = {};
+                    r300.spamActive = {};
+                    r297("Anti Anti-Input", "\xd0\x9e\xd1\x82\xd0\xba\xd0\xbb\xd1\x8e\xd1\x87\xd0\xb5\xd0\xbd", 2);
+                    return;
+                end; 
+            end
+        });
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r312 = _G.WS;
+        v8 = _G.tspawn;
+        o = _G.tcancel;
+        L = _G.twait;
+        f.AntiBarrier = f.AntiBarrier or ;
+        r313 = f.AntiBarrier;
+        b.CreateToggle(b, {
+            ["Name"] = "Anti Barrier (Noclip)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_86, ...)
+                if arg1_86 then
+                    r313.enabled = true;
+                    r313.thread = task.spawn(function(...)
+                        local U = {
+                            696,
+                            224,
+                            223,
+                            801
+                        }; 
+                    end);
+                else
+                    r313.enabled = false;
+                    if r313.thread then
+                        task.cancel(r313.thread);
+                        r313.thread = nil;
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r314 = _G.WS;
+        r315 = _G.PS;
+        v8 = _G.runService;
+        L = _G.Notify;
+        q = _G.PlaySound;
+        T = _G.Sounds;
+        r316 = pcall;
+        R = _G.twait;
+        f.AntiPaint = f.AntiPaint or {
+            ["enabled"] = false,
+            ["connections"] = {}
+        };
+        r317 = f.AntiPaint;
+        local function r318(arg1_87, ...)
+            v1 = arg1_87;
+            if not v1 then
+                return;
+            end;
+            Q = v1.GetChildren;
+            l = {
+                Q(v1)
+            };
+            d = Q[3];
+            p = Q[2];
+            for d, v4 in pairs(v("pairs")) do
+                Q = d;
+                r319 = v4;
+                if M[v5].Name == "PaintPlayerPart" or M[v5].Name == "FirePlayerPart" then
+                    if M[v5].Parent then
+                        M[h](function(...)
+                            v5 = M[v5];
+                            v5.Destroy(v5);
+                            return; 
+                        end);
+                    end;
+                end; 
+            end;
+            return; 
+        end;
+        _G.destroyPaintParts = r318;
+        local function r320(...)
+            v5 = pairs;
+            d = r315;
+            p = d[3];
+            d = d[1];
+            for p, Q in d, v5(d.GetPlayers(d)) do
+                v5 = r314;
+                l = p;
+                if v5.FindFirstChild(v5, Q.Name .. "SpawnedInToys") then
+                    b = v4.GetChildren;
+                    w = b[3];
+                    for w, b in b[1], pairs(b(v4)) do
+                        i = w;
+                        if b.Name == "BucketPaint" or (b.Name == "FoodHotSauce" or (b.Name == "ToiletGold" or b.Name == "ToiletWhite")) then
+                            r318(b);
+                        end; 
+                    end;
+                end; 
+            end;
+            return; 
+        end;
+        _G.scanAllPaintToys = r320;
+        b.CreateToggle(b, {
+            ["Name"] = "Anti Paint",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_88, ...)
+                if arg1_88 then
+                    r317.enabled = true;
+                    r320();
+                    v5 = r314.DescendantAdded;
+                    d = v5.Connect(v5, function(arg1_89, ...)
+                        r321 = arg1_89;
+                        if r317.enabled and r321.Name == "PaintPlayerPart" then
+                            p = r321.Parent;
+                            if p then
+                                d = p.Name;
+                                if d == "BucketPaint" or (d == "FoodHotSauce" or (d == "ToiletGold" or d == "ToiletWhite")) then
+                                    task.wait(.1);
+                                    if r321 and r321.Parent then
+                                        M[U[6]](function(...)
+                                            v5 = r321;
+                                            v5.Destroy(v5);
+                                            return; 
+                                        end);
+                                    end;
+                                end;
+                            end;
+                        end;
+                        return; 
+                    end);
+                    r317.connections.descendant = d;
+                    v3 = game;
+                    v5 = v3.GetService(v3, "RunService").Stepped;
+                    r317.connections.scan = v5.Connect(v5, function(...)
+                        if r317.enabled then
+                            r320();
+                        end;
+                        return; 
+                    end);
+                else
+                    r317.enabled = false;
+                    Q = r317;
+                    l = Q.connections;
+                    p = Q[2];
+                    d = Q[3];
+                    for d, v4 in pairs(v3) do
+                        Q = d;
+                        if v4 then
+                            v4.Disconnect(v4);
+                        end; 
+                    end;
+                    r317.connections = {};
+                    return;
+                end; 
+            end
+        });
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r322 = _G.LP;
+        r323 = _G.RepS;
+        r324 = _G.tspawn;
+        v8 = _G.twait;
+        f.AntiExplode = f.AntiExplode or ;
+        r325 = f.AntiExplode;
+        r326 = {
+            "Left Arm",
+            "Left Leg",
+            "Right Arm",
+            "Right Leg"
+        };
+        _G.limbs = r326;
+        b.CreateToggle(b, {
+            ["Name"] = "Anti Explode",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_90, ...)
+                if arg1_90 then
+                    r325.enabled = true;
+                    p = r323;
+                    d = p.FindFirstChild(p, "BombEvents");
+                    p = d and p.FindFirstChild(p, "BombExplode");
+                    if p then
+                        d = p.OnClientEvent;
+                        r325.connection = d.Connect(d, function(arg1_91, arg2_91, ...)
+                            r327 = arg1_91;
+                            r328 = arg2_91;
+                            if not r325.enabled then
+                                return;
+                            end;
+                            r329 = r322.Character;
+                            if not r329 then
+                                return;
+                            end;
+                            v5 = r329;
+                            r330 = v5.FindFirstChild(v5, "HumanoidRootPart");
+                            v5 = r329;
+                            r331 = v5.FindFirstChild(v5, "Humanoid");
+                            if not r330 or not r331 then
+                                return;
+                            end;
+                            r324(function(...)
+                                if r327.Radius + 10 > (r328 - r330.Position).Magnitude then
+                                    r330.Anchored = true;
+                                    task.wait();
+                                    v5 = r331;
+                                    v5.ChangeState(v5, Enum.HumanoidStateType.Running);
+                                    v5 = r330;
+                                    v5.Anchored = false;
+                                    for S = 1, 4 do
+                                        v5 = r329;
+                                        v4 = v5.FindFirstChild(v5, r326[v1]);
+                                        if v4 then
+                                            v3 = v4.FindFirstChild(v4, "RagdollLimbPart");
+                                        end;
+                                        if v4 then
+                                            v4.RagdollLimbPart.CanCollide = false;
+                                        end; 
+                                    end;
+                                end;
+                                return; 
+                            end);
+                            return; 
+                        end);
+                    end;
+                else
+                    r325.enabled = false;
+                    if r325.connection then
+                        v5 = r325.connection;
+                        v5.Disconnect(v5);
+                        r325.connection = nil;
+                    end;
+                    return;
+                end; 
+            end
+        });
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r332 = _G.LP;
+        r333 = _G.WS;
+        r334 = _G.Notify;
+        r335 = _G.PlaySound;
+        r336 = _G.Sounds;
+        r337 = _G.tspawn;
+        v8 = _G.twait;
+        f.AntiBurn = f.AntiBurn or ;
+        r338 = f.AntiBurn;
+        local function r339(...)
+            if not r338.enabled then
+                return;
+            end;
+            v1 = r332.Character;
+            if not v1 then
+                return;
+            end;
+            r340 = v1.FindFirstChild(v1, "Humanoid");
+            r341 = v1.FindFirstChild(v1, "HumanoidRootPart");
+            if not r340 or (not r341 or not 21465050228491.FindFirstChild(21465050228491, "FireDebounce")) then
+                return;
+            end;
+            l = r333.Plots;
+            v3 = l;
+            l = v3 and l.FindFirstChild(l, "Plot1");
+            if l then
+                v3 = l.FindFirstChild(l, "Barrier");
+            end;
+            r342 = l;
+            v4 = r342;
+            v3 = "fireConnection";
+            r342 = v3 and v4.FindFirstChild(v4, "PlotBarrier");
+            if not r342 then
+                return;
+            end;
+            if r338.fireConnection then
+                v5 = r338.fireConnection;
+                v5.Disconnect(v5);
+                r338.fireConnection = nil;
+            end;
+            f = r15("2\xd2>\xab\xa1c\xf9", 17171146039099);
+            v2 = r340.FireDebounce[r16[f]];
+            r338.fireConnection = v2.Connect(v2, function(...)
+                if r340.FireDebounce.Value == true then
+                    r337(function(...)
+                        v1 = not r340.FireDebounce.Value;
+                        v3 = v1;
+                        if v1 then
+                            v5 = task.wait;
+                            v5();
+                            v1 = r342;
+                            v3 = r342.Parent and (r341 and r341.Parent);
+                            while not v1 do
+                                if v3 then
+                                    r342.CFrame = r341.CFrame;
+                                end;
+                                if not r340.FireDebounce.Value or not r338.enabled then
+                                    return;
+                                end; 
+                            end;
+                            v3 = r342.Parent and (r341 and r341.Parent);
+                            v5 = v5;
+                        else
+                            v3 = not r338.enabled;
+                        end; 
+                    end);
+                    task.wait();
+                    r340.FireDebounce.Value = false;
+                    task.wait();
+                    p = r342;
+                    if p and r342.Parent then
+                        p = r342.CFrame;
+                        r342.CFrame = p;
+                    end;
+                    v8 = f.find(f, "partesp");
+                    v5 = 29152817149191;
+                    b = f.find(f, "partesp");
+                end; 
+            end);
+            return; 
+        end;
+        _G.setupAntiBurn = r339;
+        b.CreateToggle(b, {
+            ["Name"] = "Anti Burn (TP plot)",
+            ["Default"] = false,
+            ["Callback"] = function(arg1_92, ...)
+                if arg1_92 then
+                    r338.enabled = true;
+                    r339();
+                    p = r332.CharacterAdded;
+                    r338.charConnection = p.Connect(p, function(...)
+                        task.wait(.05);
+                        r339();
+                        return; 
+                    end);
+                    r334("Anti Burn", "Enabled", 2);
+                    r335(r336.Notify);
+                else
+                    r338.enabled = false;
+                    if r338.fireConnection then
+                        v5 = r338.fireConnection;
+                        v5.Disconnect(v5);
+                        r338.fireConnection = nil;
+                    end;
+                    if r338.charConnection then
+                        v5 = r338.charConnection;
+                        v5.Disconnect(v5);
+                        r338.charConnection = nil;
+                    end;
+                    r334("Anti Burn", "Disabled", 2);
+                    return;
+                end; 
+            end
+        });
+        b = _G.AntiFunctionsBlock;
+        f = _G.States;
+        r343 = _G.LP;
+        o = _G.tspawn;
+        r344 = _G.tcancel;
+        L = _G.twait;
+        r345 = tick;
+        T = _G.RepS;
+        f.AntiLoop = f.AntiLoop or {
+            ["enabled"] = false,
+            ["thread"] = nil,
+            ["struggleThread"] = nil,
+            ["houseTarget"] = _G.CF(-491, -7, -166)
+        };
+        r346 = f.AntiLoop;
+        r347 = {};
+        B = M[p];
+        local function r348(arg1_93, ...)
+            v1 = arg1_93;
+            if r347 and r347[v1] then
+                v5 = r347[v1];
+                v5.Disconnect(v5);
+                r347[v1] = nil;
+            end;
+            return; 
+        end;
+        r = T.FindFirstChild(T, "Struggle");
+        K = r;
+        if r then
+        end;
+    end;
+end;
+return (function(...)
+    while true do
+        l1 = l2;
+        l2 = l1;
+        r3(); 
+    end;
+    return; 
+end)();

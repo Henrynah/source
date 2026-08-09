@@ -1,0 +1,135 @@
+--[=[
+
+ █     █░  █████▒▄▄▄█████▓ ▄▄▄       ██▓███  
+▓█░ █ ░█░▓██   ▒ ▓  ██▒ ▓▒▒████▄    ▓██░  ██▒
+▒█░ █ ░█ ▒████ ░ ▒ ▓██░ ▒░▒██  ▀█▄  ▓██░ ██▓▒
+░█░ █ ░█ ░▓█▒  ░ ░ ▓██▓ ░ ░██▄▄▄▄██ ▒██▄█▓▒ ▒
+░░██▒██▓ ░▒█░      ▒██▒ ░  ▓█   ▓██▒▒██▒ ░  ░
+░ ▓░▒ ▒   ▒ ░      ▒ ░░    ▒▒   ▓▒█░▒▓▒░ ░  ░
+  ▒ ░ ░   ░          ░      ▒   ▒▒ ░░▒ ░  
+  ░   ░   ░ ░      ░        ░   ▒   ░░  
+    ░                           ░  ░  
+--]=]
+
+OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/VerbalHubz/Verbal-Hub/main/Orion%20Hub%20Ui", true))()
+Window = OrionLib:MakeWindow({
+    Name = "Verbal Hub Sigma Advance Ftap ",
+    HidePremium = false,
+    SaveConfig = true,
+    IntroEnabled = true,
+    IntroText = "Welcome To Verbal Sigma Hub Ftap",
+    IntroIcon = "rbxassetid://121559441445555",
+    ConfigFolder = "OrionTest"
+})
+game:GetService("HttpService")
+local vu1 = game:GetService("RunService")
+local vu2 = game:GetService("Players")
+UserInputService = game:GetService("UserInputService")
+local vu3 = game:GetService("ReplicatedStorage")
+local vu4 = game:GetService("Debris")
+GrabEvents = vu3:WaitForChild("GrabEvents")
+MenuToys = vu3:WaitForChild("MenuToys")
+CharacterEvents = vu3:WaitForChild("CharacterEvents")
+CharacterEvents:WaitForChild("Struggle")
+local vu5 = GrabEvents:WaitForChild("SetNetworkOwner")
+CreateLine = GrabEvents:WaitForChild("CreateGrabLine")
+DestroyLine = GrabEvents:WaitForChild("DestroyGrabLine")
+DestroyToy = MenuToys:WaitForChild("DestroyToy")
+localPlayer = vu2.LocalPlayer
+playerCharacter = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+localPlayer.CharacterAdded:Connect(function(p6)
+    playerCharacter = p6
+end)
+local vu7 = nil
+local vu8 = nil
+local vu9 = nil
+local vu10 = {}
+local vu11 = {}
+local vu12 = {}
+local vu13 = {}
+local vu14 = nil
+renderSteppedConnections = {}
+local vu15 = nil
+local vu16 = nil
+local vu17 = nil
+local vu18 = nil
+local vu19 = nil
+local vu20 = nil
+lightbitradius = 20
+usingradius = lightbitradius
+local vu21 = nil
+auraRadius = 20
+local vu22 = workspace:FindFirstChild(localPlayer.Name .. "SpawnedInToys")
+ownedToys = {}
+bombList = {}
+_G.ToyToLoad = "BombMissile"
+_G.MaxMissiles = 9
+_G.BlobmanDelay = 0.005
+Tab = Window:MakeTab({
+    Name = "Sigma Player",
+    Icon = "rbxassetid://18778642981",
+    PremiumOnly = false
+})
+Tab:AddButton({
+    Name = "Our WebSite,Socials",
+    Callback = function()
+        setclipboard("https://guns.lol/itsjose")
+        OrionLib:MakeNotification({
+            Name = "You Copied The Discord Link",
+            Content = "WebSite link copied to clipboard!",
+            Image = "rbxassetid://4483345998",
+            Time = 4
+        })
+    end
+})
+player = game.Players.LocalPlayer
+character = player.Character or player.CharacterAdded:Wait()
+humanoid = character:WaitForChild("Humanoid")
+animator = humanoid:WaitForChild("Animator")
+fireFlailAnimation = game:GetService("ReplicatedFirst"):WaitForChild("CatchFire"):WaitForChild("FireFlailAnimation")
+fireAnimationTrack = animator:LoadAnimation(fireFlailAnimation)
+function playFireFlailAnimation()
+    fireAnimationTrack:Play()
+end
+function stopFireFlailAnimation()
+    fireAnimationTrack:Stop()
+end
+Tab:AddToggle({
+    Name = " Fire  Animation",
+    Default = false,
+    Callback = function(p23)
+        if p23 then
+            playFireFlailAnimation()
+        else
+            stopFireFlailAnimation()
+        end
+    end
+})
+InfiniteJumpEnabled = true
+game:GetService("UserInputService").JumpRequest:Connect(function()
+    if InfiniteJumpEnabled then
+        game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+    end
+end)
+Tab:AddToggle({
+    Name = "\239\191\189\239\191\189\239\191\189\239\191\189\239\191\189 Infinite Jump \226\156\168",
+    Default = false,
+    Callback = function(p24)
+        InfiniteJumpEnabled = p24
+        print("Infinite Jump: " .. tostring(p24))
+    end
+})
+Tab:AddSlider({
+    Name = "WalkSpeed",
+    Min = 16,
+    Max = 200,
+    Default = 50,
+    Increment = 1,
+    ValueName = "Speed",
+    Callback = function(Value)
+        local hum = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if hum then
+            hum.WalkSpeed = Value
+        end
+    end
+})
