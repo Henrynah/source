@@ -1,0 +1,1323 @@
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/jadpy/suki/refs/heads/main/orion"))()
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Debris = game:GetService("Debris")
+local Workspace = game:GetService("Workspace")
+
+local localPlayer = Players.LocalPlayer
+
+-- Remote Events
+local GrabEvents = ReplicatedStorage:WaitForChild("GrabEvents")
+local SetNetworkOwner = GrabEvents:WaitForChild("SetNetworkOwner")
+local DestroyGrabLine = GrabEvents:WaitForChild("DestroyGrabLine")
+
+local CharacterEvents = ReplicatedStorage:WaitForChild("CharacterEvents")
+local RagdollRemote = CharacterEvents:WaitForChild("RagdollRemote")
+
+local MenuToys = ReplicatedStorage:WaitForChild("MenuToys")
+local SpawnToyRemoteFunction = MenuToys:WaitForChild("SpawnToyRemoteFunction")
+local DestroyToy = MenuToys:WaitForChild("DestroyToy")
+
+-- Config
+local Config = {
+    KillAuraToggle = false,
+    LaunchAuraToggle = false,
+    WalkSpeedToggle = false,
+    Range = 30,
+    auraRadius = 600,
+    walkSpeedValue = 5,
+    ToyName = "CreatureBlobman",
+    Running = false,
+    LaunchAuraCoroutine = nil,
+    walkSpeedConnection = nil,
+    PvpAuraActive = false,
+    PvpAuraRadius = 20,
+    PvpAuraMode = "Grab",
+    ComboActive = false,
+    ComboStep = 0,
+    AntiGrabEnabled = false,
+    AntiKickEnabled = false,
+    AntiRagdollEnabled = false,
+    AntiFireEnabled = false,
+    AntiVoidEnabled = false,
+    AntiBringEnabled = false,
+    AntiBlobmanEnabled = false,
+    NoClipEnabled = false,
+    FallDamageProtection = true,
+    platformPart = nil,
+    teleportHeight = 1000000,
+    loopInterval = 0.02,
+    loopActive = false,
+    spawnPlatformOnStart = true,
+    autoReconnect = false,
+}
+
+-- Utility Functions
+local function GetCharacter()
+    return localPlayer.Character or localPlayer.CharacterAdded:Wait()
+end
+
+local function getLocalHumanoid()
+    local char = localPlayer.Character
+    return char and char:FindFirstChildOfClass("Humanoid")
+end
+
+local function getCharInfo()
+    local char = localPlayer.Character
+    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    return char, hrp, hum
+end
+
+local function getInventory()
+    return Workspace:FindFirstChild(localPlayer.Name .. "SpawnedInToys")
+end
+
+local function SpawnToy(name, cframe, vector)
+    SpawnToyRemoteFunction:InvokeServer(name, cframe, vector or Vector3.zero)
+    local inv = getInventory()
+    return inv and inv:WaitForChild(name, 5)
+end
+
+local function WaitForChild(Parent, Name, Time)
+    return Parent:FindFirstChild(Name) or Parent:WaitForChild(Name, Time or 3)
+end
+
+local function SetOwnerGrab(part)
+    if part then
+        local ge = ReplicatedStorage:FindFirstChild("GrabEvents")
+        if ge and ge:FindFirstChild("SetNetworkOwner") then
+            ge.SetNetworkOwner:FireServer(part, part.CFrame)
+        end
+    end
+end
+
+local function IsInRange(pos1, pos2, range)
+    return (pos1 - pos2).Magnitude <= range
+end
+
+-- Blobman Related
+local function spawnBlobmanIfNeeded()
+    local inv = getInventory()
+    if not inv then return nil end
+
+    local existing = inv:FindFirstChild(Config.ToyName)
+    if existing then return existing end
+
+    local char = GetCharacter()
+    if char and char:FindFirstChild("Head") then
+        pcall(function()
+            SpawnToy(Config.ToyName, char.Head.CFrame)
+        end)
+    end
+
+    return inv:WaitForChild(Config.ToyName, 5)
+end
+
+local function sitOnBlobman(blobman)
+    if not blobman then return end
+    local seat = blobman:FindFirstChildWhichIsA("VehicleSeat", true)
+    local hum = getLocalHumanoid()
+    if seat and hum and not seat.Occupant then
+        task.wait(0.1)
+        pcall(function() seat:Sit(hum) end)
+    end
+end
+
+-- Target Check
+local function CanAuraTarget(targetPlayer)
+    if not targetPlayer or targetPlayer == localPlayer then return false end
+    if not targetPlayer.Character then return false end
+    local hum = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
+    return hum and hum.Health > 0
+end
+
+-- ===== Kill Aura =====
+local function runKillAura()
+    local hpToggle = false
+    while Config.Running do
+        task.wait(0.01)
+        local _, hrp = getCharInfo()
+        if not hrp then continue end
+
+        local blobman = spawnBlobmanIfNeeded()
+        if not blobman then continue end
+
+        sitOnBlobman(blobman)
+
+        local scriptFolder = blobman:FindFirstChild("BlobmanSeatAndOwnerScript")
+        local detector = blobman:FindFirstChild("LeftDetector")
+        local weld = detector and detector:FindFirstChild("LeftWeld")
+
+        if scriptFolder and detector and weld then
+            local CreatureGrab = scriptFolder:FindFirstChild("CreatureGrab")
+            local CreatureRelease = scriptFolder:FindFirstChild("CreatureRelease")
+            local CreatureDrop = scriptFolder:FindFirstChild("CreatureDrop")
+
+            if CreatureGrab and CreatureRelease and CreatureDrop then
+                hpToggle = not hpToggle
+                for _, plr in ipairs(Players:GetPlayers()) do
+                    if not Config.Running then break end
+
+                    if plr ~= localPlayer then
+                        local targetChar = plr.Character
+                        local targetHRP = targetChar and targetChar:FindFirstChild("HumanoidRootPart")
+                        local targetHumanoid = targetChar and targetChar:FindFirstChildOfClass("Humanoid")
+
+                        if targetHRP and targetHumanoid and (hrp.Position - targetHRP.Position).Magnitude <= Config.Range then
+                            pcall(function()
+                                CreatureGrab:FireServer(detector, targetHRP, weld)
+                                CreatureRelease:FireServer(weld, targetHRP)
+                                CreatureDrop:FireServer(weld, targetHRP)
+                                targetHumanoid.Health = hpToggle and 0 or 100
+                            end)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- ===== Launch Aura =====
+function onLaunchAura()
+    Config.LaunchAuraCoroutine = coroutine.create(function()
+        while true do
+            pcall(function()
+                local char = GetCharacter()
+                local root = char and char:FindFirstChild("HumanoidRootPart")
+                if not root then return end
+
+                for _, player in pairs(Players:GetPlayers()) do
+                    if CanAuraTarget(player) then
+                        local torso = player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso")
+                        if torso and (torso.Position - root.Position).Magnitude <= Config.auraRadius then
+                            SetNetworkOwner:FireServer(torso, player.Character.HumanoidRootPart.CFrame)
+                            task.wait(0.1)
+                            local bodyVel = torso:FindFirstChild("LaunchForce") or Instance.new("BodyVelocity", torso)
+                            bodyVel.Name = "LaunchForce"
+                            bodyVel.Velocity = Vector3.new(0, 200000000000, 0)
+                            bodyVel.MaxForce = Vector3.new(0, math.huge, 0)
+                            Debris:AddItem(bodyVel, 1)
+                        end
+                    end
+                end
+            end)
+            task.wait(0.02)
+        end
+    end)
+    coroutine.resume(Config.LaunchAuraCoroutine)
+end
+
+function offLaunchAura()
+    if Config.LaunchAuraCoroutine then
+        coroutine.close(Config.LaunchAuraCoroutine)
+        Config.LaunchAuraCoroutine = nil
+    end
+end
+
+-- ===== Walk Speed =====
+local function onWalkSpeed()
+    if Config.walkSpeedConnection then
+        Config.walkSpeedConnection:Disconnect()
+        Config.walkSpeedConnection = nil
+    end
+
+    Config.walkSpeedConnection = RunService.Heartbeat:Connect(function()
+        if not Config.WalkSpeedToggle then return end
+        local char = localPlayer.Character
+        if char and char:FindFirstChild("Humanoid") and char:FindFirstChild("HumanoidRootPart") then
+            local hrp = char.HumanoidRootPart
+            local moveDir = char.Humanoid.MoveDirection
+            if moveDir.Magnitude > 0 then
+                hrp.CFrame = hrp.CFrame + moveDir * (Config.walkSpeedValue / 10)
+            end
+        end
+    end)
+end
+
+local function offWalkSpeed()
+    Config.WalkSpeedToggle = false
+    if Config.walkSpeedConnection then
+        Config.walkSpeedConnection:Disconnect()
+        Config.walkSpeedConnection = nil
+    end
+    local char = localPlayer.Character
+    if char and char:FindFirstChild("Humanoid") then
+        char.Humanoid.WalkSpeed = 16
+    end
+end
+
+-- ===== PVP Aura =====
+local function PvpAuraLoop()
+    local GE = ReplicatedStorage:FindFirstChild("GrabEvents")
+    if not GE then return end
+    local SetOwner = GE:FindFirstChild("SetNetworkOwner")
+
+    while Config.PvpAuraActive do
+        pcall(function()
+            local char = localPlayer.Character
+            if not char then task.wait(0.1) return end
+            local root = char:FindFirstChild("HumanoidRootPart")
+            if not root then task.wait(0.1) return end
+
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= localPlayer then
+                    local targetChar = player.Character
+                    if targetChar then
+                        local targetRoot = targetChar:FindFirstChild("HumanoidRootPart")
+                        if targetRoot then
+                            local dist = (root.Position - targetRoot.Position).Magnitude
+                            if dist <= Config.PvpAuraRadius then
+                                if Config.PvpAuraMode == "Grab" then
+                                    SetOwner:FireServer(targetRoot, targetRoot.CFrame)
+                                    local bp = targetRoot:FindFirstChild("AuraBP") or Instance.new("BodyPosition", targetRoot)
+                                    bp.Name = "AuraBP"
+                                    bp.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+                                    bp.P = 6000000
+                                    bp.D = 500
+                                    bp.Position = root.Position + Vector3.new(0, 5, 0)
+                                elseif Config.PvpAuraMode == "Fling" then
+                                    local bv = targetRoot:FindFirstChild("AuraBV") or Instance.new("BodyVelocity", targetRoot)
+                                    bv.Name = "AuraBV"
+                                    bv.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+                                    bv.Velocity = Vector3.new(
+                                        math.random(-100000, 100000),
+                                        math.random(50000, 200000),
+                                        math.random(-100000, 100000)
+                                    )
+                                    task.wait(0.1)
+                                    bv:Destroy()
+                                elseif Config.PvpAuraMode == "Freeze" then
+                                    for _, part in pairs(targetChar:GetChildren()) do
+                                        if part:IsA("BasePart") then
+                                            part.Anchored = true
+                                        end
+                                    end
+                                    task.wait(0.5)
+                                    for _, part in pairs(targetChar:GetChildren()) do
+                                        if part:IsA("BasePart") then
+                                            part.Anchored = false
+                                        end
+                                    end
+                                elseif Config.PvpAuraMode == "Kill" then
+                                    local hum = targetChar:FindFirstChild("Humanoid")
+                                    if hum and hum.Health > 0 then
+                                        hum.Health = 0
+                                    end
+                                elseif Config.PvpAuraMode == "Poison" then
+                                    local hum = targetChar:FindFirstChild("Humanoid")
+                                    if hum and hum.Health > 0 then
+                                        hum.Health = hum.Health - 5
+                                        task.wait(0.1)
+                                    end
+                                elseif Config.PvpAuraMode == "Ragdoll" then
+                                    local RagdollRemote = ReplicatedStorage:FindFirstChild("CharacterEvents") and 
+                                                        ReplicatedStorage.CharacterEvents:FindFirstChild("RagdollRemote")
+                                    if RagdollRemote then
+                                        RagdollRemote:FireServer(targetRoot, 0)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+        task.wait(0.1)
+    end
+end
+
+-- ===== Combo Attack =====
+local function ComboAttackFunction()
+    local GE = ReplicatedStorage:WaitForChild("GrabEvents")
+    local SetOwner = GE:FindFirstChild("SetNetworkOwner")
+    local RagdollRemote = ReplicatedStorage:FindFirstChild("CharacterEvents") and 
+                         ReplicatedStorage.CharacterEvents:FindFirstChild("RagdollRemote")
+
+    while Config.ComboActive do
+        if GlobalTarget == "" then
+            task.wait(0.5)
+            continue
+        end
+        local target = Players:FindFirstChild(GlobalTarget)
+        if not target then task.wait(0.5) continue end
+        local targetChar = target.Character
+        local targetRoot = targetChar and targetChar:FindFirstChild("HumanoidRootPart")
+        local targetHumanoid = targetChar and targetChar:FindFirstChild("Humanoid")
+
+        if targetRoot and targetHumanoid and targetHumanoid.Health > 0 then
+            local myChar = localPlayer.Character
+            local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+            if not myRoot then task.wait(0.1) continue end
+
+            Config.ComboStep = Config.ComboStep + 1
+            if Config.ComboStep > 6 then Config.ComboStep = 1 end
+
+            if Config.ComboStep == 1 then
+                SetOwner:FireServer(targetRoot, targetRoot.CFrame)
+            elseif Config.ComboStep == 2 then
+                if RagdollRemote then RagdollRemote:FireServer(targetRoot, 0) end
+            elseif Config.ComboStep == 3 then
+                myRoot.CFrame = targetRoot.CFrame * CFrame.new(0, 0, 3)
+                local bp = targetRoot:FindFirstChild("ComboBP") or Instance.new("BodyPosition", targetRoot)
+                bp.Name = "ComboBP"
+                bp.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+                bp.P = 6000000
+                bp.D = 500
+                bp.Position = targetRoot.Position + Vector3.new(0, 30, 0)
+            elseif Config.ComboStep == 4 then
+                local bv = targetRoot:FindFirstChild("ComboBV") or Instance.new("BodyVelocity", targetRoot)
+                bv.Name = "ComboBV"
+                bv.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+                bv.Velocity = Vector3.new(math.random(-50000, 50000), 80000, math.random(-50000, 50000))
+                task.wait(0.2)
+                bv:Destroy()
+            elseif Config.ComboStep == 5 then
+                for _, part in pairs(targetChar:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.Anchored = true
+                    end
+                end
+                task.wait(0.5)
+                for _, part in pairs(targetChar:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.Anchored = false
+                    end
+                end
+            elseif Config.ComboStep == 6 then
+                targetHumanoid.Health = 0
+            end
+            task.wait(0.8)
+        else
+            task.wait(0.5)
+        end
+    end
+end
+
+-- ===== Anti Grab =====
+local function AntiGrabLoop()
+    while Config.AntiGrabEnabled do
+        pcall(function()
+            local char = localPlayer.Character
+            if char and char:FindFirstChild("Head") then
+                local head = char.Head
+                local partOwner = head:FindFirstChild("PartOwner")
+                if partOwner then
+                    local struggle = ReplicatedStorage:FindFirstChild("CharacterEvents") and ReplicatedStorage.CharacterEvents:FindFirstChild("Struggle")
+                    if struggle then
+                        struggle:FireServer()
+                    end
+                    for _, part in pairs(char:GetChildren()) do
+                        if part:IsA("BasePart") then
+                            part.Anchored = true
+                        end
+                    end
+                    task.wait(0.1)
+                    for _, part in pairs(char:GetChildren()) do
+                        if part:IsA("BasePart") then
+                            part.Anchored = false
+                        end
+                    end
+                end
+            end
+        end)
+        task.wait(0.05)
+    end
+end
+
+-- ===== Anti Kick =====
+local function AntiKickLoop()
+    while Config.AntiKickEnabled do
+        pcall(function()
+            local char = localPlayer.Character
+            if char then
+                local root = char:FindFirstChild("HumanoidRootPart")
+                if root then
+                    local torso = char:FindFirstChild("Torso")
+                    if torso then
+                        local bp = torso:FindFirstChild("AntiKickBP") or Instance.new("BodyPosition", torso)
+                        bp.Name = "AntiKickBP"
+                        bp.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+                        bp.P = 6000000000000
+                        bp.D = 6000000
+                        bp.Position = root.Position
+                    end
+                end
+            end
+        end)
+        task.wait(0.1)
+    end
+end
+
+-- ===== Anti Ragdoll =====
+local function AntiRagdollLoop()
+    while Config.AntiRagdollEnabled do
+        pcall(function()
+            local char = localPlayer.Character
+            if char then
+                local hum = char:FindFirstChild("Humanoid")
+                if hum then
+                    if hum.PlatformStand == true then
+                        hum.PlatformStand = false
+                    end
+                    if hum.BreakJointsOnDeath then
+                        hum.BreakJointsOnDeath = false
+                    end
+                    if hum.Health <= 0 then
+                        hum.Health = 1
+                    end
+                    if hum.Sit and hum.SeatPart == nil then
+                        hum.Sit = false
+                    end
+                end
+            end
+        end)
+        task.wait(0.05)
+    end
+end
+
+-- ===== Anti Fire =====
+local function AntiFireLoop()
+    while Config.AntiFireEnabled do
+        pcall(function()
+            local char = localPlayer.Character
+            if char then
+                local root = char:FindFirstChild("HumanoidRootPart")
+                if root then
+                    local fireLight = root:FindFirstChild("FireLight")
+                    if fireLight then
+                        local toysFolder = Workspace:FindFirstChild(localPlayer.Name .. "SpawnedInToys")
+                        if toysFolder then
+                            local extinguisher = toysFolder:FindFirstChild("FireExtinguisher")
+                            if extinguisher then
+                                local extPart = extinguisher:FindFirstChild("ExtinguishPart")
+                                if extPart then
+                                    extPart.Position = root.Position
+                                    task.wait(0.1)
+                                    extPart.Position = Vector3.new(0, -100, 0)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+        task.wait(0.1)
+    end
+end
+
+-- ===== Anti Void =====
+local function AntiVoidLoop()
+    while Config.AntiVoidEnabled do
+        pcall(function()
+            Workspace.FallenPartsDestroyHeight = -9999999
+            local char = localPlayer.Character
+            if char then
+                local root = char:FindFirstChild("HumanoidRootPart")
+                if root and root.Position.Y < -50 then
+                    root.CFrame = CFrame.new(0, 10, 0)
+                end
+            end
+        end)
+        task.wait(0.1)
+    end
+end
+
+-- ===== Anti Bring =====
+local function AntiBringLoop()
+    while Config.AntiBringEnabled do
+        pcall(function()
+            local char = localPlayer.Character
+            if char then
+                local root = char:FindFirstChild("HumanoidRootPart")
+                if root then
+                    local toys = Workspace:GetDescendants()
+                    for _, obj in pairs(toys) do
+                        if obj:IsA("BasePart") and obj.Name == "Part" and obj:FindFirstChild("PartOwner") then
+                            local dist = (obj.Position - root.Position).Magnitude
+                            if dist < 10 and obj.Parent and obj.Parent.Name == "CreatureBlobman" then
+                                local script = obj.Parent:FindFirstChild("BlobmanSeatAndOwnerScript")
+                                if script then
+                                    local drop = script:FindFirstChild("CreatureDrop")
+                                    if drop then
+                                        drop:FireServer(obj, root)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+        task.wait(0.1)
+    end
+end
+
+-- ===== Anti Blobman =====
+local function AntiBlobmanLoop()
+    while Config.AntiBlobmanEnabled do
+        pcall(function()
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= localPlayer then
+                    local toys = Workspace:FindFirstChild(player.Name .. "SpawnedInToys")
+                    if toys then
+                        for _, child in pairs(toys:GetChildren()) do
+                            if child.Name == "CreatureBlobman" then
+                                for _, detector in pairs(child:GetChildren()) do
+                                    if detector.Name == "LeftDetector" or detector.Name == "RightDetector" then
+                                        detector:Destroy()
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+        task.wait(0.5)
+    end
+end
+
+-- ===== No Clip =====
+local function NoclipLoop()
+    while Config.NoClipEnabled do
+        pcall(function()
+            local char = localPlayer.Character
+            if char then
+                for _, part in pairs(char:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                        part.CanQuery = false
+                        part.CanTouch = false
+                    end
+                end
+            end
+        end)
+        task.wait(0.1)
+    end
+end
+
+-- ===== Fall Damage Protection =====
+local function FallDamageProtectionLoop()
+    while Config.FallDamageProtection do
+        pcall(function()
+            local char = localPlayer.Character
+            if char then
+                local hum = char:FindFirstChild("Humanoid")
+                if hum and hum.Health > 0 then
+                    local root = char:FindFirstChild("HumanoidRootPart")
+                    if root and root.Velocity.Y < -50 then
+                        Workspace.FallenPartsDestroyHeight = -9999999
+                    end
+                end
+            end
+        end)
+        task.wait(0.1)
+    end
+end
+
+-- ===== Kill Bypass Loop =====
+local function StartPlatformLoop()
+    while Config.loopActive do
+        local char = localPlayer.Character
+        local root = char and char:FindFirstChild("HumanoidRootPart")
+        local camera = Workspace.CurrentCamera
+
+        if root and camera then
+            if not Config.platformPart and Config.spawnPlatformOnStart then
+                Config.platformPart = Instance.new("Part", Workspace)
+                Config.platformPart.Name = "SkyBase"
+                Config.platformPart.Anchored = true
+                Config.platformPart.Size = Vector3.new(1500, 2, 1500)
+                Config.platformPart.CFrame = CFrame.new(0, Config.teleportHeight, 0)
+                Config.platformPart.Transparency = 1
+                Config.platformPart.CanCollide = false
+                Workspace.FallenPartsDestroyHeight = -9999999
+            end
+
+            local originalPos = root.CFrame
+            local savedCameraCFrame = camera.CFrame
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CFrame = savedCameraCFrame
+
+            root.CFrame = Config.platformPart.CFrame + Vector3.new(0, 5, 0)
+            root.AssemblyLinearVelocity = Vector3.zero
+            root.AssemblyAngularVelocity = Vector3.zero
+
+            task.wait(Config.loopInterval)
+
+            if not Config.loopActive then
+                char = localPlayer.Character
+                root = char and char:FindFirstChild("HumanoidRootPart")
+                if root then
+                    root.CFrame = originalPos
+                end
+                camera.CameraType = Enum.CameraType.Custom
+                break
+            end
+
+            char = localPlayer.Character
+            root = char and char:FindFirstChild("HumanoidRootPart")
+            if root then
+                root.CFrame = originalPos
+                root.AssemblyLinearVelocity = Vector3.zero
+                root.AssemblyAngularVelocity = Vector3.zero
+            end
+
+            camera.CameraType = Enum.CameraType.Custom
+            task.wait(Config.loopInterval)
+        else
+            task.wait(0.05)
+        end
+    end
+
+    local camera = Workspace.CurrentCamera
+    if camera then
+        camera.CameraType = Enum.CameraType.Custom
+    end
+end
+
+-- Global Target Variable
+GlobalTarget = ""
+
+-- ===== OrionLib GUI =====
+local Window = OrionLib:MakeWindow({
+    Name = "Masukatto Hub",
+    SaveConfig = true,
+    ConfigFolder = "KillAura",
+    IntroEnabled = true,
+    IntroText = "Masukatto Hub",
+    IntroIcon = "rbxassetid://7733916988",
+    Icon = "rbxassetid://7733916988",
+    FreeMouse = true
+})
+
+-- ==========================================
+-- 🎯 Main Tab
+-- ==========================================
+local MainTab = Window:MakeTab({
+    Name = "Main",
+    Icon = "rbxassetid://7733916988",
+    PremiumOnly = false
+})
+
+MainTab:AddSection({
+    Name = "Kill Aura"
+})
+
+MainTab:AddToggle({
+    Name = "Kill Aura",
+    Default = false,
+    Callback = function(Value)
+        Config.KillAuraToggle = Value
+        Config.Running = Value
+        if Value then
+            task.spawn(runKillAura)
+        end
+    end
+})
+
+MainTab:AddSlider({
+    Name = "Range",
+    Min = 10,
+    Max = 100,
+    Default = 30,
+    Increment = 5,
+    Callback = function(Value)
+        Config.Range = Value
+    end
+})
+
+MainTab:AddSection({
+    Name = "Launch Aura"
+})
+
+MainTab:AddToggle({
+    Name = "Launch Aura",
+    Default = false,
+    Callback = function(Value)
+        Config.LaunchAuraToggle = Value
+        if Value then
+            onLaunchAura()
+        else
+            offLaunchAura()
+        end
+    end
+})
+
+MainTab:AddSlider({
+    Name = "Launch Range",
+    Min = 50,
+    Max = 1000,
+    Default = 600,
+    Increment = 50,
+    Callback = function(Value)
+        Config.auraRadius = Value
+    end
+})
+
+MainTab:AddSection({
+    Name = "Walk Speed"
+})
+
+MainTab:AddToggle({
+    Name = "Walk Speed",
+    Default = false,
+    Callback = function(Value)
+        Config.WalkSpeedToggle = Value
+        if Value then
+            onWalkSpeed()
+        else
+            offWalkSpeed()
+        end
+    end
+})
+
+MainTab:AddSlider({
+    Name = "Speed",
+    Min = 0,
+    Max = 300,
+    Default = 5,
+    Increment = 1,
+    Callback = function(Value)
+        Config.walkSpeedValue = Value
+        local char = localPlayer.Character
+        if char and char:FindFirstChild("Humanoid") then
+            char.Humanoid.WalkSpeed = Value
+        end
+    end
+})
+
+-- ==========================================
+-- 🎯 Target Tab
+-- ==========================================
+local TargetTab = Window:MakeTab({
+    Name = "Target",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+local function GetPlayers()
+    local list = {}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= localPlayer then
+            table.insert(list, plr.Name)
+        end
+    end
+    return list
+end
+
+local TargetDropdown = TargetTab:AddDropdown({
+    Name = "Select Target",
+    Options = GetPlayers(),
+    CurrentOption = {""},
+    MultipleOptions = false,
+    Callback = function(Option)
+        GlobalTarget = Option[1] or ""
+    end,
+})
+
+TargetTab:AddButton({
+    Name = "🔄 Refresh Player List",
+    Callback = function()
+        TargetDropdown:Refresh(GetPlayers())
+        OrionLib:MakeNotification({
+            Name = "Updated",
+            Content = "Player list refreshed",
+            Time = 2
+        })
+    end
+})
+
+TargetTab:AddButton({
+    Name = "👁️ Show Target Info",
+    Callback = function()
+        if GlobalTarget == "" then
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "No target selected",
+                Time = 3
+            })
+            return
+        end
+        local target = Players:FindFirstChild(GlobalTarget)
+        if target then
+            local info = "Name: " .. target.Name .. "\n"
+            info = info .. "Display Name: " .. target.DisplayName .. "\n"
+            info = info .. "User ID: " .. target.UserId .. "\n"
+            if target.Character then
+                local hum = target.Character:FindFirstChild("Humanoid")
+                if hum then
+                    info = info .. "Health: " .. math.floor(hum.Health) .. "/" .. math.floor(hum.MaxHealth) .. "\n"
+                end
+                local root = target.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    info = info .. "Position: " .. string.format("%.1f, %.1f, %.1f", root.Position.X, root.Position.Y, root.Position.Z)
+                end
+            else
+                info = info .. "Status: Dead"
+            end
+            OrionLib:MakeNotification({
+                Name = "📊 Player Info",
+                Content = info,
+                Time = 5
+            })
+        end
+    end
+})
+
+-- ==========================================
+-- ⚔️ PVP Tab
+-- ==========================================
+local PVPTab = Window:MakeTab({
+    Name = "PVP",
+    Icon = "rbxassetid://117381520745599",
+    PremiumOnly = false
+})
+
+PVPTab:AddSection({
+    Name = "⚔️ PVP Aura"
+})
+
+PVPTab:AddToggle({
+    Name = "⚡ PVP Aura",
+    Default = false,
+    Callback = function(Value)
+        Config.PvpAuraActive = Value
+        if Value then
+            OrionLib:MakeNotification({
+                Name = "PVP Aura",
+                Content = "Mode: " .. Config.PvpAuraMode .. " Range: " .. Config.PvpAuraRadius,
+                Time = 3
+            })
+            task.spawn(PvpAuraLoop)
+        else
+            OrionLib:MakeNotification({
+                Name = "PVP Aura",
+                Content = "Stopped",
+                Time = 2
+            })
+        end
+    end
+})
+
+PVPTab:AddDropdown({
+    Name = "Aura Mode",
+    Options = {"Grab", "Fling", "Freeze", "Kill", "Poison", "Ragdoll"},
+    CurrentOption = {"Grab"},
+    Callback = function(Option)
+        Config.PvpAuraMode = Option[1] or "Grab"
+        OrionLib:MakeNotification({
+            Name = "Mode Changed",
+            Content = Config.PvpAuraMode .. " selected",
+            Time = 2
+        })
+    end
+})
+
+PVPTab:AddSlider({
+    Name = "Aura Range",
+    Min = 1,
+    Max = 50,
+    Default = 20,
+    Increment = 1,
+    Callback = function(Value)
+        Config.PvpAuraRadius = Value
+    end
+})
+
+PVPTab:AddSection({
+    Name = "⚔️ Combo Attack"
+})
+
+PVPTab:AddToggle({
+    Name = "🔥 Combo Attack (6 Steps)",
+    Default = false,
+    Callback = function(Value)
+        Config.ComboActive = Value
+        if Value then
+            if GlobalTarget ~= "" then
+                Config.ComboStep = 0
+                OrionLib:MakeNotification({
+                    Name = "Combo",
+                    Content = "Starting combo on " .. GlobalTarget,
+                    Time = 3
+                })
+                task.spawn(ComboAttackFunction)
+            else
+                OrionLib:MakeNotification({
+                    Name = "Error",
+                    Content = "Select a target first",
+                    Time = 3
+                })
+                Config.ComboActive = false
+            end
+        else
+            OrionLib:MakeNotification({
+                Name = "Combo",
+                Content = "Stopped",
+                Time = 2
+            })
+        end
+    end
+})
+
+PVPTab:AddSection({
+    Name = "🎯 Quick Actions"
+})
+
+PVPTab:AddButton({
+    Name = "👊 Instant Kill (Target)",
+    Callback = function()
+        if GlobalTarget == "" then
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "No target selected",
+                Time = 3
+            })
+            return
+        end
+        local target = Players:FindFirstChild(GlobalTarget)
+        if target and target.Character then
+            local hum = target.Character:FindFirstChild("Humanoid")
+            if hum then
+                hum.Health = 0
+                OrionLib:MakeNotification({
+                    Name = "Instant Kill",
+                    Content = "Killed " .. GlobalTarget,
+                    Time = 3
+                })
+            end
+        end
+    end
+})
+
+PVPTab:AddButton({
+    Name = "🌀 Ragdoll (Target)",
+    Callback = function()
+        if GlobalTarget == "" then
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "No target selected",
+                Time = 3
+            })
+            return
+        end
+        local target = Players:FindFirstChild(GlobalTarget)
+        if target and target.Character then
+            local root = target.Character:FindFirstChild("HumanoidRootPart")
+            local RagdollRemote = ReplicatedStorage:FindFirstChild("CharacterEvents") and 
+                                 ReplicatedStorage.CharacterEvents:FindFirstChild("RagdollRemote")
+            if RagdollRemote and root then
+                RagdollRemote:FireServer(root, 0)
+                OrionLib:MakeNotification({
+                    Name = "Ragdoll",
+                    Content = "Ragdolled " .. GlobalTarget,
+                    Time = 3
+                })
+            end
+        end
+    end
+})
+
+PVPTab:AddButton({
+    Name = "📌 Grab (Target)",
+    Callback = function()
+        if GlobalTarget == "" then
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "No target selected",
+                Time = 3
+            })
+            return
+        end
+        local target = Players:FindFirstChild(GlobalTarget)
+        if target and target.Character then
+            local root = target.Character:FindFirstChild("HumanoidRootPart")
+            local GE = ReplicatedStorage:FindFirstChild("GrabEvents")
+            if GE and GE:FindFirstChild("SetNetworkOwner") and root then
+                GE.SetNetworkOwner:FireServer(root, root.CFrame)
+                OrionLib:MakeNotification({
+                    Name = "Grab",
+                    Content = "Grabbed " .. GlobalTarget,
+                    Time = 3
+                })
+            end
+        end
+    end
+})
+
+-- ===== PVP Tab: Kill Bypass =====
+PVPTab:AddSection({
+    Name = "🛡️ Kill Bypass (PVP)"
+})
+
+PVPTab:AddToggle({
+    Name = "Kill Bypass",
+    Default = false,
+    Callback = function(Value)
+        Config.loopActive = Value
+        if Value then
+            OrionLib:MakeNotification({
+                Name = "Kill Bypass",
+                Content = "Enabled",
+                Time = 2
+            })
+            task.spawn(StartPlatformLoop)
+        else
+            OrionLib:MakeNotification({
+                Name = "Kill Bypass",
+                Content = "Disabled",
+                Time = 2
+            })
+        end
+    end
+})
+
+PVPTab:AddSlider({
+    Name = "Teleport Interval (seconds)",
+    Min = 0.01,
+    Max = 0.5,
+    Default = 0.02,
+    Increment = 0.01,
+    Callback = function(Value)
+        Config.loopInterval = Value
+    end
+})
+
+PVPTab:AddSlider({
+    Name = "Teleport Height",
+    Min = 1000,
+    Max = 10000000,
+    Default = 1000000,
+    Increment = 1000,
+    Callback = function(Value)
+        Config.teleportHeight = Value
+        if Config.platformPart then
+            Config.platformPart.CFrame = CFrame.new(0, Config.teleportHeight, 0)
+        end
+    end
+})
+
+PVPTab:AddToggle({
+    Name = "Auto Create Platform",
+    Default = true,
+    Callback = function(Value)
+        Config.spawnPlatformOnStart = Value
+        if not Value and Config.platformPart then
+            Config.platformPart:Destroy()
+            Config.platformPart = nil
+        end
+    end
+})
+
+-- ==========================================
+-- 🛡️ Anti Tab
+-- ==========================================
+local AntiTab = Window:MakeTab({
+    Name = "Anti",
+    Icon = "rbxassetid://129017321982695",
+    PremiumOnly = false
+})
+
+AntiTab:AddSection({
+    Name = "Anti Features"
+})
+
+AntiTab:AddToggle({
+    Name = "Anti Grab",
+    Default = false,
+    Callback = function(Value)
+        Config.AntiGrabEnabled = Value
+        if Value then
+            task.spawn(AntiGrabLoop)
+        end
+    end
+})
+
+AntiTab:AddToggle({
+    Name = "Anti Kick",
+    Default = false,
+    Callback = function(Value)
+        Config.AntiKickEnabled = Value
+        if Value then
+            task.spawn(AntiKickLoop)
+        end
+    end
+})
+
+AntiTab:AddToggle({
+    Name = "Anti Ragdoll",
+    Default = false,
+    Callback = function(Value)
+        Config.AntiRagdollEnabled = Value
+        if Value then
+            task.spawn(AntiRagdollLoop)
+        end
+    end
+})
+
+AntiTab:AddToggle({
+    Name = "Anti Fire",
+    Default = false,
+    Callback = function(Value)
+        Config.AntiFireEnabled = Value
+        if Value then
+            task.spawn(AntiFireLoop)
+        end
+    end
+})
+
+AntiTab:AddToggle({
+    Name = "Anti Void",
+    Default = false,
+    Callback = function(Value)
+        Config.AntiVoidEnabled = Value
+        if Value then
+            task.spawn(AntiVoidLoop)
+        else
+            Workspace.FallenPartsDestroyHeight = -100
+        end
+    end
+})
+
+AntiTab:AddToggle({
+    Name = "Anti Bring",
+    Default = false,
+    Callback = function(Value)
+        Config.AntiBringEnabled = Value
+        if Value then
+            task.spawn(AntiBringLoop)
+        end
+    end
+})
+
+AntiTab:AddToggle({
+    Name = "Anti Blobman",
+    Default = false,
+    Callback = function(Value)
+        Config.AntiBlobmanEnabled = Value
+        if Value then
+            task.spawn(AntiBlobmanLoop)
+        end
+    end
+})
+
+AntiTab:AddToggle({
+    Name = "Fall Damage Protection",
+    Default = true,
+    Callback = function(Value)
+        Config.FallDamageProtection = Value
+        if Value then
+            task.spawn(FallDamageProtectionLoop)
+        end
+    end
+})
+
+-- ==========================================
+-- 🧊 Character Tab
+-- ==========================================
+local CharacterTab = Window:MakeTab({
+    Name = "Character",
+    Icon = "rbxassetid://76482243432173",
+    PremiumOnly = false
+})
+
+CharacterTab:AddSection({
+    Name = "Character Control"
+})
+
+CharacterTab:AddToggle({
+    Name = "No Clip",
+    Default = false,
+    Callback = function(Value)
+        Config.NoClipEnabled = Value
+        if Value then
+            task.spawn(NoclipLoop)
+        end
+    end
+})
+
+CharacterTab:AddSlider({
+    Name = "Walk Speed",
+    Min = 0,
+    Max = 300,
+    Default = 16,
+    Increment = 1,
+    Callback = function(Value)
+        local char = localPlayer.Character
+        if char then
+            local hum = char:FindFirstChild("Humanoid")
+            if hum then
+                hum.WalkSpeed = Value
+            end
+        end
+    end
+})
+
+CharacterTab:AddSlider({
+    Name = "Jump Power",
+    Min = 0,
+    Max = 500,
+    Default = 50,
+    Increment = 1,
+    Callback = function(Value)
+        local char = localPlayer.Character
+        if char then
+            local hum = char:FindFirstChild("Humanoid")
+            if hum then
+                hum.JumpPower = Value
+            end
+        end
+    end
+})
+
+-- ==========================================
+-- 📊 Info Tab
+-- ==========================================
+local InfoTab = Window:MakeTab({
+    Name = "Info",
+    Icon = "rbxassetid://111725691127581",
+    PremiumOnly = false
+})
+
+InfoTab:AddParagraph("Username", localPlayer.Name)
+InfoTab:AddParagraph("Display Name", localPlayer.DisplayName)
+InfoTab:AddParagraph("User ID", tostring(localPlayer.UserId))
+InfoTab:AddParagraph("Game ID", tostring(game.PlaceId))
+
+InfoTab:AddButton({
+    Name = "Join Discord Server",
+    Callback = function()
+        setclipboard("https://discord.gg/YqmhW4Se8B")
+        OrionLib:MakeNotification({
+            Name = "Copied",
+            Content = "Discord invite link copied",
+            Time = 3
+        })
+    end
+})
+
+InfoTab:AddButton({
+    Name = "Show Server Info",
+    Callback = function()
+        local info = "Players: " .. #Players:GetPlayers() .. "\n"
+        info = info .. "Ping: " .. math.floor(localPlayer:GetNetworkPing() * 1000) .. "ms"
+        OrionLib:MakeNotification({
+            Name = "📊 Server Info",
+            Content = info,
+            Time = 5
+        })
+    end
+})
+
+OrionLib:Init()
+
+OrionLib:MakeNotification({
+    Name = "System Loaded",
+    Content = "Masukatto Hub is ready.",
+    Time = 5
+})

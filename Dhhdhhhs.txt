@@ -1,0 +1,813 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local CoreGui = game:GetService("CoreGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+
+local BetterOrion = loadstring(game:HttpGet("https://gitlab.com/m1kp0/BetterOrion/raw/main/Library.lua"))()
+
+local Window = BetterOrion:MakeWindow({
+    Name = "Dragonic",
+    SubName = "Made by Siroo",
+    IntroEnabled = true,
+    IntroIcon = "hammer",
+    IntroText = "Dragonic Hub",
+    Size = UDim2.new(0, 550, 0, 380),
+    ToggleUIKey = Enum.KeyCode.Tab,
+    SearchBar = true
+})
+
+local Tab = Window:MakeTab({
+    Name = "Ragdoll",
+    Icon = "hammer"
+})
+
+local Section = Tab:AddSection({
+    Name = "Ragdoll Kill",
+    Side = "Left"
+})
+
+local selectedPlayer = nil
+local isLooping = false
+local loopConnection = nil
+local monitorConnection = nil
+local currentBanana = nil
+local playerDropdown = nil
+local isTargetDead = false
+
+local isRagdollActive = false
+local ragdollMonitorTask = nil
+
+local isTouchKillActive = false
+local touchConnections = {}
+local touchDebounce = {}
+
+local function getLocalChar()
+    return LocalPlayer.Character
+end
+
+local function getHumanoidRootPart()
+    local char = getLocalChar()
+    if char then
+        return char:FindFirstChild("HumanoidRootPart")
+    end
+    return nil
+end
+
+local function getSpawnedToysFolder()
+    return Workspace:FindFirstChild(LocalPlayer.Name .. "SpawnedInToys")
+end
+
+local function destroyAllPencils()
+    local folder = getSpawnedToysFolder()
+    if not folder then return end
+    local destroyToy = ReplicatedStorage:FindFirstChild("MenuToys") and ReplicatedStorage.MenuToys:FindFirstChild("DestroyToy")
+    if not destroyToy then return end
+    for _, child in pairs(folder:GetChildren()) do
+        if child.Name == "ToolPencil" then
+            pcall(function()
+                destroyToy:FireServer(child)
+            end)
+        end
+    end
+end
+
+local function countPencils()
+    local folder = getSpawnedToysFolder()
+    if not folder then return 0 end
+    local count = 0
+    for _, child in pairs(folder:GetChildren()) do
+        if child.Name == "ToolPencil" then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+local function isPencilWeldedToTarget()
+    local folder = getSpawnedToysFolder()
+    if not folder then return false end
+    
+    local target = Players:FindFirstChild(selectedPlayer)
+    if not target or not target.Character then return false end
+    local targetHead = target.Character:FindFirstChild("Head")
+    if not targetHead then return false end
+    
+    for _, child in pairs(folder:GetChildren()) do
+        if child.Name == "ToolPencil" then
+            local stickyPart = child:FindFirstChild("StickyPart")
+            if stickyPart then
+                local weld = stickyPart:FindFirstChild("StickyWeld")
+                if weld and weld.Part1 == targetHead then
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
+
+local function spawnToolPencil()
+    local hrp = getHumanoidRootPart()
+    if not hrp then return nil end
+    
+    local spawnPos = hrp.CFrame * CFrame.new(0, 14, 20)
+    local menuToys = ReplicatedStorage:FindFirstChild("MenuToys")
+    if not menuToys then return nil end
+    
+    local spawnRemote = menuToys:FindFirstChild("SpawnToyRemoteFunction")
+    if not spawnRemote then return nil end
+    
+    local spawned = nil
+    local folder = getSpawnedToysFolder()
+    if not folder then return nil end
+    
+    local conn
+    conn = folder.ChildAdded:Connect(function(child)
+        if child.Name == "ToolPencil" then
+            spawned = child
+            conn:Disconnect()
+        end
+    end)
+    
+    task.spawn(function()
+        pcall(function()
+            spawnRemote:InvokeServer("ToolPencil", spawnPos, Vector3.zero)
+        end)
+    end)
+    
+    local start = tick()
+    repeat
+        task.wait(0.05)
+    until spawned or (tick() - start) > 3
+    
+    if conn then
+        pcall(function() conn:Disconnect() end)
+    end
+    
+    return spawned
+end
+
+local function setNetworkOwnerPencil(part)
+    if not part then return end
+    local grabEvents = ReplicatedStorage:FindFirstChild("GrabEvents")
+    if not grabEvents then return end
+    local setNet = grabEvents:FindFirstChild("SetNetworkOwner")
+    if not setNet then return end
+    
+    pcall(function()
+        for _ = 1, 5 do
+            setNet:FireServer(part, part.CFrame)
+        end
+    end)
+end
+
+local function doSticky()
+    if not selectedPlayer or selectedPlayer == "" then return false end
+    
+    local target = Players:FindFirstChild(selectedPlayer)
+    if not target or not target.Character then return false end
+    
+    local targetHead = target.Character:FindFirstChild("Head")
+    if not targetHead then return false end
+    
+    destroyAllPencils()
+    task.wait(0.05)
+    
+    local pencil = spawnToolPencil()
+    if not pencil then return false end
+    
+    local soundPart = pencil:FindFirstChild("SoundPart")
+    local stickyPart = pencil:FindFirstChild("StickyPart")
+    
+    if soundPart then
+        setNetworkOwnerPencil(soundPart)
+    end
+    
+    task.wait(0.05)
+    
+    if stickyPart then
+        local stickyEvent = ReplicatedStorage:FindFirstChild("PlayerEvents") and ReplicatedStorage.PlayerEvents:FindFirstChild("StickyPartEvent")
+        if stickyEvent then
+            pcall(function()
+                stickyEvent:FireServer(stickyPart, targetHead, CFrame.new(0, 0/0, 0))
+                stickyEvent:FireServer(stickyPart, targetHead, CFrame.new(0, 0/0, 0))
+            end)
+            
+            task.wait(0.5)
+            
+            if not isPencilWeldedToTarget() then
+                destroyAllPencils()
+                task.wait(0.05)
+                doSticky()
+            end
+            
+            return true
+        end
+    end
+    return false
+end
+
+local function RagdollRespawnMonitor()
+    local target = Players:FindFirstChild(selectedPlayer)
+    if not target then return end
+    
+    target.CharacterAdded:Connect(function()
+        if isRagdollActive then
+            doSticky()
+        end
+    end)
+end
+
+local function PencilMonitor()
+    while isRagdollActive do
+        local count = countPencils()
+        
+        if count == 0 then
+            doSticky()
+        elseif count >= 2 then
+            destroyAllPencils()
+            task.wait(0.05)
+            doSticky()
+        elseif count == 1 then
+            if not isPencilWeldedToTarget() then
+                destroyAllPencils()
+                task.wait(0.05)
+                doSticky()
+            end
+        end
+        
+        task.wait(0.1)
+    end
+end
+
+local function setNetworkOwner(part)
+    if not part then return end
+    local grabEvents = ReplicatedStorage:FindFirstChild("GrabEvents")
+    if not grabEvents then return end
+    local setNet = grabEvents:FindFirstChild("SetNetworkOwner")
+    if not setNet then return end
+    
+    pcall(function()
+        setNet:FireServer(part, part.CFrame)
+    end)
+end
+
+local function destroyGrabLine(part)
+    if not part then return end
+    local grabEvents = ReplicatedStorage:FindFirstChild("GrabEvents")
+    if not grabEvents then return end
+    local destroyLine = grabEvents:FindFirstChild("DestroyGrabLine")
+    if not destroyLine then return end
+    
+    pcall(function()
+        destroyLine:FireServer(part)
+    end)
+end
+
+local function destroyBanana(banana)
+    if not banana then return end
+    local menuToys = ReplicatedStorage:FindFirstChild("MenuToys")
+    if not menuToys then return end
+    local destroyToy = menuToys:FindFirstChild("DestroyToy")
+    if not destroyToy then return end
+    
+    pcall(function()
+        destroyToy:FireServer(banana)
+    end)
+end
+
+local function spawnBanana()
+    local hrp = getHumanoidRootPart()
+    if not hrp then return nil end
+    
+    local spawnPos = hrp.CFrame * CFrame.new(0, 14, 20)
+    local menuToys = ReplicatedStorage:FindFirstChild("MenuToys")
+    if not menuToys then return nil end
+    
+    local spawnRemote = menuToys:FindFirstChild("SpawnToyRemoteFunction")
+    if not spawnRemote then return nil end
+    
+    local spawned = nil
+    local folder = getSpawnedToysFolder()
+    if not folder then return nil end
+    
+    local conn
+    conn = folder.ChildAdded:Connect(function(child)
+        if child.Name == "FoodBanana" then
+            spawned = child
+            conn:Disconnect()
+        end
+    end)
+    
+    task.spawn(function()
+        pcall(function()
+            spawnRemote:InvokeServer("FoodBanana", spawnPos, Vector3.zero)
+        end)
+    end)
+    
+    local start = tick()
+    repeat
+        task.wait(0.05)
+    until spawned or (tick() - start) > 3
+    
+    if conn then
+        pcall(function() conn:Disconnect() end)
+    end
+    
+    return spawned
+end
+
+local function holdBanana(banana)
+    if not banana then return end
+    local holdPart = banana:FindFirstChild("HoldPart")
+    if not holdPart then return end
+    
+    local holdRemote = holdPart:FindFirstChild("HoldItemRemoteFunction")
+    if not holdRemote then return end
+    
+    local char = getLocalChar()
+    if not char then return end
+    
+    local success = false
+    for i = 1, 5 do
+        if not banana or not banana.Parent then break end
+        local result = pcall(function()
+            return holdRemote:InvokeServer(banana, char)
+        end)
+        if result then
+            success = true
+            break
+        end
+        task.wait(0.05)
+    end
+    return success
+end
+
+local function useBanana(banana)
+    if not banana then return end
+    local useEvent = ReplicatedStorage:FindFirstChild("HoldEvents") and ReplicatedStorage.HoldEvents:FindFirstChild("Use")
+    if not useEvent then return end
+    
+    pcall(function()
+        useEvent:FireServer(banana)
+    end)
+end
+
+local function dropBanana(banana)
+    if not banana then return end
+    local holdPart = banana:FindFirstChild("HoldPart")
+    if not holdPart then return end
+    local dropRemote = holdPart:FindFirstChild("DropItemRemoteFunction")
+    if not dropRemote then return end
+    local hrp = getHumanoidRootPart()
+    if not hrp then return end
+    
+    local dropPos = hrp.CFrame * CFrame.new(0, 15, 0)
+    pcall(function()
+        dropRemote:InvokeServer(banana, dropPos, dropPos)
+    end)
+end
+
+local function getTargetLeg()
+    if not selectedPlayer then return nil end
+    local target = Players:FindFirstChild(selectedPlayer)
+    if not target or not target.Character then return nil end
+    return target.Character:FindFirstChild("Left Leg")
+end
+
+local function getTargetHealth()
+    if not selectedPlayer then return 0 end
+    local target = Players:FindFirstChild(selectedPlayer)
+    if not target or not target.Character then return 0 end
+    local hum = target.Character:FindFirstChildOfClass("Humanoid")
+    if not hum then return 0 end
+    return hum.Health
+end
+
+local function fullBananaCycle()
+    if not selectedPlayer or selectedPlayer == "" then return false end
+    
+    local banana = spawnBanana()
+    if not banana then return false end
+    
+    holdBanana(banana)
+    task.wait(0.05)
+    holdBanana(banana)
+    task.wait(0.05)
+    
+    task.wait(0.5)
+    
+    useBanana(banana)
+    
+    task.wait(2.3)
+    
+    dropBanana(banana)
+    task.wait(0.05)
+    dropBanana(banana)
+    
+    task.wait(0.3)
+    
+    return banana
+end
+
+local function stopLoop()
+    isLooping = false
+    if loopConnection then
+        loopConnection:Disconnect()
+        loopConnection = nil
+    end
+    if monitorConnection then
+        monitorConnection:Disconnect()
+        monitorConnection = nil
+    end
+    
+    if currentBanana then
+        destroyBanana(currentBanana)
+        local hitboxPart = currentBanana:FindFirstChild("HitboxPart")
+        if hitboxPart then
+            local bp = hitboxPart:FindFirstChild("BodyPosition")
+            if bp then bp:Destroy() end
+            local bg = hitboxPart:FindFirstChild("BodyGyro")
+            if bg then bg:Destroy() end
+        end
+        currentBanana = nil
+    end
+    
+    local folder = getSpawnedToysFolder()
+    if folder then
+        for _, child in pairs(folder:GetChildren()) do
+            if child.Name == "FoodBanana" then
+                destroyBanana(child)
+            end
+        end
+    end
+end
+
+local function restartLoop(banana)
+    if loopConnection then
+        loopConnection:Disconnect()
+        loopConnection = nil
+    end
+    
+    currentBanana = banana
+    
+    local hitboxPart = banana:FindFirstChild("HitboxPart")
+    if not hitboxPart then return end
+    
+    loopConnection = RunService.Heartbeat:Connect(function()
+        if not isLooping then
+            stopLoop()
+            return
+        end
+        
+        if not currentBanana or not currentBanana.Parent then
+            return
+        end
+        
+        local folder = getSpawnedToysFolder()
+        local bananaExists = false
+        if folder then
+            for _, child in pairs(folder:GetChildren()) do
+                if child.Name == "FoodBanana" then
+                    bananaExists = true
+                    currentBanana = child
+                    hitboxPart = child:FindFirstChild("HitboxPart")
+                    break
+                end
+            end
+        end
+        
+        if not bananaExists or not hitboxPart then
+            loopConnection:Disconnect()
+            loopConnection = nil
+            currentBanana = nil
+            if isLooping then
+                task.wait(0.05)
+            end
+            return
+        end
+        
+        local hrp = getHumanoidRootPart()
+        if not hrp then return end
+        
+        local targetPos
+        local targetCFrame
+        
+        local health = getTargetHealth()
+        if health <= 0 then
+            isTargetDead = true
+            targetPos = hrp.CFrame * CFrame.new(0, 7, 0)
+            targetCFrame = CFrame.new(targetPos.Position)
+        else
+            isTargetDead = false
+            local leg = getTargetLeg()
+            if leg then
+                targetPos = leg.CFrame * CFrame.new(0, 0.5, 0)
+                targetCFrame = leg.CFrame
+            else
+                targetPos = hrp.CFrame * CFrame.new(0, 7, 0)
+                targetCFrame = CFrame.new(targetPos.Position)
+            end
+        end
+        
+        setNetworkOwner(hitboxPart)
+        destroyGrabLine(hitboxPart)
+        
+        local bp = hitboxPart:FindFirstChild("BodyPosition")
+        if bp then
+            bp.Position = targetPos.Position
+        else
+            bp = Instance.new("BodyPosition")
+            bp.P = 10000
+            bp.D = 100
+            bp.MaxForce = Vector3.new(1e9, 1e9, 1e9)
+            bp.Position = targetPos.Position
+            bp.Parent = hitboxPart
+        end
+        
+        local bg = hitboxPart:FindFirstChild("BodyGyro")
+        if bg then
+            bg.CFrame = targetCFrame
+        else
+            bg = Instance.new("BodyGyro")
+            bg.P = 10000
+            bg.D = 100
+            bg.MaxTorque = Vector3.new(1e9, 1e9, 1e9)
+            bg.CFrame = targetCFrame
+            bg.Parent = hitboxPart
+        end
+    end)
+end
+
+local function startLoop()
+    if isLooping then return end
+    if not selectedPlayer or selectedPlayer == "" then return end
+    
+    isLooping = true
+    isTargetDead = false
+    
+    local banana = fullBananaCycle()
+    if banana then
+        restartLoop(banana)
+    end
+    
+    monitorConnection = RunService.Heartbeat:Connect(function()
+        if not isLooping then return end
+        
+        local folder = getSpawnedToysFolder()
+        local bananaExists = false
+        if folder then
+            for _, child in pairs(folder:GetChildren()) do
+                if child.Name == "FoodBanana" then
+                    bananaExists = true
+                    break
+                end
+            end
+        end
+        
+        if not bananaExists then
+            if loopConnection then
+                loopConnection:Disconnect()
+                loopConnection = nil
+            end
+            
+            task.wait(0.05)
+            
+            local newBanana = fullBananaCycle()
+            if newBanana then
+                restartLoop(newBanana)
+            end
+        end
+    end)
+end
+
+local function launchAndDropTarget(targetChar)
+    local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
+    local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
+    if not targetHrp or not targetHum or targetHum.Health <= 0 then return end
+
+    local originalCFrame = targetHrp.CFrame
+    local grabEvents = ReplicatedStorage:FindFirstChild("GrabEvents")
+    local setNet = grabEvents and grabEvents:FindFirstChild("SetNetworkOwner")
+    local destroyLine = grabEvents and grabEvents:FindFirstChild("DestroyGrabLine")
+
+    local targetParts = {}
+    for _, part in ipairs(targetChar:GetChildren()) do
+        if part:IsA("BasePart") then
+            table.insert(targetParts, part)
+        end
+    end
+
+    local myHrp = getHumanoidRootPart()
+    local lockCFrame = myHrp and myHrp.CFrame or originalCFrame
+
+    if destroyLine then
+        pcall(function()
+            for _, part in ipairs(targetParts) do
+                destroyLine:FireServer(part)
+            end
+        end)
+    end
+
+    if setNet then
+        for _ = 1, 3 do
+            pcall(function()
+                for _, part in ipairs(targetParts) do
+                    setNet:FireServer(part, lockCFrame)
+                    part.CFrame = lockCFrame
+                    part.AssemblyLinearVelocity = Vector3.zero
+                end
+            end)
+            RunService.Heartbeat:Wait()
+        end
+    end
+
+    local voidCFrame = CFrame.new(originalCFrame.X, -1000000, originalCFrame.Z)
+    pcall(function()
+        for _, part in ipairs(targetParts) do
+            if setNet then setNet:FireServer(part, voidCFrame) end
+            part.CFrame = voidCFrame
+            part.AssemblyLinearVelocity = Vector3.new(0, -100000, 0)
+        end
+    end)
+
+    if destroyLine then
+        pcall(function()
+            destroyLine:FireServer(targetHrp)
+        end)
+    end
+
+    local startTime = tick()
+    while targetHum.Health > 0 and (tick() - startTime) < 0.5 do
+        RunService.Heartbeat:Wait()
+    end
+
+    pcall(function()
+        for _, part in ipairs(targetParts) do
+            if setNet then setNet:FireServer(part, originalCFrame) end
+            part.CFrame = originalCFrame
+            part.AssemblyLinearVelocity = Vector3.zero
+            part.AssemblyAngularVelocity = Vector3.zero
+        end
+    end)
+end
+
+local function setupTouchKill()
+    for _, conn in pairs(touchConnections) do
+        conn:Disconnect()
+    end
+    table.clear(touchConnections)
+
+    if not isTouchKillActive then return end
+
+    local char = getLocalChar()
+    if not char then return end
+
+    for _, part in ipairs(char:GetChildren()) do
+        if part:IsA("BasePart") then
+            local conn = part.Touched:Connect(function(hit)
+                if not isTouchKillActive then return end
+                
+                local hitChar = hit.Parent
+                if not hitChar then return end
+                
+                if hitChar:IsA("Accessory") then
+                    hitChar = hitChar.Parent
+                end
+                
+                local hitPlayer = Players:GetPlayerFromCharacter(hitChar)
+
+                if hitPlayer and hitPlayer ~= LocalPlayer then
+                    if selectedPlayer and selectedPlayer ~= "" then
+                        if hitPlayer.Name ~= selectedPlayer then return end
+                    end
+
+                    if not touchDebounce[hitPlayer] then
+                        touchDebounce[hitPlayer] = true
+                        task.spawn(function()
+                            launchAndDropTarget(hitChar)
+                            task.wait(0.5)
+                            touchDebounce[hitPlayer] = nil
+                        end)
+                    end
+                end
+            end)
+            table.insert(touchConnections, conn)
+        end
+    end
+end
+
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(0.5)
+    if isTouchKillActive then
+        setupTouchKill()
+    end
+end)
+
+local function GetPlayerList()
+    local list = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        table.insert(list, player.DisplayName .. " (" .. player.Name .. ")")
+    end
+    return list
+end
+
+local function GetPlayerNameFromDisplay(display)
+    if not display or display == "" then return nil end
+    local startPos, endPos = string.find(display, "%(")
+    if startPos then
+        return string.sub(display, startPos + 1, -2)
+    end
+    return nil
+end
+
+playerDropdown = Section:AddDropdown({
+    Name = "Select Player",
+    Options = GetPlayerList(),
+    Search = true,
+    Callback = function(v)
+        local name = GetPlayerNameFromDisplay(v)
+        selectedPlayer = name or nil
+    end
+})
+
+local function UpdatePlayerList()
+    if playerDropdown then
+        playerDropdown:Refresh(GetPlayerList(), true)
+    end
+end
+
+Players.PlayerAdded:Connect(function()
+    task.wait(0.03)
+    UpdatePlayerList()
+end)
+
+Players.PlayerRemoving:Connect(function()
+    task.wait(0.2)
+    UpdatePlayerList()
+end)
+
+task.spawn(function()
+    task.wait(1)
+    UpdatePlayerList()
+end)
+
+Section:AddToggle({
+    Name = "Ragdoll Kill",
+    Default = false,
+    Callback = function(v)
+        if v then
+            if not selectedPlayer or selectedPlayer == "" then
+                return
+            end
+            isRagdollActive = true
+            doSticky()
+            RagdollRespawnMonitor()
+            ragdollMonitorTask = task.spawn(PencilMonitor)
+        else
+            isRagdollActive = false
+            if ragdollMonitorTask then
+                task.cancel(ragdollMonitorTask)
+                ragdollMonitorTask = nil
+            end
+            destroyAllPencils()
+        end
+    end
+})
+
+Section:AddToggle({
+    Name = "Loop Banana Ragdoll",
+    Default = false,
+    Callback = function(v)
+        if v then
+            if not selectedPlayer or selectedPlayer == "" then
+                return
+            end
+            stopLoop()
+            startLoop()
+        else
+            stopLoop()
+        end
+    end
+})
+
+Section:AddToggle({
+    Name = "Touch Kill (Instant Void Drop)",
+    Default = false,
+    Callback = function(v)
+        isTouchKillActive = v
+        if v then
+            setupTouchKill()
+        else
+            for _, conn in pairs(touchConnections) do
+                conn:Disconnect()
+            end
+            table.clear(touchConnections)
+        end
+    end
+})
+
+BetterOrion:Init()
+

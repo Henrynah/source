@@ -1,0 +1,949 @@
+-- ts file was generated at discord.gg/25ms
+
+local genv = getgenv()
+local fenv = getfenv()
+
+type(genv)
+
+genv['25ms was here :)'] = function() end
+
+loadstring('                return pcall(function()\n                    return 1 / "abc"\n                end)\n            ')
+loadstring('                return pcall(function()\n                    return 1 / "abc"\n                end)\n            ')
+task.spawn({})
+
+local _call8 = Instance.new('BindableEvent')
+
+task.delay(0, function()
+    _call8:Fire()
+end)
+_call8.Event.Wait(_call8.Event)
+_call8:Destroy()
+workspace:subgmaballshaha()
+
+local _game__definitely_not_a_real_member__22 = game.__definitely_not_a_real_member__
+
+_game__definitely_not_a_real_member__22(game)
+game:FindFirstChild('__DefinitelyNotARealService__')
+workspace:FindFirstChildOfClass('__DefinitelyNotARealClass__')
+
+local _ = #workspace:GetChildren()
+
+type(Instance.new('Part'))
+type(Instance.new('Part'))
+game:IsLoaded()
+
+local _ = genv.InventoryPlus
+
+genv.InventoryPlus = 'V2'
+
+makefolder('InventoryPlusV2')
+makefolder('InventoryPlusV2/Config')
+makefolder('InventoryPlusV2/Config/FavoritesSaves')
+writefile('InventoryPlusV2/Config/FavoritesSaves/Favorites.json', '')
+
+local _LocalPlayer42 = game.Players.LocalPlayer
+local _call44 = _LocalPlayer42:WaitForChild('PlayerGui', 9000000000)
+local _call58 = _call44:WaitForChild('MenuGui', 9000000000).WaitForChild(_call44:WaitForChild('MenuGui', 9000000000), 'Menu', 9000000000).WaitForChild(_call44:WaitForChild('MenuGui', 9000000000).WaitForChild(_call44:WaitForChild('MenuGui', 9000000000), 'Menu', 9000000000), 'TabContents', 9000000000)
+
+game:GetService('HttpService')
+game:GetService('TweenService')
+
+local _MenuToys67 = game:GetService('ReplicatedStorage').MenuToys
+local _ = _MenuToys67.SpawnToyRemoteFunction
+local _ = _MenuToys67.DestroyToy
+local _ = _MenuToys67.BuyToyRemoteFunction
+local _ = workspace[_LocalPlayer42.Name .. 'SpawnedInToys']
+local _call76 = Instance.new('ScreenGui')
+
+_call76.Name = 'InventoryPlusV2'
+_call76.IgnoreGuiInset = false
+_call76.Parent = game.CoreGui
+
+local _ = _call76.Parent
+
+_call76.DisplayOrder = -1
+
+local _call79 = Color3.fromRGB(20, 20, 20)
+local _call81 = Color3.fromRGB(20, 20, 20)
+local _call83 = Color3.fromRGB(240, 240, 240)
+
+Color3.fromRGB(100, 100, 100)
+Color3.fromRGB(80, 80, 80)
+
+local _call89 = UDim2.new(0, 850, 0, 550)
+
+UDim2.new(0.9, 0, 0.9, 0)
+
+local _call93 = UDim2.new(0.5, 0, 0.5, 0)
+
+for _100, _100_2 in _call58.Toys.Contents.GetChildren(_call58.Toys.Contents)do
+    local _ = _100_2.Name
+    local _ = _100_2.Name
+    local _ = _100_2.ViewItemButton.LowResImage.Image
+    local _ = _100_2.ViewItemButton.LowResImage.ImageRectOffset
+    local _ = _100_2.Name
+    local _ = _100_2.Name
+    local _ = _100_2.Name
+    local _ = _100_2.LayoutOrder
+    local _ = _100_2.Name
+end
+for _120, _120_2 in _call58.ToyShop.Contents.GetChildren(_call58.ToyShop.Contents)do
+    local _ = _120_2.Name
+    local _ = _120_2.Name
+    local _ = _120_2.ViewItemButton.LowResImage.Image
+    local _ = _120_2.ViewItemButton.LowResImage.ImageColor3
+    local _ = _120_2.ViewItemButton.LowResImage.ImageRectOffset
+    local _ = _120_2.Name
+    local _ = _120_2.Name
+    local _ = _120_2.Name
+    local _ = _120_2.Parent.Parent.ToyInfoFrameHolder[_120_2.Name].ItemDesc.Text
+end
+for _148, _148_2 in _call58.ToyDestroy.Contents.GetChildren(_call58.ToyDestroy.Contents)do
+    local _ = _148_2.Name
+    local _ = _148_2.Name
+    local _ = _148_2.ViewItemButton.LowResImage.Image
+    local _ = _148_2.ViewItemButton.LowResImage.ImageColor3
+    local _ = _148_2.ViewItemButton.LowResImage.ImageRectOffset
+    local _ = _148_2.Name
+    local _ = _148_2.Name
+    local _ = _148_2.Name
+    local _ = _148_2.LayoutOrder
+end
+
+fenv.CreateMainWindow = function()
+    local _call169 = Instance.new('Frame')
+
+    _call169.Visible = false
+    _call169.Active = true
+    _call169.Parent = _call76
+    _call169.AnchorPoint = Vector2.new(0.5, 0.55)
+    _call169.Transparency = 0.4
+    _call169.Name = 'MainWindow'
+    _call169.Position = _call93
+    _call169.Size = _call89
+    _call169.BackgroundColor3 = _call79
+
+    local _call171 = Instance.new('UIAspectRatioConstraint')
+
+    _call171.AspectRatio = 1.6
+
+    local _call175 = Instance.new('UISizeConstraint')
+
+    _call175.MaxSize = Vector2.new(1 / 0, 950)
+
+    local _call179 = Instance.new('UICorner')
+
+    _call179.CornerRadius = UDim.new(0, 10)
+
+    local _call181 = Instance.new('UIStroke')
+
+    _call181.Color = _call81
+    _call181.Transparency = 0.42
+    _call181.Thickness = 2
+
+    local _call185 = Instance.new('Frame')
+
+    _call185.Parent = _call76
+    _call185.Transparency = 1
+    _call185.Name = 'TopBar'
+    _call185.Size = UDim2.new(1, 0, 0, 60)
+
+    local _call197 = Instance.new('TextLabel')
+
+    _call197.RichText = true
+    _call197.TextColor3 = _call83
+    _call197.Text = '  Your Toys'
+    _call197.TextXAlignment = Enum.TextXAlignment.Left
+    _call197.Size = UDim2.new(1, -363, 0, 45)
+    _call197.Font = Enum.Font.GothamBlack
+    _call197.BackgroundTransparency = 0.5
+    _call197.Position = UDim2.new(0, 0, 0, -53)
+    _call197.Name = 'TabName'
+    _call197.ZIndex = 2
+    _call197.TextSize = 26
+    _call197.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+    local _call201 = Instance.new('UICorner')
+
+    _call201.CornerRadius = UDim.new(5, 0)
+
+    local _call203 = Instance.new('UIStroke')
+
+    _call203.Color = _call81
+    _call203.Transparency = 0.5
+    _call203.Thickness = 1
+    _call201.Parent = _call197
+    _call203.Parent = _call197
+
+    local _call209 = Instance.new('ImageButton')
+
+    _call209.Image = 'rbxassetid://7072725342'
+    _call209.BackgroundTransparency = 1
+    _call209.Position = UDim2.new(1, -40, 0, 12)
+    _call209.Name = 'CloseButton'
+    _call209.Size = UDim2.new(0, 25, 0, 25)
+
+    local _call221 = Instance.new('TextLabel')
+
+    _call221.RichText = true
+    _call221.TextColor3 = _call83
+    _call221.TextTransparency = 0.5
+    _call221.Text = 'InventoryPlus V2'
+    _call221.TextXAlignment = Enum.TextXAlignment.Right
+    _call221.Size = UDim2.new(1, -520, 0, 45)
+    _call221.TextWrapped = true
+    _call221.Font = Enum.Font.Gotham
+    _call221.BackgroundTransparency = 1
+    _call221.Position = UDim2.new(0.5, -280, 0, -53)
+    _call221.Name = 'TheBestWatermark'
+    _call221.ZIndex = 2
+    _call221.TextSize = 18
+    _call221.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    _call197.Parent = _call185
+    _call209.Parent = _call185
+    _call221.Parent = _call185
+    _call171.Parent = _call169
+    _call175.Parent = _call169
+    _call179.Parent = _call169
+    _call181.Parent = _call169
+    _call185.Parent = _call169
+
+    local _call231 = Instance.new('Frame')
+
+    _call231.AnchorPoint = Vector2.new(0, 0.5)
+    _call231.Transparency = 0.5
+    _call231.Name = 'TabHolder'
+    _call231.Position = UDim2.new(0, -80, 0.5, 0)
+    _call231.Parent = _call169
+    _call231.ZIndex = -1
+    _call231.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    _call231.Size = UDim2.new(0, 72, 0, 400)
+
+    local _call235 = Instance.new('UICorner')
+
+    _call235.CornerRadius = UDim.new(5, 0)
+
+    local _call237 = Instance.new('UIStroke')
+
+    _call237.Color = _call81
+    _call237.Transparency = 0.4
+    _call237.Thickness = 1
+
+    local _call243 = Instance.new('Frame')
+
+    _call243.Transparency = 1
+    _call243.Name = 'FakeHolder'
+    _call243.Position = UDim2.new(0, 0, 0, 8)
+    _call243.Parent = _call169
+    _call243.ZIndex = -1
+    _call243.Size = UDim2.new(1, 0, 1, 0)
+
+    local _call249 = Instance.new('UIListLayout')
+
+    _call249.Padding = UDim.new(0, -10)
+    _call249.SortOrder = Enum.SortOrder.LayoutOrder
+    _call249.Parent = _call243
+    _call235.Parent = _call231
+    _call237.Parent = _call231
+    _call243.Parent = _call231
+
+    local _call255 = Instance.new('Frame')
+
+    _call255.BackgroundTransparency = 1
+    _call255.Position = UDim2.new(0, 0, 0, 0)
+    _call255.Parent = _call169
+    _call255.BackgroundColor3 = _call79
+    _call255.Name = 'Container'
+    _call255.Size = UDim2.new(1, 0, 1, 0)
+
+    local _call261 = Instance.new('UIListLayout')
+
+    _call261.Padding = UDim.new(0, 0)
+    _call261.SortOrder = Enum.SortOrder.LayoutOrder
+    _call261.Parent = _call255
+
+    local _call267 = Instance.new('Frame')
+
+    _call267.ClipsDescendants = true
+    _call267.BackgroundTransparency = 1
+    _call267.Position = UDim2.new(0, 0, 0, 0)
+    _call267.Parent = _call169
+    _call267.BackgroundColor3 = _call79
+    _call267.Name = 'FakeContainer'
+    _call267.Size = UDim2.new(1, 0, 1, 0)
+    _call255.Parent = _call267
+
+    local _call273 = Instance.new('Frame')
+
+    _call273.Name = 'InventorySpace'
+    _call273.Position = UDim2.new(0, 100, 1, 57)
+    _call273.Parent = _call169
+    _call273.ClipsDescendants = true
+    _call273.BackgroundTransparency = 1
+    _call273.Size = UDim2.new(1, -200, 0, -50)
+
+    local _call279 = Instance.new('Frame')
+
+    _call279.Name = 'FakeFrame'
+    _call279.Size = UDim2.new(1, 0, 1, 0)
+    _call279.BackgroundTransparency = 0.5
+    _call279.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+    local _call283 = Instance.new('UICorner')
+
+    _call283.CornerRadius = UDim.new(0, 16)
+
+    local _call285 = Instance.new('UIStroke')
+
+    _call285.Color = _call81
+    _call285.Transparency = 0.4
+    _call285.Thickness = 1
+    _call283.Parent = _call279
+    _call285.Parent = _call279
+
+    local _call293 = Instance.new('Frame')
+
+    _call293.BackgroundTransparency = 0.7
+    _call293.Position = UDim2.new(0, 10, 0, 30)
+    _call293.ClipsDescendants = true
+    _call293.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    _call293.Size = UDim2.new(1, -20, 0, 10)
+
+    local _call297 = Instance.new('UICorner')
+
+    _call297.CornerRadius = UDim.new(0, 10)
+
+    local _call299 = Instance.new('UIStroke')
+
+    _call299.Color = _call81
+    _call299.Transparency = 0.7
+    _call299.Thickness = 1
+
+    local _call307 = Instance.new('Frame')
+
+    _call307.Transparency = 1
+    _call307.Name = 'Bar'
+    _call307.Position = UDim2.new(0, 0, 0, 0)
+    _call307.Size = UDim2.new(0, 0, 1, 0)
+    _call307.BackgroundColor3 = Color3.fromRGB(0, 240, 0)
+
+    local _call311 = Instance.new('UICorner')
+
+    _call311.CornerRadius = UDim.new(0, 10)
+    _call311.Parent = _call307
+    _call297.Parent = _call293
+    _call299.Parent = _call293
+    _call307.Parent = _call293
+
+    local _call317 = Instance.new('TextLabel')
+
+    _call317.Font = Enum.Font.GothamBlack
+    _call317.BackgroundTransparency = 1
+    _call317.TextColor3 = _call83
+    _call317.Text = 'Toys Limit'
+    _call317.TextSize = 15
+    _call317.Position = UDim2.new(0, 50, 0, 16)
+
+    local _call327 = Instance.new('TextLabel')
+
+    _call327.Font = Enum.Font.GothamBlack
+    _call327.BackgroundTransparency = 1
+    _call327.TextColor3 = _call83
+    _call327.Name = 'Counter'
+    _call327.Text = '0/' .. tostring(_LocalPlayer42.ToysLimitCap.Value)
+    _call327.TextSize = 15
+    _call327.Position = UDim2.new(1, -28, 0, 16)
+    _call279.Parent = _call273
+    _call293.Parent = _call273
+    _call317.Parent = _call273
+    _call327.Parent = _call273
+
+    local _call333 = Instance.new('Frame')
+
+    _call333.Transparency = 1
+    _call333.Name = 'SubTabHolder'
+    _call333.Position = UDim2.new(0.5, -180, 0, -56)
+    _call333.Parent = _call169
+    _call333.ClipsDescendants = true
+    _call333.Size = UDim2.new(1, 0, 0, 52)
+
+    local _call341 = Instance.new('Frame')
+
+    _call341.Transparency = 0.5
+    _call341.Name = 'FakeFrameButtons'
+    _call341.Position = UDim2.new(0.5, -179, 0, 2.5)
+    _call341.Active = true
+    _call341.Size = UDim2.new(0, 290, 0, 45)
+    _call341.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+    local _call345 = Instance.new('UICorner')
+
+    _call345.CornerRadius = UDim.new(5, 0)
+
+    local _call347 = Instance.new('UIStroke')
+
+    _call347.Color = _call81
+    _call347.Transparency = 0.5
+    _call347.Thickness = 1
+    _call345.Parent = _call341
+    _call347.Parent = _call341
+
+    local _call355 = Instance.new('Frame')
+
+    _call355.Transparency = 0.5
+    _call355.Name = 'FakeFrameFavorites'
+    _call355.Position = UDim2.new(0.5, 116, 0, 2.5)
+    _call355.Active = true
+    _call355.Size = UDim2.new(0, 60, 0, 45)
+    _call355.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+    local _call359 = Instance.new('UICorner')
+
+    _call359.CornerRadius = UDim.new(5, 0)
+
+    local _call361 = Instance.new('UIStroke')
+
+    _call361.Color = _call81
+    _call361.Transparency = 0.5
+    _call361.Thickness = 1
+    _call359.Parent = _call355
+    _call361.Parent = _call355
+    _call341.Parent = _call333
+    _call355.Parent = _call333
+
+    local _call367 = Instance.new('Frame')
+
+    _call367.Transparency = 0.4
+    _call367.Name = 'CoinsWatermark'
+    _call367.Position = UDim2.new(1, -160, 0, -50)
+    _call367.Parent = _call76
+    _call367.Size = UDim2.new(0, 150, 0, 60)
+    _call367.BackgroundColor3 = _call79
+
+    local _call371 = Instance.new('UICorner')
+
+    _call371.CornerRadius = UDim.new(0, 10)
+
+    local _call373 = Instance.new('UIStroke')
+
+    _call373.Color = _call81
+    _call373.Transparency = 0.95
+    _call373.Thickness = 1
+
+    local _386 = string.format('Coins: %s\nFPS: %s\nPing: %s', _call44.MenuGui.TopRight.CoinsFrame.CoinsDisplay.Coins.Text, '0', '0')
+    local _call392 = Instance.new('TextLabel')
+
+    _call392.TextColor3 = Color3.fromRGB(231, 226, 154)
+    _call392.Font = Enum.Font.GothamBlack
+    _call392.BackgroundTransparency = 1
+    _call392.Position = UDim2.new(0, 10, 0, 0)
+    _call392.TextXAlignment = Enum.TextXAlignment.Left
+    _call392.Text = _386
+    _call392.TextSize = 20
+    _call392.Size = UDim2.new(1, -10, 1, 0)
+
+    local _call400 = Instance.new('ImageLabel')
+
+    _call400.Visible = false
+    _call400.Image = 'rbxassetid://10709753149'
+    _call400.BackgroundTransparency = 1
+    _call400.Position = UDim2.new(1, -55, 0, 4)
+    _call400.ImageColor3 = Color3.fromRGB(220, 50, 0)
+    _call400.Size = UDim2.new(0, 50, 0, 50)
+    _call371.Parent = _call367
+    _call373.Parent = _call367
+    _call392.Parent = _call367
+    _call400.Parent = _call367
+
+    local _call406 = Instance.new('Frame')
+
+    _call406.Visible = false
+    _call406.Transparency = 0.2
+    _call406.Name = 'BuyFrame'
+    _call406.Position = UDim2.new(0, 0, 0, 0)
+    _call406.Parent = _call169
+    _call406.ZIndex = -10
+    _call406.Size = UDim2.new(1, 0, 1, 0)
+    _call406.BackgroundColor3 = _call79
+
+    local _call410 = Instance.new('UICorner')
+
+    _call410.CornerRadius = UDim.new(0, 10)
+
+    local _call420 = Instance.new('TextButton')
+
+    _call420.TextColor3 = _call83
+    _call420.Text = 'Buy'
+    _call420.Font = Enum.Font.GothamBlack
+    _call420.Name = 'Buy'
+    _call420.Position = UDim2.new(0.5, -25, 1, -40)
+    _call420.BackgroundColor3 = Color3.fromRGB(20, 115, 240)
+    _call420.BackgroundTransparency = 0.5
+    _call420.TextSize = 20
+    _call420.Size = UDim2.new(0.5, 15, 0, 30)
+
+    local _call424 = Instance.new('UICorner')
+
+    _call424.CornerRadius = UDim.new(0, 10)
+    _call424.Parent = _call420
+
+    local _call434 = Instance.new('TextButton')
+
+    _call434.TextColor3 = _call83
+    _call434.Text = 'Back'
+    _call434.Font = Enum.Font.GothamBlack
+    _call434.Name = 'Back'
+    _call434.Position = UDim2.new(0, 68, 1, -40)
+    _call434.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+    _call434.BackgroundTransparency = 0.5
+    _call434.TextSize = 20
+    _call434.Size = UDim2.new(0.5, -100, 0, 30)
+
+    local _call438 = Instance.new('UICorner')
+
+    _call438.CornerRadius = UDim.new(0, 10)
+    _call438.Parent = _call434
+
+    local _call446 = Instance.new('ImageLabel')
+
+    _call446.Image = 'rbxassetid://71634501782424'
+    _call446.BackgroundTransparency = 1
+    _call446.Position = UDim2.new(0, 100, 0.5, -90)
+    _call446.Name = 'ToyImage'
+    _call446.ImageRectSize = Vector2.new(90, 90)
+    _call446.Size = UDim2.new(0, 180, 0, 180)
+
+    local _call452 = Instance.new('TextLabel')
+
+    _call452.Font = Enum.Font.GothamBlack
+    _call452.Name = 'ToyName'
+    _call452.TextColor3 = _call83
+    _call452.TextSize = 30
+    _call452.Position = UDim2.new(0.5, 0, 0, 30)
+
+    local _call460 = Instance.new('TextLabel')
+
+    _call460.Position = UDim2.new(0.5, -100, 0, 0)
+    _call460.Font = Enum.Font.GothamBlack
+    _call460.Name = 'ToyDescription'
+    _call460.TextColor3 = _call83
+    _call460.BackgroundTransparency = 1
+    _call460.TextWrapped = true
+    _call460.TextSize = 24
+    _call460.Size = UDim2.new(0.5, 90, 1, -20)
+    _call410.Parent = _call406
+    _call420.Parent = _call406
+    _call434.Parent = _call406
+    _call446.Parent = _call406
+    _call452.Parent = _call406
+    _call460.Parent = _call406
+
+    _call406.Back.MouseButton1Click:Connect(function()
+        _call406.Visible = false
+    end)
+    _call406.Buy.MouseButton1Click:Connect(function()
+        error('internal 579: <25ms: infinitelooperror>')
+    end)
+    _call169.TopBar.CloseButton.MouseButton1Click:Connect(function() end)
+    game:GetService('UserInputService').InputBegan:Connect(function(_481) end)
+    _call367.TextLabel.GetPropertyChangedSignal(_call367.TextLabel, 'Text'):Connect(function() end)
+    _call406.ToyDescription.GetPropertyChangedSignal(_call406.ToyDescription, 'Text'):Connect(function() end)
+
+    fenv.ChangeTab = function(_496, _496_2) end
+    fenv.MakeTab = function(_497, _497_2, _497_3) end
+    fenv.MakeSubTab = function(_498, _498_2, _498_3) end
+end
+fenv.UIWork = function() end
+fenv.LoadAll = function() end
+fenv.MakeFlingcord = function() end
+
+local _call505 = Instance.new('Frame')
+
+_call505.Visible = false
+_call505.Active = true
+_call505.Parent = _call76
+_call505.AnchorPoint = Vector2.new(0.5, 0.55)
+_call505.Transparency = 0.4
+_call505.Name = 'MainWindow'
+_call505.Position = _call93
+_call505.Size = _call89
+_call505.BackgroundColor3 = _call79
+
+local _call507 = Instance.new('UIAspectRatioConstraint')
+
+_call507.AspectRatio = 1.6
+
+local _call511 = Instance.new('UISizeConstraint')
+
+_call511.MaxSize = Vector2.new(1 / 0, 950)
+
+local _call515 = Instance.new('UICorner')
+
+_call515.CornerRadius = UDim.new(0, 10)
+
+local _call517 = Instance.new('UIStroke')
+
+_call517.Color = _call81
+_call517.Transparency = 0.42
+_call517.Thickness = 2
+
+local _call521 = Instance.new('Frame')
+
+_call521.Parent = _call76
+_call521.Transparency = 1
+_call521.Name = 'TopBar'
+_call521.Size = UDim2.new(1, 0, 0, 60)
+
+local _call533 = Instance.new('TextLabel')
+
+_call533.RichText = true
+_call533.TextColor3 = _call83
+_call533.Text = '  Your Toys'
+_call533.TextXAlignment = Enum.TextXAlignment.Left
+_call533.Size = UDim2.new(1, -363, 0, 45)
+_call533.Font = Enum.Font.GothamBlack
+_call533.BackgroundTransparency = 0.5
+_call533.Position = UDim2.new(0, 0, 0, -53)
+_call533.Name = 'TabName'
+_call533.ZIndex = 2
+_call533.TextSize = 26
+_call533.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+local _call537 = Instance.new('UICorner')
+
+_call537.CornerRadius = UDim.new(5, 0)
+
+local _call539 = Instance.new('UIStroke')
+
+_call539.Color = _call81
+_call539.Transparency = 0.5
+_call539.Thickness = 1
+_call537.Parent = _call533
+_call539.Parent = _call533
+
+local _call545 = Instance.new('ImageButton')
+
+_call545.Image = 'rbxassetid://7072725342'
+_call545.BackgroundTransparency = 1
+_call545.Position = UDim2.new(1, -40, 0, 12)
+_call545.Name = 'CloseButton'
+_call545.Size = UDim2.new(0, 25, 0, 25)
+
+local _call557 = Instance.new('TextLabel')
+
+_call557.RichText = true
+_call557.TextColor3 = _call83
+_call557.TextTransparency = 0.5
+_call557.Text = 'InventoryPlus V2'
+_call557.TextXAlignment = Enum.TextXAlignment.Right
+_call557.Size = UDim2.new(1, -520, 0, 45)
+_call557.TextWrapped = true
+_call557.Font = Enum.Font.Gotham
+_call557.BackgroundTransparency = 1
+_call557.Position = UDim2.new(0.5, -280, 0, -53)
+_call557.Name = 'TheBestWatermark'
+_call557.ZIndex = 2
+_call557.TextSize = 18
+_call557.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+_call533.Parent = _call521
+_call545.Parent = _call521
+_call557.Parent = _call521
+_call507.Parent = _call505
+_call511.Parent = _call505
+_call515.Parent = _call505
+_call517.Parent = _call505
+_call521.Parent = _call505
+
+local _call567 = Instance.new('Frame')
+
+_call567.AnchorPoint = Vector2.new(0, 0.5)
+_call567.Transparency = 0.5
+_call567.Name = 'TabHolder'
+_call567.Position = UDim2.new(0, -80, 0.5, 0)
+_call567.Parent = _call505
+_call567.ZIndex = -1
+_call567.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+_call567.Size = UDim2.new(0, 72, 0, 400)
+
+local _call571 = Instance.new('UICorner')
+
+_call571.CornerRadius = UDim.new(5, 0)
+
+local _call573 = Instance.new('UIStroke')
+
+_call573.Color = _call81
+_call573.Transparency = 0.4
+_call573.Thickness = 1
+
+local _call579 = Instance.new('Frame')
+
+_call579.Transparency = 1
+_call579.Name = 'FakeHolder'
+_call579.Position = UDim2.new(0, 0, 0, 8)
+_call579.Parent = _call505
+_call579.ZIndex = -1
+_call579.Size = UDim2.new(1, 0, 1, 0)
+
+local _call585 = Instance.new('UIListLayout')
+
+_call585.Padding = UDim.new(0, -10)
+_call585.SortOrder = Enum.SortOrder.LayoutOrder
+_call585.Parent = _call579
+_call571.Parent = _call567
+_call573.Parent = _call567
+_call579.Parent = _call567
+
+local _call591 = Instance.new('Frame')
+
+_call591.BackgroundTransparency = 1
+_call591.Position = UDim2.new(0, 0, 0, 0)
+_call591.Parent = _call505
+_call591.BackgroundColor3 = _call79
+_call591.Name = 'Container'
+_call591.Size = UDim2.new(1, 0, 1, 0)
+
+local _call597 = Instance.new('UIListLayout')
+
+_call597.Padding = UDim.new(0, 0)
+_call597.SortOrder = Enum.SortOrder.LayoutOrder
+_call597.Parent = _call591
+
+local _call603 = Instance.new('Frame')
+
+_call603.ClipsDescendants = true
+_call603.BackgroundTransparency = 1
+_call603.Position = UDim2.new(0, 0, 0, 0)
+_call603.Parent = _call505
+_call603.BackgroundColor3 = _call79
+_call603.Name = 'FakeContainer'
+_call603.Size = UDim2.new(1, 0, 1, 0)
+_call591.Parent = _call603
+
+local _call609 = Instance.new('Frame')
+
+_call609.Name = 'InventorySpace'
+_call609.Position = UDim2.new(0, 100, 1, 57)
+_call609.Parent = _call505
+_call609.ClipsDescendants = true
+_call609.BackgroundTransparency = 1
+_call609.Size = UDim2.new(1, -200, 0, -50)
+
+local _call615 = Instance.new('Frame')
+
+_call615.Name = 'FakeFrame'
+_call615.Size = UDim2.new(1, 0, 1, 0)
+_call615.BackgroundTransparency = 0.5
+_call615.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+local _call619 = Instance.new('UICorner')
+
+_call619.CornerRadius = UDim.new(0, 16)
+
+local _call621 = Instance.new('UIStroke')
+
+_call621.Color = _call81
+_call621.Transparency = 0.4
+_call621.Thickness = 1
+_call619.Parent = _call615
+_call621.Parent = _call615
+
+local _call629 = Instance.new('Frame')
+
+_call629.BackgroundTransparency = 0.7
+_call629.Position = UDim2.new(0, 10, 0, 30)
+_call629.ClipsDescendants = true
+_call629.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+_call629.Size = UDim2.new(1, -20, 0, 10)
+
+local _call633 = Instance.new('UICorner')
+
+_call633.CornerRadius = UDim.new(0, 10)
+
+local _call635 = Instance.new('UIStroke')
+
+_call635.Color = _call81
+_call635.Transparency = 0.7
+_call635.Thickness = 1
+
+local _call643 = Instance.new('Frame')
+
+_call643.Transparency = 1
+_call643.Name = 'Bar'
+_call643.Position = UDim2.new(0, 0, 0, 0)
+_call643.Size = UDim2.new(0, 0, 1, 0)
+_call643.BackgroundColor3 = Color3.fromRGB(0, 240, 0)
+
+local _call647 = Instance.new('UICorner')
+
+_call647.CornerRadius = UDim.new(0, 10)
+_call647.Parent = _call643
+_call633.Parent = _call629
+_call635.Parent = _call629
+_call643.Parent = _call629
+
+local _call653 = Instance.new('TextLabel')
+
+_call653.Font = Enum.Font.GothamBlack
+_call653.BackgroundTransparency = 1
+_call653.TextColor3 = _call83
+_call653.Text = 'Toys Limit'
+_call653.TextSize = 15
+_call653.Position = UDim2.new(0, 50, 0, 16)
+
+local _call663 = Instance.new('TextLabel')
+
+_call663.Font = Enum.Font.GothamBlack
+_call663.BackgroundTransparency = 1
+_call663.TextColor3 = _call83
+_call663.Name = 'Counter'
+_call663.Text = '0/' .. tostring(_LocalPlayer42.ToysLimitCap.Value)
+_call663.TextSize = 15
+_call663.Position = UDim2.new(1, -28, 0, 16)
+_call615.Parent = _call609
+_call629.Parent = _call609
+_call653.Parent = _call609
+_call663.Parent = _call609
+
+local _call669 = Instance.new('Frame')
+
+_call669.Transparency = 1
+_call669.Name = 'SubTabHolder'
+_call669.Position = UDim2.new(0.5, -180, 0, -56)
+_call669.Parent = _call505
+_call669.ClipsDescendants = true
+_call669.Size = UDim2.new(1, 0, 0, 52)
+
+local _call677 = Instance.new('Frame')
+
+_call677.Transparency = 0.5
+_call677.Name = 'FakeFrameButtons'
+_call677.Position = UDim2.new(0.5, -179, 0, 2.5)
+_call677.Active = true
+_call677.Size = UDim2.new(0, 290, 0, 45)
+_call677.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+local _call681 = Instance.new('UICorner')
+
+_call681.CornerRadius = UDim.new(5, 0)
+
+local _call683 = Instance.new('UIStroke')
+
+_call683.Color = _call81
+_call683.Transparency = 0.5
+_call683.Thickness = 1
+_call681.Parent = _call677
+_call683.Parent = _call677
+
+local _call691 = Instance.new('Frame')
+
+_call691.Transparency = 0.5
+_call691.Name = 'FakeFrameFavorites'
+_call691.Position = UDim2.new(0.5, 116, 0, 2.5)
+_call691.Active = true
+_call691.Size = UDim2.new(0, 60, 0, 45)
+_call691.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+local _call695 = Instance.new('UICorner')
+
+_call695.CornerRadius = UDim.new(5, 0)
+
+local _call697 = Instance.new('UIStroke')
+
+_call697.Color = _call81
+_call697.Transparency = 0.5
+_call697.Thickness = 1
+_call695.Parent = _call691
+_call697.Parent = _call691
+_call677.Parent = _call669
+_call691.Parent = _call669
+
+local _call703 = Instance.new('Frame')
+
+_call703.Transparency = 0.4
+_call703.Name = 'CoinsWatermark'
+_call703.Position = UDim2.new(1, -160, 0, -50)
+_call703.Parent = _call76
+_call703.Size = UDim2.new(0, 150, 0, 60)
+_call703.BackgroundColor3 = _call79
+
+local _call707 = Instance.new('UICorner')
+
+_call707.CornerRadius = UDim.new(0, 10)
+
+local _call709 = Instance.new('UIStroke')
+
+_call709.Color = _call81
+_call709.Transparency = 0.95
+_call709.Thickness = 1
+
+local _722 = string.format('Coins: %s\nFPS: %s\nPing: %s', _call44.MenuGui.TopRight.CoinsFrame.CoinsDisplay.Coins.Text, '0', '0')
+local _call728 = Instance.new('TextLabel')
+
+_call728.TextColor3 = Color3.fromRGB(231, 226, 154)
+_call728.Font = Enum.Font.GothamBlack
+_call728.BackgroundTransparency = 1
+_call728.Position = UDim2.new(0, 10, 0, 0)
+_call728.TextXAlignment = Enum.TextXAlignment.Left
+_call728.Text = _722
+_call728.TextSize = 20
+_call728.Size = UDim2.new(1, -10, 1, 0)
+
+local _call736 = Instance.new('ImageLabel')
+
+_call736.Visible = false
+_call736.Image = 'rbxassetid://10709753149'
+_call736.BackgroundTransparency = 1
+_call736.Position = UDim2.new(1, -55, 0, 4)
+_call736.ImageColor3 = Color3.fromRGB(220, 50, 0)
+_call736.Size = UDim2.new(0, 50, 0, 50)
+_call707.Parent = _call703
+_call709.Parent = _call703
+_call728.Parent = _call703
+_call736.Parent = _call703
+
+local _call742 = Instance.new('Frame')
+
+_call742.Visible = false
+_call742.Transparency = 0.2
+_call742.Name = 'BuyFrame'
+_call742.Position = UDim2.new(0, 0, 0, 0)
+_call742.Parent = _call505
+_call742.ZIndex = -10
+_call742.Size = UDim2.new(1, 0, 1, 0)
+_call742.BackgroundColor3 = _call79
+
+local _call746 = Instance.new('UICorner')
+
+_call746.CornerRadius = UDim.new(0, 10)
+
+local _call756 = Instance.new('TextButton')
+
+_call756.TextColor3 = _call83
+_call756.Text = 'Buy'
+_call756.Font = Enum.Font.GothamBlack
+_call756.Name = 'Buy'
+_call756.Position = UDim2.new(0.5, -25, 1, -40)
+_call756.BackgroundColor3 = Color3.fromRGB(20, 115, 240)
+_call756.BackgroundTransparency = 0.5
+_call756.TextSize = 20
+_call756.Size = UDim2.new(0.5, 15, 0, 30)
+
+local _call760 = Instance.new('UICorner')
+
+_call760.CornerRadius = UDim.new(0, 10)
+_call760.Parent = _call756
+
+local _call770 = Instance.new('TextButton')
+
+_call770.TextColor3 = _call83
+_call770.Text = 'Back'
+_call770.Font = Enum.Font.GothamBlack
+_call770.Name = 'Back'
+_call770.Position = UDim2.new(0, 68, 1, -40)
+_call770.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+_call770.BackgroundTransparency = 0.5
+_call770.TextSize = 20
+_call770.Size = UDim2.new(0.5, -100, 0, 30)
+
+UDim.new(0, 10)
+error('internal 579: <25ms: infinitelooperror>')

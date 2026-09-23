@@ -1,0 +1,1131 @@
+if not isfolder("Audio") then
+    makefolder("Audio")
+else
+	writefile("Audio/ToolBreak.mp3", game:HttpGet('https://github.com/replicateclient/imakescripts/blob/main/minecraft-tool-break.mp3?raw=true'))
+	writefile("Audio/explode1.mp3", game:HttpGet('https://github.com/replicateclient/imakescripts/blob/main/explode1.mp3?raw=true'))
+end
+local song = "ToolBreak.mp3"
+local song2 = "explode1.mp3"
+local looped = false
+local volume = 3
+local Players = game:GetService("Players") 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
+
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+local GrabEvents = ReplicatedStorage:WaitForChild("GrabEvents")
+local CreateGrabLine = GrabEvents:WaitForChild("CreateGrabLine")
+local DestroyGrabLine = GrabEvents:WaitForChild("DestroyGrabLine")
+local SetNetworkOwner = GrabEvents:WaitForChild("SetNetworkOwner")
+
+local GRID_SIZE = 3
+local GRID_SPACING = 12
+local GRID_HEIGHT = 50
+local KEYBIND = Enum.KeyCode.G
+local STAB_KEYBIND = Enum.KeyCode.Z
+local UI_TOGGLE_KEY = Enum.KeyCode.RightControl
+local currentMode = "BombBalloon"
+local waitingForKeybind = false
+local waitingForStabKeybind = false
+local preparingStuff = false
+local explosiveCount = 9 -- Default count from slider
+local selectedPlayer = nil
+local targetMode = "Look" -- "Look" or "Player"
+
+--// LOGIC FUNCTIONS //--
+
+local function toysFolder()
+    return workspace:FindFirstChild(player.Name .. "SpawnedInToys")
+end
+
+local function lookAt(startPosition, targetPosition)
+    local directionVector = (targetPosition - startPosition).Unit
+    local rightVector = directionVector:Cross(Vector3.new(0, 1, 0))
+    local upVector = rightVector:Cross(directionVector)
+    return CFrame.fromMatrix(startPosition, rightVector, upVector)
+end
+
+local function TeleportTo(cf)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = cf
+        player.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0) 
+        player.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
+    end
+end
+
+local function lookPosition()
+    if targetMode == "Player" and selectedPlayer then
+        local targetChar = selectedPlayer.Character
+        if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+            return targetChar.HumanoidRootPart.Position
+        end
+    end
+    
+    local params = RaycastParams.new()
+    params.FilterDescendantsInstances = { player.Character }
+    params.FilterType = Enum.RaycastFilterType.Blacklist
+    local result = workspace:Raycast(
+        camera.CFrame.Position,
+        camera.CFrame.LookVector * 1000,
+        params
+    )
+    return result and result.Position or (camera.CFrame.Position + camera.CFrame.LookVector * 100)
+end
+
+local function getCampfire(folder)
+    for _, v in ipairs(folder:GetChildren()) do
+        if v.Name == "Campfire" and v:IsA("Model") and v.PrimaryPart then
+            return v
+        end
+    end
+end
+
+--// UI HELPER FUNCTIONS //--
+
+local gui
+
+local function notify(text, color)
+    if not gui then return end
+    local notif = Instance.new("Frame")
+    notif.Size = UDim2.new(0, 250, 0, 40)
+    notif.Position = UDim2.new(1, -260, 1, -50)
+    notif.BackgroundColor3 = Color3.fromRGB(30, 30, 36)
+    notif.BorderSizePixel = 0
+    notif.Parent = gui
+    
+    local stroke = Instance.new("UIStroke", notif)
+    stroke.Color = color or Color3.fromRGB(80, 80, 90)
+    stroke.Thickness = 1
+    
+    local corner = Instance.new("UICorner", notif)
+    corner.CornerRadius = UDim.new(0, 6)
+    
+    local label = Instance.new("TextLabel", notif)
+    label.Size = UDim2.new(1, -20, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.Font = Enum.Font.GothamMedium
+    label.TextSize = 13
+    label.TextColor3 = Color3.new(1, 1, 1)
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    
+    notif.Position = UDim2.new(1, 10, 1, -50)
+    TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Exponential), {Position = UDim2.new(1, -260, 1, -60)}):Play()
+    
+    task.delay(2.5, function()
+        if notif then
+            TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Exponential), {Position = UDim2.new(1, 10, 1, -60)}):Play()
+            task.wait(0.4)
+            notif:Destroy()
+        end
+    end)
+end
+
+local function makeDraggable(topbarObject, object)
+    local dragging = false
+    local dragInput, dragStart, startPos
+
+    local function update(input)
+        local delta = input.Position - dragStart
+        local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        TweenService:Create(object, TweenInfo.new(0.15), {Position = targetPos}):Play()
+    end
+
+    topbarObject.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = object.Position
+            
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    topbarObject.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            update(input)
+        end
+    end)
+end
+
+--// GAMEPLAY FUNCTIONS //--
+
+local function prepareStuff()
+    if preparingStuff then return end
+    preparingStuff = true
+    local MenuToys = ReplicatedStorage:FindFirstChild("MenuToys")
+    if not MenuToys then
+        notify("MenuToys not found", Color3.fromRGB(220, 60, 60))
+        preparingStuff = false
+        return
+    end
+    local SpawnToyRemoteFunction = MenuToys:FindFirstChild("SpawnToyRemoteFunction")
+    if not SpawnToyRemoteFunction then
+        notify("Spawn Remote not found", Color3.fromRGB(220, 60, 60))
+        preparingStuff = false
+        return
+    end
+    notify("Preparing..", Color3.fromRGB(100, 140, 220))
+    
+    -- Spawn items and track when each spawns
+    local lastSpawnTime = tick()
+    for i = 1, explosiveCount do
+        local success = pcall(function()
+            SpawnToyRemoteFunction:InvokeServer(currentMode, CFrame.new(-166, -5, -604), Vector3.new(0, -75.5, 0))
+        end)
+        task.wait(0.8)
+    end
+    
+    local success = pcall(function()
+        SpawnToyRemoteFunction:InvokeServer("Campfire", CFrame.new(-329, -5, -553), Vector3.new(0, 110.5, 0))
+    end)
+	
+    task.wait(0.5)
+    
+    local spawnedItems = {}
+    local folder = toysFolder()
+    if not folder then
+        notify("Toys folder not found", Color3.fromRGB(220, 60, 60))
+        preparingStuff = false
+        return
+    end
+    for _, item in ipairs(folder:GetChildren()) do
+        if (item.Name == currentMode or item.Name == "Campfire") and item:IsA("Model") and item.PrimaryPart then
+            table.insert(spawnedItems, item)
+        end
+    end
+    if #spawnedItems == 0 then
+        notify("Nothing to prepare", Color3.fromRGB(220, 60, 60))
+        preparingStuff = false
+        return
+    end
+    
+    local originalCFrame = player.Character.HumanoidRootPart.CFrame
+    for i, item in ipairs(spawnedItems) do
+        if item and item.Parent then
+            local grabPart = nil
+            if item.Name == "Campfire" then grabPart = item:FindFirstChild("FirePlayerPart")
+            elseif item.Name == "BombBalloon" then grabPart = item:FindFirstChild("Balloon")
+            elseif item.Name == "BombMissile" then grabPart = item:FindFirstChild("Body") end
+            if not grabPart then grabPart = item.PrimaryPart end
+            if grabPart then
+                TeleportTo(grabPart.CFrame * CFrame.new(5, 5, 0))
+                task.wait(0.055) 
+                pcall(function() CreateGrabLine:FireServer(grabPart, CFrame.new(0, 0, 0)) end)
+                pcall(function()
+                    local lookAtCF = lookAt(player.Character.HumanoidRootPart.Position, grabPart.Position)
+                    SetNetworkOwner:FireServer(grabPart, lookAtCF)
+                end)
+                pcall(function() DestroyGrabLine:FireServer(grabPart) end)
+                task.wait(0.055)
+            end
+        end
+    end
+    TeleportTo(originalCFrame)
+    notify("Prepared " .. #spawnedItems .. " explosives", Color3.fromRGB(80, 180, 100))
+    preparingStuff = false
+end
+
+local function activateCannon()
+
+    local folder = toysFolder()
+    if not folder then notify("No toys folder", Color3.fromRGB(220, 60, 60)) return end
+    local campfire = getCampfire(folder)
+    if not campfire then notify("Campfire missing", Color3.fromRGB(220, 60, 60)) return end
+    local items = {}
+    for _, v in ipairs(folder:GetChildren()) do
+        if v.Name == currentMode and v:IsA("Model") and v.PrimaryPart then
+            table.insert(items, v)
+        end
+    end
+    if #items < 1 then notify("No " .. currentMode:lower() .. "s found", Color3.fromRGB(220, 60, 60)) return end
+    
+    local center = lookPosition() + Vector3.new(0, GRID_HEIGHT, 0)
+    local count = 0
+	    if isfile('Audio/'..song) then
+        local audio = getcustomasset('Audio/'..song)
+        local a = Instance.new("Sound", workspace)
+        a.SoundId = audio
+        a.Looped = looped
+        a:Play()
+        a.Volume = volume
+    end
+    task.wait(1)
+    for i = 1, math.min(#items, explosiveCount) do
+        local model = items[i]
+        local gridSize = math.ceil(math.sqrt(explosiveCount))
+        local row = math.floor((i - 1) / gridSize)
+        local col = (i - 1) % gridSize
+        local offset = Vector3.new((col - (gridSize-1)/2) * GRID_SPACING, 0, (row - (gridSize-1)/2) * GRID_SPACING)
+        local cf = CFrame.new(center + offset)
+        local targetPart = model.PrimaryPart
+        if model.Name == "BombBalloon" and model:FindFirstChild("Balloon") then targetPart = model.Balloon
+        elseif model.Name == "BombMissile" and model:FindFirstChild("Body") then targetPart = model.Body end
+
+        if targetPart then
+            pcall(function() SetNetworkOwner:FireServer(targetPart, cf) end)
+            model:SetPrimaryPartCFrame(cf)
+            count = count + 1
+        end
+    end
+    
+    -- Set up touch events after positioning
+    if campfire and campfire.PrimaryPart then
+        for _, model in ipairs(items) do
+            if model and model.Parent then
+                for _, part in ipairs(model:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Touched:Connect(function(hit)
+                            if hit:IsA("BasePart") and (hit.Anchored or hit.Material == Enum.Material.Grass) then
+                                campfire:SetPrimaryPartCFrame(part.CFrame)
+                            end
+                        end)
+                    end
+                end
+            end
+        end
+    end
+    
+    notify("hitman ran NukeShot()", Color3.fromRGB(255, 100, 100))
+end
+
+local function stabShot()
+    local folder = toysFolder()
+    if not folder then notify("No toys folder", Color3.fromRGB(220, 60, 60)) return end
+    local campfire = getCampfire(folder)
+    if not campfire then notify("Campfire missing", Color3.fromRGB(220, 60, 60)) return end
+    local items = {}
+    for _, v in ipairs(folder:GetChildren()) do
+        if v.Name == currentMode and v:IsA("Model") and v.PrimaryPart then
+            table.insert(items, v)
+        end
+    end
+    if #items < 1 then notify("No " .. currentMode:lower() .. "s found", Color3.fromRGB(220, 60, 60)) return end
+    
+    local target = lookPosition()
+	if isfile('Audio/'..song2) then
+        local audio = getcustomasset('Audio/'..song2)
+        local a = Instance.new("Sound", workspace)
+        a.SoundId = audio
+        a.Looped = looped
+        a:Play()
+        a.Volume = volume
+    end
+    -- Teleport all missiles to same spot
+    for i = 1, math.min(#items, explosiveCount) do
+        local model = items[i]
+        local targetPart = model.PrimaryPart
+        if model.Name == "BombBalloon" and model:FindFirstChild("Balloon") then targetPart = model.Balloon
+        elseif model.Name == "BombMissile" and model:FindFirstChild("Body") then targetPart = model.Body end
+
+        if targetPart then
+            local cf = CFrame.new(target)
+            pcall(function() SetNetworkOwner:FireServer(targetPart, cf) end)
+            model:SetPrimaryPartCFrame(cf)
+        end
+    end
+    
+    -- Rapidly teleport campfire to each missile to ensure all explode
+    task.spawn(function()
+        task.wait(0.1)
+        if campfire and campfire.PrimaryPart then
+            for i = 1, math.min(#items, explosiveCount) do
+                local model = items[i]
+                if model and model.Parent and model.PrimaryPart then
+                    campfire:SetPrimaryPartCFrame(model.PrimaryPart.CFrame)
+                    task.wait(0.05)
+                end
+            end
+        end
+    end)
+    
+    notify("hitman ran StabShot()", Color3.fromRGB(255, 100, 100))
+end
+
+--// UI CONSTRUCTION //--
+
+if CoreGui:FindFirstChild("SillyObc") then
+    CoreGui.SillyObc:Destroy()
+end
+
+gui = Instance.new("ScreenGui")
+gui.Name = "SillyObc"
+gui.DisplayOrder = 9999
+gui.ResetOnSpawn = false
+gui.Parent = CoreGui
+
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.fromOffset(400, 300)
+main.Position = UDim2.fromScale(0.5, 0.5)
+main.AnchorPoint = Vector2.new(0.5, 0.5)
+main.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+main.BorderSizePixel = 0
+main.ClipsDescendants = true
+
+local mainCorner = Instance.new("UICorner", main)
+mainCorner.CornerRadius = UDim.new(0, 12)
+
+local mainStroke = Instance.new("UIStroke", main)
+mainStroke.Color = Color3.fromRGB(45, 45, 55)
+mainStroke.Thickness = 1.5
+
+-- Header
+local header = Instance.new("Frame", main)
+header.Size = UDim2.new(1, 0, 0, 45)
+header.BackgroundColor3 = Color3.fromRGB(24, 24, 30)
+header.BorderSizePixel = 0
+makeDraggable(header, main)
+
+local headerCorner = Instance.new("UICorner", header)
+headerCorner.CornerRadius = UDim.new(0, 12)
+
+local headerCover = Instance.new("Frame", header)
+headerCover.Size = UDim2.new(1, 0, 0, 14)
+headerCover.Position = UDim2.new(0, 0, 1, -14)
+headerCover.BackgroundColor3 = Color3.fromRGB(24, 24, 30)
+headerCover.BorderSizePixel = 0
+
+local title = Instance.new("TextLabel", header)
+title.Size = UDim2.new(1, -100, 1, 0)
+title.Position = UDim2.new(0, 15, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "obc  <font color=\"rgb(90,90,110)\">(beta)</font>"
+title.RichText = true
+title.Font = Enum.Font.GothamBold
+title.TextSize = 16
+title.TextColor3 = Color3.new(1, 1, 1)
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Control Buttons
+local closeBtn = Instance.new("TextButton", header)
+closeBtn.Size = UDim2.fromOffset(28, 28)
+closeBtn.Position = UDim2.new(1, -36, 0.5, -14)
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 55, 55)
+closeBtn.Text = ""
+closeBtn.AutoButtonColor = false
+
+local closeCorner = Instance.new("UICorner", closeBtn)
+closeCorner.CornerRadius = UDim.new(0, 7)
+
+local closeIcon = Instance.new("TextLabel", closeBtn)
+closeIcon.Size = UDim2.new(1, 0, 1, 0)
+closeIcon.BackgroundTransparency = 1
+closeIcon.Text = "×"
+closeIcon.Font = Enum.Font.GothamBold
+closeIcon.TextSize = 18
+closeIcon.TextColor3 = Color3.new(1, 1, 1)
+
+local minBtn = Instance.new("TextButton", header)
+minBtn.Size = UDim2.fromOffset(28, 28)
+minBtn.Position = UDim2.new(1, -70, 0.5, -14)
+minBtn.BackgroundColor3 = Color3.fromRGB(55, 55, 65)
+minBtn.Text = ""
+minBtn.AutoButtonColor = false
+
+local minCorner = Instance.new("UICorner", minBtn)
+minCorner.CornerRadius = UDim.new(0, 7)
+
+local minIcon = Instance.new("TextLabel", minBtn)
+minIcon.Size = UDim2.new(1, 0, 1, 0)
+minIcon.BackgroundTransparency = 1
+minIcon.Text = "−"
+minIcon.Font = Enum.Font.GothamBold
+minIcon.TextSize = 16
+minIcon.TextColor3 = Color3.new(1, 1, 1)
+
+-- Tab System
+local tabContainer = Instance.new("Frame", main)
+tabContainer.Size = UDim2.new(1, -20, 0, 35)
+tabContainer.Position = UDim2.new(0, 10, 0, 52)
+tabContainer.BackgroundTransparency = 1
+
+local tabLayout = Instance.new("UIListLayout", tabContainer)
+tabLayout.FillDirection = Enum.FillDirection.Horizontal
+tabLayout.Padding = UDim.new(0, 6)
+tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+local currentTab = "Main"
+local tabs = {}
+
+local function createTab(name, order)
+    local tab = Instance.new("TextButton", tabContainer)
+    tab.Size = UDim2.new(0, 90, 1, 0)
+    tab.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+    tab.Text = ""
+    tab.AutoButtonColor = false
+    tab.LayoutOrder = order
+    
+    local tabCorner = Instance.new("UICorner", tab)
+    tabCorner.CornerRadius = UDim.new(0, 6)
+    
+    local tabLabel = Instance.new("TextLabel", tab)
+    tabLabel.Size = UDim2.new(1, 0, 1, 0)
+    tabLabel.BackgroundTransparency = 1
+    tabLabel.Text = name
+    tabLabel.Font = Enum.Font.GothamSemibold
+    tabLabel.TextSize = 12
+    tabLabel.TextColor3 = Color3.fromRGB(140, 140, 150)
+    
+    tabs[name] = {button = tab, label = tabLabel}
+    return tab
+end
+
+local mainTab = createTab("Main", 1)
+local settingsTab = createTab("Settings", 2)
+local infoTab = createTab("Info", 3)
+
+-- Content Pages
+local contentContainer = Instance.new("Frame", main)
+contentContainer.Size = UDim2.new(1, -20, 1, -105)
+contentContainer.Position = UDim2.new(0, 10, 0, 95)
+contentContainer.BackgroundTransparency = 1
+contentContainer.ClipsDescendants = true
+
+-- Main Page
+local mainPage = Instance.new("ScrollingFrame", contentContainer)
+mainPage.Size = UDim2.new(1, 0, 1, 0)
+mainPage.BackgroundTransparency = 1
+mainPage.BorderSizePixel = 0
+mainPage.ScrollBarThickness = 4
+mainPage.ScrollBarImageColor3 = Color3.fromRGB(60, 60, 70)
+mainPage.CanvasSize = UDim2.new(0, 0, 0, 0)
+mainPage.AutomaticCanvasSize = Enum.AutomaticSize.Y
+
+local mainLayout = Instance.new("UIListLayout", mainPage)
+mainLayout.Padding = UDim.new(0, 10)
+mainLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Settings Page
+local settingsPage = Instance.new("ScrollingFrame", contentContainer)
+settingsPage.Size = UDim2.new(1, 0, 1, 0)
+settingsPage.BackgroundTransparency = 1
+settingsPage.BorderSizePixel = 0
+settingsPage.ScrollBarThickness = 4
+settingsPage.ScrollBarImageColor3 = Color3.fromRGB(60, 60, 70)
+settingsPage.CanvasSize = UDim2.new(0, 0, 0, 0)
+settingsPage.AutomaticCanvasSize = Enum.AutomaticSize.Y
+settingsPage.Visible = false
+
+local settingsLayout = Instance.new("UIListLayout", settingsPage)
+settingsLayout.Padding = UDim.new(0, 10)
+settingsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Info Page
+local infoPage = Instance.new("ScrollingFrame", contentContainer)
+infoPage.Size = UDim2.new(1, 0, 1, 0)
+infoPage.BackgroundTransparency = 1
+infoPage.BorderSizePixel = 0
+infoPage.ScrollBarThickness = 4
+infoPage.ScrollBarImageColor3 = Color3.fromRGB(60, 60, 70)
+infoPage.CanvasSize = UDim2.new(0, 0, 0, 0)
+infoPage.AutomaticCanvasSize = Enum.AutomaticSize.Y
+infoPage.Visible = false
+
+local infoLayout = Instance.new("UIListLayout", infoPage)
+infoLayout.Padding = UDim.new(0, 8)
+infoLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Tab switching function
+local function switchTab(tabName)
+    currentTab = tabName
+    
+    mainPage.Visible = (tabName == "Main")
+    settingsPage.Visible = (tabName == "Settings")
+    infoPage.Visible = (tabName == "Info")
+    
+    for name, data in pairs(tabs) do
+        if name == tabName then
+            data.button.BackgroundColor3 = Color3.fromRGB(80, 120, 200)
+            data.label.TextColor3 = Color3.new(1, 1, 1)
+        else
+            data.button.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+            data.label.TextColor3 = Color3.fromRGB(140, 140, 150)
+        end
+    end
+end
+
+mainTab.MouseButton1Click:Connect(function() switchTab("Main") end)
+settingsTab.MouseButton1Click:Connect(function() switchTab("Settings") end)
+infoTab.MouseButton1Click:Connect(function() switchTab("Info") end)
+
+-- Helper to create section headers
+local function createSectionHeader(parent, text, order)
+    local header = Instance.new("Frame", parent)
+    header.Size = UDim2.new(0.98, 0, 0, 25)
+    header.BackgroundTransparency = 1
+    header.LayoutOrder = order
+    
+    local label = Instance.new("TextLabel", header)
+    label.Size = UDim2.new(1, 0, 1, 0)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 13
+    label.TextColor3 = Color3.fromRGB(180, 180, 190)
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    
+    local line = Instance.new("Frame", header)
+    line.Size = UDim2.new(0.98, 0, 0, 1)
+    line.Position = UDim2.new(0, 0, 1, -1)
+    line.BackgroundColor3 = Color3.fromRGB(40, 40, 48)
+    line.BorderSizePixel = 0
+    
+    return header
+end
+
+-- Helper to create buttons
+local function createButton(parent, text, color, order)
+    local btn = Instance.new("TextButton", parent)
+    btn.Size = UDim2.new(0.98, 0, 0, 42)
+    btn.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+    btn.Text = ""
+    btn.LayoutOrder = order
+    btn.AutoButtonColor = false
+    
+    local btnCorner = Instance.new("UICorner", btn)
+    btnCorner.CornerRadius = UDim.new(0, 8)
+    
+    local btnStroke = Instance.new("UIStroke", btn)
+    btnStroke.Color = Color3.fromRGB(50, 50, 60)
+    btnStroke.Thickness = 1
+    
+    local label = Instance.new("TextLabel", btn)
+    label.Size = UDim2.new(1, -45, 1, 0)
+    label.Position = UDim2.new(0, 40, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.Font = Enum.Font.GothamSemibold
+    label.TextSize = 13
+    label.TextColor3 = Color3.fromRGB(220, 220, 230)
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    
+    local icon = Instance.new("Frame", btn)
+    icon.Size = UDim2.fromOffset(6, 26)
+    icon.Position = UDim2.new(0, 12, 0.5, -13)
+    icon.BackgroundColor3 = color
+    icon.BorderSizePixel = 0
+    
+    local iconCorner = Instance.new("UICorner", icon)
+    iconCorner.CornerRadius = UDim.new(0, 3)
+    
+    btn.MouseEnter:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(35, 35, 42)}):Play()
+        TweenService:Create(btnStroke, TweenInfo.new(0.15), {Color = color}):Play()
+    end)
+    
+    btn.MouseLeave:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(28, 28, 34)}):Play()
+        TweenService:Create(btnStroke, TweenInfo.new(0.15), {Color = Color3.fromRGB(50, 50, 60)}):Play()
+    end)
+    
+    return btn, label
+end
+
+-- MAIN PAGE CONTENT
+createSectionHeader(mainPage, "main stuff", 1)
+
+local activateBtn, activateTxt = createButton(mainPage, "Nuke shot", Color3.fromRGB(80, 140, 255), 2)
+local stabBtn, stabTxt = createButton(mainPage, "Stab shot", Color3.fromRGB(255, 80, 80), 3)
+local prepareBtn, prepareTxt = createButton(mainPage, "Prepare stuff", Color3.fromRGB(100, 200, 100), 4)
+
+createSectionHeader(mainPage, "status", 5)
+
+-- Status Display
+local statusFrame = Instance.new("Frame", mainPage)
+statusFrame.Size = UDim2.new(0.98, 0, 0, 70)
+statusFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+statusFrame.BorderSizePixel = 0
+statusFrame.LayoutOrder = 6
+
+local statusCorner = Instance.new("UICorner", statusFrame)
+statusCorner.CornerRadius = UDim.new(0, 8)
+
+local statusStroke = Instance.new("UIStroke", statusFrame)
+statusStroke.Color = Color3.fromRGB(50, 50, 60)
+
+local modeLabel = Instance.new("TextLabel", statusFrame)
+modeLabel.Size = UDim2.new(1, -20, 0, 20)
+modeLabel.Position = UDim2.new(0, 10, 0, 8)
+modeLabel.BackgroundTransparency = 1
+modeLabel.Text = "Mode: " .. currentMode
+modeLabel.Font = Enum.Font.GothamSemibold
+modeLabel.TextSize = 12
+modeLabel.TextColor3 = Color3.fromRGB(180, 180, 190)
+modeLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local keyLabel = Instance.new("TextLabel", statusFrame)
+keyLabel.Size = UDim2.new(1, -20, 0, 18)
+keyLabel.Position = UDim2.new(0, 10, 0, 30)
+keyLabel.BackgroundTransparency = 1
+keyLabel.Text = "Nuke shot: " .. KEYBIND.Name
+keyLabel.Font = Enum.Font.Gotham
+keyLabel.TextSize = 11
+keyLabel.TextColor3 = Color3.fromRGB(140, 140, 150)
+keyLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local stabKeyLabel = Instance.new("TextLabel", statusFrame)
+stabKeyLabel.Size = UDim2.new(1, -20, 0, 18)
+stabKeyLabel.Position = UDim2.new(0, 10, 0, 48)
+stabKeyLabel.BackgroundTransparency = 1
+stabKeyLabel.Text = "Stab shot: " .. STAB_KEYBIND.Name
+stabKeyLabel.Font = Enum.Font.Gotham
+stabKeyLabel.TextSize = 11
+stabKeyLabel.TextColor3 = Color3.fromRGB(140, 140, 150)
+stabKeyLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+-- SETTINGS PAGE CONTENT
+createSectionHeader(settingsPage, "settings", 1)
+
+-- Mode Switch
+local modeSwitchFrame = Instance.new("Frame", settingsPage)
+modeSwitchFrame.Size = UDim2.new(0.98, 0, 0, 50)
+modeSwitchFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+modeSwitchFrame.BorderSizePixel = 0
+modeSwitchFrame.LayoutOrder = 2
+
+local modeSwitchCorner = Instance.new("UICorner", modeSwitchFrame)
+modeSwitchCorner.CornerRadius = UDim.new(0, 8)
+
+local modeSwitchStroke = Instance.new("UIStroke", modeSwitchFrame)
+modeSwitchStroke.Color = Color3.fromRGB(50, 50, 60)
+
+local modeSwitchLabel = Instance.new("TextLabel", modeSwitchFrame)
+modeSwitchLabel.Size = UDim2.new(0.6, 0, 1, 0)
+modeSwitchLabel.Position = UDim2.new(0, 12, 0, 0)
+modeSwitchLabel.BackgroundTransparency = 1
+modeSwitchLabel.Text = "Explosive Type"
+modeSwitchLabel.Font = Enum.Font.GothamSemibold
+modeSwitchLabel.TextSize = 12
+modeSwitchLabel.TextColor3 = Color3.fromRGB(200, 200, 210)
+modeSwitchLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local modeBtn = Instance.new("TextButton", modeSwitchFrame)
+modeBtn.Size = UDim2.fromOffset(120, 32)
+modeBtn.Position = UDim2.new(1, -130, 0.5, -16)
+modeBtn.BackgroundColor3 = Color3.fromRGB(80, 120, 200)
+modeBtn.Text = currentMode
+modeBtn.Font = Enum.Font.GothamSemibold
+modeBtn.TextSize = 11
+modeBtn.TextColor3 = Color3.new(1, 1, 1)
+modeBtn.AutoButtonColor = false
+
+local modeBtnCorner = Instance.new("UICorner", modeBtn)
+modeBtnCorner.CornerRadius = UDim.new(0, 6)
+
+-- Slider
+local sliderFrame = Instance.new("Frame", settingsPage)
+sliderFrame.Size = UDim2.new(0.98, 0, 0, 60)
+sliderFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+sliderFrame.BorderSizePixel = 0
+sliderFrame.LayoutOrder = 3
+
+local sliderCorner = Instance.new("UICorner", sliderFrame)
+sliderCorner.CornerRadius = UDim.new(0, 8)
+
+local sliderStroke = Instance.new("UIStroke", sliderFrame)
+sliderStroke.Color = Color3.fromRGB(50, 50, 60)
+
+local sliderLabel = Instance.new("TextLabel", sliderFrame)
+sliderLabel.Size = UDim2.new(1, -20, 0, 22)
+sliderLabel.Position = UDim2.new(0, 12, 0, 8)
+sliderLabel.BackgroundTransparency = 1
+sliderLabel.Text = "Bomb count (use gamepass): " .. explosiveCount
+sliderLabel.Font = Enum.Font.GothamSemibold
+sliderLabel.TextSize = 12
+sliderLabel.TextColor3 = Color3.fromRGB(200, 200, 210)
+sliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local sliderBg = Instance.new("Frame", sliderFrame)
+sliderBg.Size = UDim2.new(1, -24, 0, 8)
+sliderBg.Position = UDim2.new(0, 12, 1, -20)
+sliderBg.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
+sliderBg.BorderSizePixel = 0
+
+local sliderBgCorner = Instance.new("UICorner", sliderBg)
+sliderBgCorner.CornerRadius = UDim.new(0, 4)
+
+local sliderFill = Instance.new("Frame", sliderBg)
+sliderFill.Size = UDim2.new((explosiveCount - 1) / 19, 0, 1, 0)
+sliderFill.BackgroundColor3 = Color3.fromRGB(80, 140, 220)
+sliderFill.BorderSizePixel = 0
+
+local sliderFillCorner = Instance.new("UICorner", sliderFill)
+sliderFillCorner.CornerRadius = UDim.new(0, 4)
+
+local sliderDragger = Instance.new("Frame", sliderBg)
+sliderDragger.Size = UDim2.fromOffset(18, 18)
+sliderDragger.Position = UDim2.new((explosiveCount - 1) / 19, -9, 0.5, -9)
+sliderDragger.BackgroundColor3 = Color3.fromRGB(100, 160, 240)
+sliderDragger.BorderSizePixel = 0
+
+local draggerCorner = Instance.new("UICorner", sliderDragger)
+draggerCorner.CornerRadius = UDim.new(1, 0)
+
+local draggerStroke = Instance.new("UIStroke", sliderDragger)
+draggerStroke.Color = Color3.fromRGB(120, 180, 255)
+draggerStroke.Thickness = 2
+
+-- Slider functionality
+local draggingSlider = false
+sliderBg.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingSlider = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingSlider = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if draggingSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local mousePos = input.Position.X
+        local sliderPos = sliderBg.AbsolutePosition.X
+        local sliderSize = sliderBg.AbsoluteSize.X
+        local relativePos = math.clamp((mousePos - sliderPos) / sliderSize, 0, 1)
+        
+        explosiveCount = math.floor(relativePos * 19) + 1
+        sliderLabel.Text = "Bomb count (use gamepass): " .. explosiveCount
+        sliderFill.Size = UDim2.new(relativePos, 0, 1, 0)
+        sliderDragger.Position = UDim2.new(relativePos, -9, 0.5, -9)
+    end
+end)
+
+-- Target Dropdown
+local dropdownFrame = Instance.new("Frame", settingsPage)
+dropdownFrame.Size = UDim2.new(0.98, 0, 0, 50)
+dropdownFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+dropdownFrame.BorderSizePixel = 0
+dropdownFrame.LayoutOrder = 4
+dropdownFrame.ClipsDescendants = true
+
+local dropdownCorner = Instance.new("UICorner", dropdownFrame)
+dropdownCorner.CornerRadius = UDim.new(0, 8)
+
+local dropdownStroke = Instance.new("UIStroke", dropdownFrame)
+dropdownStroke.Color = Color3.fromRGB(50, 50, 60)
+
+local dropdownBtn = Instance.new("TextButton", dropdownFrame)
+dropdownBtn.Size = UDim2.new(1, 0, 0, 50)
+dropdownBtn.BackgroundTransparency = 1
+dropdownBtn.Text = ""
+dropdownBtn.AutoButtonColor = false
+
+local dropdownLabel = Instance.new("TextLabel", dropdownBtn)
+dropdownLabel.Size = UDim2.new(1, -50, 1, 0)
+dropdownLabel.Position = UDim2.new(0, 12, 0, 0)
+dropdownLabel.BackgroundTransparency = 1
+dropdownLabel.Text = "Bomb target: Where ur looking"
+dropdownLabel.Font = Enum.Font.GothamSemibold
+dropdownLabel.TextSize = 12
+dropdownLabel.TextColor3 = Color3.fromRGB(200, 200, 210)
+dropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local dropdownArrow = Instance.new("TextLabel", dropdownBtn)
+dropdownArrow.Size = UDim2.fromOffset(30, 50)
+dropdownArrow.Position = UDim2.new(1, -40, 0, 0)
+dropdownArrow.BackgroundTransparency = 1
+dropdownArrow.Text = "▼"
+dropdownArrow.Font = Enum.Font.GothamBold
+dropdownArrow.TextSize = 13
+dropdownArrow.TextColor3 = Color3.fromRGB(140, 140, 150)
+
+local dropdownList = Instance.new("ScrollingFrame", dropdownFrame)
+dropdownList.Size = UDim2.new(1, 0, 0, 0)
+dropdownList.Position = UDim2.new(0, 0, 0, 50)
+dropdownList.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
+dropdownList.BorderSizePixel = 0
+dropdownList.ScrollBarThickness = 3
+dropdownList.Visible = false
+dropdownList.CanvasSize = UDim2.new(0, 0, 0, 0)
+dropdownList.AutomaticCanvasSize = Enum.AutomaticSize.Y
+
+local listLayout2 = Instance.new("UIListLayout", dropdownList)
+listLayout2.SortOrder = Enum.SortOrder.LayoutOrder
+
+local dropdownExpanded = false
+
+local function updateDropdownList()
+    for _, child in ipairs(dropdownList:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+    
+    local lookBtn = Instance.new("TextButton", dropdownList)
+    lookBtn.Size = UDim2.new(1, 0, 0, 35)
+    lookBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+    lookBtn.BorderSizePixel = 0
+    lookBtn.Text = "Where ur looking"
+    lookBtn.Font = Enum.Font.Gotham
+    lookBtn.TextSize = 11
+    lookBtn.TextColor3 = Color3.fromRGB(200, 200, 210)
+    lookBtn.AutoButtonColor = false
+    lookBtn.LayoutOrder = 0
+    
+    lookBtn.MouseEnter:Connect(function()
+        lookBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 48)
+    end)
+    lookBtn.MouseLeave:Connect(function()
+        lookBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+    end)
+    lookBtn.MouseButton1Click:Connect(function()
+        selectedPlayer = nil
+        targetMode = "Look"
+        dropdownLabel.Text = "Bomb target: Where ur looking"
+        dropdownExpanded = false
+        TweenService:Create(dropdownList, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 0)}):Play()
+        TweenService:Create(dropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 50)}):Play()
+        dropdownArrow.Text = "▼"
+        task.delay(0.2, function()
+            dropdownList.Visible = false
+        end)
+        notify("Bomb target: Where ur looking", Color3.fromRGB(100, 140, 220))
+    end)
+    
+    local playerCount = 1
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= player then
+            local playerBtn = Instance.new("TextButton", dropdownList)
+            playerBtn.Size = UDim2.new(1, 0, 0, 35)
+            playerBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+            playerBtn.BorderSizePixel = 0
+            playerBtn.Text = plr.Name
+            playerBtn.Font = Enum.Font.Gotham
+            playerBtn.TextSize = 11
+            playerBtn.TextColor3 = Color3.fromRGB(200, 200, 210)
+            playerBtn.AutoButtonColor = false
+            playerBtn.LayoutOrder = playerCount
+            
+            playerBtn.MouseEnter:Connect(function()
+                playerBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 48)
+            end)
+            playerBtn.MouseLeave:Connect(function()
+                playerBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+            end)
+            playerBtn.MouseButton1Click:Connect(function()
+                selectedPlayer = plr
+                targetMode = "Player"
+                dropdownLabel.Text = "Bomb target: " .. plr.Name
+                dropdownExpanded = false
+                TweenService:Create(dropdownList, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 0)}):Play()
+                TweenService:Create(dropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 50)}):Play()
+                dropdownArrow.Text = "▼"
+                task.delay(0.2, function()
+                    dropdownList.Visible = false
+                end)
+                notify("Bomb target: " .. plr.Name, Color3.fromRGB(100, 140, 220))
+            end)
+            
+            playerCount = playerCount + 1
+        end
+    end
+end
+
+dropdownBtn.MouseButton1Click:Connect(function()
+    dropdownExpanded = not dropdownExpanded
+    
+    if dropdownExpanded then
+        updateDropdownList()
+        dropdownList.Visible = true
+        local listHeight = math.min(150, listLayout2.AbsoluteContentSize.Y)
+        TweenService:Create(dropdownList, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, listHeight)}):Play()
+        TweenService:Create(dropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 50 + listHeight)}):Play()
+        dropdownArrow.Text = "▲"
+    else
+        TweenService:Create(dropdownList, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 0)}):Play()
+        TweenService:Create(dropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 50)}):Play()
+        task.wait(0.2)
+        dropdownList.Visible = false
+        dropdownArrow.Text = "▼"
+    end
+end)
+
+createSectionHeader(settingsPage, "keybinds", 5)
+
+local bindBtn, bindTxt = createButton(settingsPage, "Rebind nuke key", Color3.fromRGB(180, 80, 255), 6)
+local stabBindBtn, stabBindTxt = createButton(settingsPage, "Rebind stab key", Color3.fromRGB(255, 120, 180), 7)
+
+-- INFO PAGE CONTENT
+local infoSections = {
+    {title = "syfm ✌️", text = "im too lazy to write ts shi twin 😭✌️"},
+}
+
+for i, section in ipairs(infoSections) do
+    local sectionFrame = Instance.new("Frame", infoPage)
+    sectionFrame.Size = UDim2.new(0.98, 0, 0, 0)
+    sectionFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
+    sectionFrame.BorderSizePixel = 0
+    sectionFrame.LayoutOrder = i
+    sectionFrame.AutomaticSize = Enum.AutomaticSize.Y
+    
+    local sectionCorner = Instance.new("UICorner", sectionFrame)
+    sectionCorner.CornerRadius = UDim.new(0, 8)
+    
+    local sectionStroke = Instance.new("UIStroke", sectionFrame)
+    sectionStroke.Color = Color3.fromRGB(50, 50, 60)
+    
+    local sectionTitle = Instance.new("TextLabel", sectionFrame)
+    sectionTitle.Size = UDim2.new(1, -20, 0, 25)
+    sectionTitle.Position = UDim2.new(0, 10, 0, 8)
+    sectionTitle.BackgroundTransparency = 1
+    sectionTitle.Text = section.title
+    sectionTitle.Font = Enum.Font.GothamBold
+    sectionTitle.TextSize = 13
+    sectionTitle.TextColor3 = Color3.fromRGB(220, 220, 230)
+    sectionTitle.TextXAlignment = Enum.TextXAlignment.Left
+    
+    local sectionText = Instance.new("TextLabel", sectionFrame)
+    sectionText.Size = UDim2.new(1, -20, 0, 0)
+    sectionText.Position = UDim2.new(0, 10, 0, 35)
+    sectionText.BackgroundTransparency = 1
+    sectionText.Text = section.text
+    sectionText.Font = Enum.Font.Gotham
+    sectionText.TextSize = 11
+    sectionText.TextColor3 = Color3.fromRGB(170, 170, 180)
+    sectionText.TextWrapped = true
+    sectionText.TextXAlignment = Enum.TextXAlignment.Left
+    sectionText.TextYAlignment = Enum.TextYAlignment.Top
+    sectionText.AutomaticSize = Enum.AutomaticSize.Y
+    
+    local padding = Instance.new("UIPadding", sectionFrame)
+    padding.PaddingBottom = UDim.new(0, 12)
+end
+
+-- Minimize/Maximize functionality
+local isExpanded = true
+
+minBtn.MouseButton1Click:Connect(function()
+    isExpanded = not isExpanded
+    
+    if isExpanded then
+        TweenService:Create(main, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {
+            Size = UDim2.fromOffset(380, 280)
+        }):Play()
+        tabContainer.Visible = true
+        contentContainer.Visible = true
+        minIcon.Text = "−"
+        minBtn.BackgroundColor3 = Color3.fromRGB(55, 55, 65)
+    else
+        TweenService:Create(main, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {
+            Size = UDim2.fromOffset(380, 45)
+        }):Play()
+        tabContainer.Visible = false
+        contentContainer.Visible = false
+        minIcon.Text = "+"
+        minBtn.BackgroundColor3 = Color3.fromRGB(80, 140, 220)
+    end
+end)
+
+closeBtn.MouseButton1Click:Connect(function()
+    TweenService:Create(main, TweenInfo.new(0.2), {Size = UDim2.fromOffset(0, 0)}):Play()
+    task.wait(0.2)
+    gui:Destroy()
+end)
+
+-- Initialize first tab
+switchTab("Main")
+local settingsPadding = Instance.new("UIPadding", settingsPage)
+settingsPadding.PaddingLeft = UDim.new(0.01, 0)
+settingsPadding.PaddingRight = UDim.new(0.01, 0)
+local mainPadding = Instance.new("UIPadding", mainPage)
+mainPadding.PaddingLeft = UDim.new(0.01, 0)
+mainPadding.PaddingRight = UDim.new(0.01, 0)
+local infoPadding = Instance.new("UIPadding", infoPage)
+infoPadding.PaddingLeft = UDim.new(0.01, 0)
+infoPadding.PaddingRight = UDim.new(0.01, 0)
+-- Button connections
+activateBtn.MouseButton1Click:Connect(activateCannon)
+
+stabBtn.MouseButton1Click:Connect(stabShot)
+
+prepareBtn.MouseButton1Click:Connect(function()
+    if preparingStuff then
+        notify("Already preparing...", Color3.fromRGB(220, 160, 60))
+        return
+    end
+    prepareTxt.Text = "Preparing..."
+    task.spawn(function()
+        prepareStuff()
+        prepareTxt.Text = "Prepare stuff"
+    end)
+end)
+
+modeBtn.MouseButton1Click:Connect(function()
+    currentMode = currentMode == "BombBalloon" and "BombMissile" or "BombBalloon"
+    modeLabel.Text = "Mode: " .. currentMode
+    modeBtn.Text = currentMode
+    notify("Mode: " .. currentMode, Color3.fromRGB(100, 140, 220))
+end)
+
+bindBtn.MouseButton1Click:Connect(function()
+    if waitingForKeybind then return end
+    waitingForKeybind = true
+    bindTxt.Text = "Press any key..."
+    
+    local connection
+    connection = UserInputService.InputBegan:Connect(function(input, gp)
+        if gp then return end
+        if input.UserInputType == Enum.UserInputType.Keyboard then
+            connection:Disconnect()
+            KEYBIND = input.KeyCode
+            local keyName = input.KeyCode.Name
+            bindTxt.Text = "Rebind Activate Key"
+            keyLabel.Text = "Activate: " .. keyName
+            notify("Activate bound to " .. keyName, Color3.fromRGB(100, 140, 220))
+            waitingForKeybind = false
+        end
+    end)
+end)
+
+stabBindBtn.MouseButton1Click:Connect(function()
+    if waitingForStabKeybind then return end
+    waitingForStabKeybind = true
+    stabBindTxt.Text = "Press any key..."
+    
+    local connection
+    connection = UserInputService.InputBegan:Connect(function(input, gp)
+        if gp then return end
+        if input.UserInputType == Enum.UserInputType.Keyboard then
+            connection:Disconnect()
+            STAB_KEYBIND = input.KeyCode
+            local keyName = input.KeyCode.Name
+            stabBindTxt.Text = "Rebind Stab Key"
+            stabKeyLabel.Text = "Stab Shot: " .. keyName
+            notify("Stab Shot bound to " .. keyName, Color3.fromRGB(255, 100, 100))
+            waitingForStabKeybind = false
+        end
+    end)
+end)
+
+-- Global Input
+UserInputService.InputBegan:Connect(function(input, gp)
+    if input.KeyCode == UI_TOGGLE_KEY then
+        gui.Enabled = not gui.Enabled
+    end
+    
+    if not gp and gui.Enabled then
+        if input.KeyCode == KEYBIND and not waitingForKeybind then
+            activateCannon()
+        elseif input.KeyCode == STAB_KEYBIND and not waitingForStabKeybind then
+            stabShot()
+        end
+    end
+end)

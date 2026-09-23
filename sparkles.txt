@@ -1,0 +1,3747 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+
+local function applyPinkGradientEffect()
+    local CoreGui = game:GetService("CoreGui")
+    local Players = game:GetService("Players")
+    
+    local time = 0
+    local strokes = {}
+    
+    local function register(obj)
+        if obj:IsA("UIStroke") then
+            table.insert(strokes, obj)
+        end
+    end
+    
+    local function scan(gui)
+        for _, v in ipairs(gui:GetDescendants()) do
+            register(v)
+        end
+        gui.DescendantAdded:Connect(register)
+    end
+    
+    local player = Players.LocalPlayer
+    if player then
+        local playerGui = player:WaitForChild("PlayerGui")
+        scan(CoreGui)
+        scan(playerGui)
+    end
+    
+    local function getPinkGradientColor(t)
+        local pinkColors = {
+            Color3.fromRGB(255, 182, 193),
+            Color3.fromRGB(255, 105, 180),
+            Color3.fromRGB(219, 112, 147)
+        }
+        
+        local position = (math.sin(t * 2) + 1) / 2
+        
+        if position < 0.5 then
+            local alpha = position * 2
+            return pinkColors[1]:Lerp(pinkColors[2], alpha)
+        else
+            local alpha = (position - 0.5) * 2
+            return pinkColors[2]:Lerp(pinkColors[3], alpha)
+        end
+    end
+    
+    RunService.RenderStepped:Connect(function(dt)
+        time = time + dt * 0.5
+        
+        for i = #strokes, 1, -1 do
+            local stroke = strokes[i]
+            if stroke and stroke.Parent then
+                local phaseOffset = i * 0.01
+                local t = time + phaseOffset
+                stroke.Color = getPinkGradientColor(t)
+            else
+                table.remove(strokes, i)
+            end
+        end
+    end)
+end
+
+pcall(applyPinkGradientEffect)
+
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/jadpy/suki/refs/heads/main/orion"))()
+
+local Theme = {
+    BackgroundColor = Color3.fromRGB(139, 69, 19),
+    SliderColor = Color3.fromRGB(255, 105, 180),
+    TextColor = Color3.fromRGB(255, 255, 255),
+    SectionColor = Color3.fromRGB(210, 180, 140),
+}
+
+local ObjectIDConfig = {
+    CurrentObjectID = "FireworkSparkler",
+    AvailableObjects = {
+        "FireworkSparkler", "PalletLightBrown", "GlassBoxGray", "MusicKeyboard",
+        "SpookyCandle1", "Tetracube1", "NinjaKatana", "YouDecoy", "BombMissile", 
+        "LadderLightBrown", "CreatureBlobman", "DiscoColorBall", "MineralCrystalPink",
+        "FloatingIsland", "FlyingToyUfo", "JukeboxBlue", "JukeboxOrange", "CouchBlue",
+        "CouchPink", "CouchWhite", "Boombox", "FireworkMissile", "Snowflake",
+        "SpookyCandle5", "MineralDiamond", "TractorGreen", "TractorOrange", "TractorRed"
+    }
+}
+
+local FeatherConfig = {
+    Enabled = false, spacing = 3, heightOffset = 2, backwardOffset = 3,
+    maxSparklers = 20, tiltAngle = 45, waveSpeed = 2, baseAmplitude = 1,
+}
+local FeatherToys = {}; local FeatherRowPoints = {}; local FeatherAssignedToys = {}
+local FeatherLoopConn = nil; local FeatherTime = 0
+
+local MagicCircleConfig = {
+    Enabled = false, Height = 5.0, Diameter = 5.0,
+    ObjectCount = 10, RotationSpeed = 20.0,
+    SymbolType = "Ring",
+    GlowEffect = true,
+    GlowIntensity = 1.0,
+}
+local MagicCircleList = {}; local MagicCircleLoopConn = nil; local MagicCircleTAccum = 0
+
+local HeartConfig = {
+    Enabled = false, Height = 5.0, Size = 5.0, ObjectCount = 12,
+    RotationSpeed = 1.0, PulseSpeed = 2.0, PulseAmplitude = 0.5, FollowPlayer = true,
+}
+local HeartToys = {}; local HeartPoints = {}; local HeartAssignedToys = {}
+local HeartLoopConn = nil; local HeartTime = 0
+
+local BigHeartConfig = {
+    Enabled = false, Height = 8.0, Size = 10.0, ObjectCount = 20,
+    RotationSpeed = 0.5, RotationSpeedMax = 10.0, PulseSpeed = 1.0,
+    PulseSpeedMax = 10.0, PulseAmplitude = 1.0, FollowPlayer = true,
+    HeartScale = 2.0, VerticalStretch = 1.2,
+}
+local BigHeartToys = {}; local BigHeartPoints = {}; local BigHeartAssignedToys = {}
+local BigHeartLoopConn = nil; local BigHeartTime = 0
+
+local StarOfDavidConfig = {
+    Enabled = false, Height = 5.0, Size = 5.0, ObjectCount = 12,
+    RotationSpeed = 1.0, PulseSpeed = 1.5, FollowPlayer = true, TriangleHeight = 0.5,
+}
+local StarOfDavidToys = {}; local StarOfDavidPoints = {}; local StarOfDavidAssignedToys = {}
+local StarOfDavidLoopConn = nil; local StarOfDavidTime = 0
+
+local StarConfig = {
+    Enabled = false, Height = 5.0, Size = 5.0, ObjectCount = 10,
+    RotationSpeed = 1.0, TwinkleSpeed = 2.0, FollowPlayer = true,
+    StarPoints = 5, OuterRadius = 5.0, InnerRadius = 2.0,
+}
+local StarToys = {}; local StarPoints = {}; local StarAssignedToys = {}
+local StarLoopConn = nil; local StarTime = 0
+
+local Star2Config = {
+    Enabled = false, Height = 10.0, Size = 15.0, ObjectCount = 24,
+    RotationSpeed = 5.0, RotationSpeedMax = 30.0, PulseSpeed = 8.0,
+    PulseSpeedMax = 20.0, PulseAmplitude = 2.0, FollowPlayer = true,
+    RayCount = 12, RayLength = 3.0, RayLengthMax = 10.0, JitterSpeed = 5.0,
+    JitterAmount = 1.0, SizeMax = 30.0, MaxDistance = 50.0,
+}
+local Star2Toys = {}; local Star2Points = {}; local Star2AssignedToys = {}
+local Star2LoopConn = nil; local Star2Time = 0
+
+local SphereConfig = {
+    Enabled = false, BaseHeight = 0, Radius = 5.0, ObjectCount = 20,
+    HorizontalRotationSpeed = 2.0, VerticalRotationSpeed = 1.0, SpiralSpeed = 0.5,
+    WaveSpeed = 1.0, WaveAmplitude = 0.3, FollowPlayer = true,
+    Latitudes = 3, Longitudes = 6, PulseSpeed = 1.0, PulseAmplitude = 0.5,
+}
+local SphereToys = {}; local SpherePoints = {}; local SphereAssignedToys = {}
+local SphereLoopConn = nil; local SphereTime = 0
+
+local FerrisWheelConfig = {
+    Enabled = false, Height = 15.0, Radius = 10.0, ObjectCount = 12,
+    RotationSpeed = 1.0, RotationSpeedMax = 5.0, FollowPlayer = true,
+    VerticalCircle = true, TiltAngle = 0, PulseEffect = false,
+    PulseSpeed = 1.0, PulseAmplitude = 2.0, SwingEffect = false, SwingAmount = 0.5,
+    FixedDirection = true,
+    FixedYaw = 0,
+    FixedPitch = 0,
+    FixedRoll = 0,
+}
+local FerrisWheelToys = {}; local FerrisWheelPoints = {}; local FerrisWheelAssignedToys = {}
+local FerrisWheelLoopConn = nil; local FerrisWheelTime = 0
+
+local AnimN1Config = {
+    Enabled = false, Height = 10.0, Radius = 15.0, ObjectCount = 50,
+    RotationSpeed = 20.0, PulseSpeed = 5.0, PulseAmount = 10.0, FollowPlayer = true,
+}
+local AnimN1Toys = {}; local AnimN1Points = {}; local AnimN1AssignedToys = {}
+local AnimN1LoopConn = nil; local AnimN1Time = 0
+
+local AnimN2Config = {
+    Enabled = false, BaseHeight = 5.0, TopHeight = 30.0, Radius = 8.0, ObjectCount = 60,
+    RotationSpeed = 15.0, RiseSpeed = 2.0, ChaosFactor = 3.0, FollowPlayer = true,
+}
+local AnimN2Toys = {}; local AnimN2Points = {}; local AnimN2AssignedToys = {}
+local AnimN2LoopConn = nil; local AnimN2Time = 0
+
+local AnimN3Config = {
+    Enabled = false, Height = 8.0, ExplosionRadius = 25.0, ObjectCount = 80,
+    CycleSpeed = 2.0, ExplosionSpeed = 10.0, Randomness = 5.0, FollowPlayer = true,
+}
+local AnimN3Toys = {}; local AnimN3Points = {}; local AnimN3AssignedToys = {}
+local AnimN3LoopConn = nil; local AnimN3Time = 0
+
+local UtilityConfig = {
+    InfiniteJump = false, Noclip = false, TPWalk = false, WalkSpeed = 16,
+    TPWalkSpeed = 50, TPWalkSpeedMax = 500, ESP = false,
+    FOV = 70, OriginalFOV = 70, MaxFOV = 180, MinFOV = -5,
+}
+local NoclipConnection = nil; local OriginalCollision = {}
+local TPWalkConnection = nil; local OriginalWalkSpeed = 16
+local ESPConnection = nil; local ESPLabels = {}
+local Camera = workspace.CurrentCamera
+
+local function findObjects()
+    local toys = {}
+    for _, item in ipairs(workspace:GetDescendants()) do
+        if item:IsA("Model") and item.Name == ObjectIDConfig.CurrentObjectID then
+            local alreadyAdded = false
+            for _, existingToy in ipairs(toys) do
+                if existingToy == item then alreadyAdded = true; break end
+            end
+            if not alreadyAdded then table.insert(toys, item) end
+        end
+    end
+    table.sort(toys, function(a, b) return a.Name < b.Name end)
+    return toys
+end
+
+local function getPrimaryPart(model)
+    if model.PrimaryPart then return model.PrimaryPart end
+    local potentialParts = {"Handle", "Main", "Part", "Base", "Sparkler", "Firework", "Blade", "Candle", "Keyboard", "Box", "Decoy", "Missile", "Ladder", "Blob", "Ball", "Crystal", "Island", "Ufo", "Jukebox", "Couch", "Boombox", "Snowflake", "Diamond", "Tractor"}
+    for _, partName in ipairs(potentialParts) do
+        local part = model:FindFirstChild(partName)
+        if part and part:IsA("BasePart") then return part end
+    end
+    for _, child in ipairs(model:GetChildren()) do
+        if child:IsA("BasePart") then return child end
+    end
+    return nil
+end
+
+local function changeObjectID(id)
+    if id == ObjectIDConfig.CurrentObjectID then return end
+    ObjectIDConfig.CurrentObjectID = id
+    
+    local activeFunctions = {}
+    if FeatherConfig.Enabled then table.insert(activeFunctions, toggleFeather) end
+    if MagicCircleConfig.Enabled then table.insert(activeFunctions, toggleMagicCircle) end
+    if HeartConfig.Enabled then table.insert(activeFunctions, toggleHeart) end
+    if BigHeartConfig.Enabled then table.insert(activeFunctions, toggleBigHeart) end
+    if StarOfDavidConfig.Enabled then table.insert(activeFunctions, toggleStarOfDavid) end
+    if StarConfig.Enabled then table.insert(activeFunctions, toggleStar) end
+    if Star2Config.Enabled then table.insert(activeFunctions, toggleStar2) end
+    if SphereConfig.Enabled then table.insert(activeFunctions, toggleSphere) end
+    if FerrisWheelConfig.Enabled then table.insert(activeFunctions, toggleFerrisWheel) end
+    if AnimN1Config.Enabled then table.insert(activeFunctions, toggleAnimN1) end
+    if AnimN2Config.Enabled then table.insert(activeFunctions, toggleAnimN2) end
+    if AnimN3Config.Enabled then table.insert(activeFunctions, toggleAnimN3) end
+    
+    for _, func in ipairs(activeFunctions) do func(false) end
+    task.wait(0.5)
+    for _, func in ipairs(activeFunctions) do func(true) end
+    
+    OrionLib:MakeNotification({
+        Name = "Object ID Changed", Content = "Switched to " .. id, Time = 3
+    })
+end
+
+local function attachPhysics(part, pValue, dValue)
+    if not part then return nil, nil end
+    local existingBG = part:FindFirstChildOfClass("BodyGyro")
+    local existingBP = part:FindFirstChildOfClass("BodyPosition")
+    if existingBG and existingBP then return existingBG, existingBP end
+    if existingBG then existingBG:Destroy() end
+    if existingBP then existingBP:Destroy() end
+    
+    local BP = Instance.new("BodyPosition")
+    local BG = Instance.new("BodyGyro")
+    BP.P = pValue or 15000
+    BP.D = dValue or 200
+    BP.MaxForce = Vector3.new(1, 1, 1) * 1e10
+    BP.Parent = part
+    
+    BG.P = pValue or 15000
+    BG.D = dValue or 200
+    BG.MaxTorque = Vector3.new(1, 1, 1) * 1e10
+    BG.Parent = part
+    return BG, BP
+end
+
+local function createFeatherRowPoints(count)
+    local points = {}
+    if count == 0 then return points end
+    local halfCount = math.floor(count / 2)
+    local isOdd = count % 2 == 1
+    for i = 1, count do
+        local x = isOdd and (i - math.ceil(count / 2)) * FeatherConfig.spacing or (i - halfCount - 0.5) * FeatherConfig.spacing
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { offsetX = x, part = part, assignedToy = nil }
+    end
+    return points
+end
+
+local function assignFeatherToysToPoints()
+    FeatherAssignedToys = {}
+    local distanceGroups = {}
+    for i, point in ipairs(FeatherRowPoints) do
+        local absDistance = math.abs(point.offsetX)
+        if not distanceGroups[absDistance] then distanceGroups[absDistance] = {} end
+        table.insert(distanceGroups[absDistance], i)
+    end
+    local sortedDistances = {}
+    for distance, _ in pairs(distanceGroups) do table.insert(sortedDistances, distance) end
+    table.sort(sortedDistances)
+    for rank, distance in ipairs(sortedDistances) do
+        for _, pointIndex in ipairs(distanceGroups[distance]) do
+            FeatherRowPoints[pointIndex].distanceRank = rank
+        end
+    end
+    for i = 1, math.min(#FeatherToys, #FeatherRowPoints) do
+        local toy = FeatherToys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false end
+                end
+                local BG, BP = attachPhysics(primaryPart)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, RowIndex = i, offsetX = FeatherRowPoints[i].offsetX, distanceRank = FeatherRowPoints[i].distanceRank }
+                FeatherRowPoints[i].assignedToy = toyTable
+                table.insert(FeatherAssignedToys, toyTable)
+            end
+        end
+    end
+    return FeatherAssignedToys
+end
+
+local function startFeatherLoop()
+    if FeatherLoopConn then FeatherLoopConn:Disconnect(); FeatherLoopConn = nil end
+    FeatherTime = 0
+    FeatherLoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not FeatherConfig.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        FeatherTime += dt * FeatherConfig.waveSpeed
+        local charCFrame = humanoidRootPart.CFrame
+        local rightVector = charCFrame.RightVector
+        local lookVector = charCFrame.LookVector
+        local backVector = -lookVector
+        local basePosition = torso.Position + Vector3.new(0, FeatherConfig.heightOffset, 0) + (backVector * FeatherConfig.backwardOffset)
+        for i, point in ipairs(FeatherRowPoints) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                local targetPosition = basePosition + (rightVector * toy.offsetX)
+                local amplitude = FeatherConfig.baseAmplitude * toy.distanceRank
+                local waveMovement = math.sin(FeatherTime) * amplitude
+                local finalPosition = targetPosition + Vector3.new(0, waveMovement, 0)
+                if point.part then point.part.Position = finalPosition end
+                toy.BP.Position = finalPosition
+                local backYRotation = math.atan2(-lookVector.X, -lookVector.Z)
+                local baseCFrame = CFrame.new(finalPosition) * CFrame.Angles(0, backYRotation, 0)
+                local tiltedCFrame = baseCFrame * CFrame.Angles(math.rad(-FeatherConfig.tiltAngle), 0, 0)
+                toy.BG.CFrame = toy.BG.CFrame:Lerp(tiltedCFrame, 0.3)
+            end
+        end
+    end)
+end
+
+local function stopFeatherLoop()
+    if FeatherLoopConn then FeatherLoopConn:Disconnect(); FeatherLoopConn = nil end
+    for _, point in ipairs(FeatherRowPoints) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+        end
+    end
+    FeatherRowPoints = {}; FeatherAssignedToys = {}
+end
+
+local function toggleFeather(state)
+    FeatherConfig.Enabled = state
+    if state then
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        FeatherToys = findObjects()
+        FeatherRowPoints = createFeatherRowPoints(math.min(#FeatherToys, FeatherConfig.maxSparklers))
+        FeatherAssignedToys = assignFeatherToysToPoints()
+        startFeatherLoop()
+        OrionLib:MakeNotification({ Name = "Feather Started", Content = "Objects: " .. #FeatherAssignedToys, Time = 3 })
+    else
+        stopFeatherLoop()
+        OrionLib:MakeNotification({ Name = "Feather Stopped", Content = "Feather placement disabled", Time = 2 })
+    end
+end
+
+local function HRP()
+    local c = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    return c:FindFirstChild("HumanoidRootPart")
+end
+
+local function attachMagicCirclePhysics(rec)
+    local model = rec.model; local part = rec.part
+    if not model or not part or not part.Parent then return end
+    for _, p in ipairs(model:GetDescendants()) do
+        if p:IsA("BasePart") then
+            pcall(function() p:SetNetworkOwner(LocalPlayer) end)
+            p.CanCollide = false; p.CanTouch = false
+            if MagicCircleConfig.GlowEffect then
+                p.Material = Enum.Material.Neon
+            end
+        end
+    end
+    if not part:FindFirstChild("MagicCircleBodyVelocity") then
+        local bv = Instance.new("BodyVelocity")
+        bv.Name = "MagicCircleBodyVelocity"; bv.MaxForce = Vector3.new(1e8, 1e8, 1e8)
+        bv.Velocity = Vector3.new(); bv.P = 1e6; bv.Parent = part
+    end
+    if not part:FindFirstChild("MagicCircleBodyGyro") then
+        local bg = Instance.new("BodyGyro")
+        bg.Name = "MagicCircleBodyGyro"; bg.MaxTorque = Vector3.new(1e8, 1e8, 1e8)
+        bg.CFrame = part.CFrame; bg.P = 1e6; bg.Parent = part
+    end
+end
+
+local function detachMagicCirclePhysics(rec)
+    local model = rec.model; local part = rec.part
+    if not model or not part then return end
+    local bv = part:FindFirstChild("MagicCircleBodyVelocity")
+    if bv then bv:Destroy() end
+    local bg = part:FindFirstChild("MagicCircleBodyGyro")
+    if bg then bg:Destroy() end
+    for _, p in ipairs(model:GetDescendants()) do
+        if p:IsA("BasePart") then
+            p.CanCollide = true; p.CanTouch = true
+            p.Material = Enum.Material.Plastic
+            pcall(function() p:SetNetworkOwner(nil) end)
+        end
+    end
+end
+
+local function rescanMagicCircle()
+    for _, r in ipairs(MagicCircleList) do detachMagicCirclePhysics(r) end
+    MagicCircleList = {}
+    local foundCount = 0
+    for _, d in ipairs(workspace:GetDescendants()) do
+        if foundCount >= MagicCircleConfig.ObjectCount then break end
+        if d:IsA("Model") and d.Name == ObjectIDConfig.CurrentObjectID then
+            local part = getPrimaryPart(d)
+            if part and not part.Anchored then
+                table.insert(MagicCircleList, { model = d, part = part })
+                foundCount = foundCount + 1
+            end
+        end
+    end
+    for i = 1, #MagicCircleList do attachMagicCirclePhysics(MagicCircleList[i]) end
+end
+
+local function startMagicCircleLoop()
+    if MagicCircleLoopConn then MagicCircleLoopConn:Disconnect(); MagicCircleLoopConn = nil end
+    MagicCircleTAccum = 0
+    MagicCircleLoopConn = RunService.Heartbeat:Connect(function(dt)
+        if not MagicCircleConfig.Enabled then return end
+        local root = HRP()
+        if not root or #MagicCircleList == 0 then return end
+        MagicCircleTAccum = MagicCircleTAccum + dt * (MagicCircleConfig.RotationSpeed / 10)
+        local radius = MagicCircleConfig.Diameter / 2
+        local angleIncrement = 360 / #MagicCircleList
+        local rootVelocity = root.AssemblyLinearVelocity or root.Velocity or Vector3.new()
+        
+        local heightOffset = 0
+        for i, rec in ipairs(MagicCircleList) do
+            local part = rec.part
+            if not part or not part.Parent then continue end
+            
+            local baseAngle = i * angleIncrement
+            local angle = math.rad(baseAngle + MagicCircleTAccum * 50)
+            local localPos = Vector3.new(radius * math.cos(angle), MagicCircleConfig.Height, radius * math.sin(angle))
+            
+            if MagicCircleConfig.SymbolType == "Hexagram" then
+                local triangleNum = (i - 1) % 6 + 1
+                if triangleNum <= 3 then
+                    heightOffset = 0.5 * math.sin(angle * 3)
+                else
+                    heightOffset = -0.5 * math.sin(angle * 3)
+                end
+                localPos = Vector3.new(radius * math.cos(angle), MagicCircleConfig.Height + heightOffset, radius * math.sin(angle))
+            elseif MagicCircleConfig.SymbolType == "Circle" then
+                heightOffset = math.sin(angle * 4) * 0.3
+                localPos = Vector3.new(radius * math.cos(angle), MagicCircleConfig.Height + heightOffset, radius * math.sin(angle))
+            end
+            
+            local targetPos = root.Position + localPos
+            local dir = targetPos - part.Position
+            local distance = dir.Magnitude
+            
+            local bv = part:FindFirstChild("MagicCircleBodyVelocity")
+            if bv then
+                if distance > 0.1 then
+                    bv.Velocity = dir.Unit * math.min(3000, distance * 50) + rootVelocity
+                else
+                    bv.Velocity = rootVelocity
+                end
+            end
+            local bg = part:FindFirstChild("MagicCircleBodyGyro")
+            if bg then
+                bg.CFrame = CFrame.lookAt(targetPos, root.Position) * CFrame.Angles(0, math.pi, 0)
+            end
+        end
+    end)
+end
+
+local function stopMagicCircleLoop()
+    if MagicCircleLoopConn then MagicCircleLoopConn:Disconnect(); MagicCircleLoopConn = nil end
+    for _, rec in ipairs(MagicCircleList) do detachMagicCirclePhysics(rec) end
+    MagicCircleList = {}
+end
+
+local function toggleMagicCircle(state)
+    MagicCircleConfig.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        rescanMagicCircle()
+        startMagicCircleLoop()
+        OrionLib:MakeNotification({ Name = "Magic Circle Started", Content = "Height: " .. MagicCircleConfig.Height .. ", Diameter: " .. MagicCircleConfig.Diameter, Time = 3 })
+    else
+        stopMagicCircleLoop()
+        OrionLib:MakeNotification({ Name = "Magic Circle Stopped", Content = "Magic circle disabled", Time = 2 })
+    end
+end
+
+local function createHeartPoints(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local t = (i - 1) * (2 * math.pi / count)
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { angle = t, part = part, assignedToy = nil }
+    end
+    return points
+end
+
+local function getHeartPosition(t, size, pulse, scale, verticalStretch)
+    local baseScale = size / 20
+    local currentScale = baseScale * (scale or 1)
+    local x = 16 * (math.sin(t) ^ 3) * currentScale
+    local y = (13 * math.cos(t) - 5 * math.cos(2*t) - 2 * math.cos(3*t) - math.cos(4*t)) * currentScale
+    if verticalStretch and verticalStretch > 1 then y = y * verticalStretch end
+    if pulse > 0 then local pulseFactor = 1 + (pulse * 0.1); x = x * pulseFactor; y = y * pulseFactor end
+    return x, y
+end
+
+local function assignHeartToysToPoints()
+    HeartAssignedToys = {}
+    for i = 1, math.min(#HeartToys, #HeartPoints) do
+        local toy = HeartToys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false end
+                end
+                local BG, BP = attachPhysics(primaryPart)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, baseAngle = HeartPoints[i].angle }
+                HeartPoints[i].assignedToy = toyTable
+                table.insert(HeartAssignedToys, toyTable)
+            end
+        end
+    end
+    return HeartAssignedToys
+end
+
+local function startHeartLoop()
+    if HeartLoopConn then HeartLoopConn:Disconnect(); HeartLoopConn = nil end
+    HeartTime = 0
+    HeartLoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not HeartConfig.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        HeartTime += dt
+        local basePosition = HeartConfig.FollowPlayer and torso.Position or torso.Position
+        local pulseEffect = 0
+        if HeartConfig.PulseSpeed > 0 then pulseEffect = math.sin(HeartTime * HeartConfig.PulseSpeed) * HeartConfig.PulseAmplitude end
+        for i, point in ipairs(HeartPoints) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                local currentAngle = toy.baseAngle + (HeartTime * HeartConfig.RotationSpeed)
+                local x, y = getHeartPosition(currentAngle, HeartConfig.Size, pulseEffect, 1, 1)
+                local heightOffset = HeartConfig.Height + (math.sin(currentAngle * 2) * 0.5)
+                local localPos = Vector3.new(x, heightOffset, y)
+                local targetPosition = basePosition + localPos
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                toy.BG.CFrame = CFrame.new(targetPosition) * CFrame.Angles(-math.rad(90), 0, 0)
+            end
+        end
+    end)
+end
+
+local function stopHeartLoop()
+    if HeartLoopConn then HeartLoopConn:Disconnect(); HeartLoopConn = nil end
+    for _, point in ipairs(HeartPoints) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+        end
+    end
+    HeartPoints = {}; HeartAssignedToys = {}
+end
+
+local function toggleHeart(state)
+    HeartConfig.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        HeartToys = findObjects()
+        HeartPoints = createHeartPoints(math.min(#HeartToys, HeartConfig.ObjectCount))
+        HeartAssignedToys = assignHeartToysToPoints()
+        startHeartLoop()
+        OrionLib:MakeNotification({ Name = "Heart Started", Content = "Size: " .. HeartConfig.Size .. ", Count: " .. HeartConfig.ObjectCount, Time = 3 })
+    else
+        stopHeartLoop()
+        OrionLib:MakeNotification({ Name = "Heart Stopped", Content = "Heart placement disabled", Time = 2 })
+    end
+end
+
+local function createBigHeartPoints(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local t = (i - 1) * (2 * math.pi / count)
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { angle = t, part = part, assignedToy = nil }
+    end
+    return points
+end
+
+local function assignBigHeartToysToPoints()
+    BigHeartAssignedToys = {}
+    for i = 1, math.min(#BigHeartToys, #BigHeartPoints) do
+        local toy = BigHeartToys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false end
+                end
+                local BG, BP = attachPhysics(primaryPart)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, baseAngle = BigHeartPoints[i].angle }
+                BigHeartPoints[i].assignedToy = toyTable
+                table.insert(BigHeartAssignedToys, toyTable)
+            end
+        end
+    end
+    return BigHeartAssignedToys
+end
+
+local function startBigHeartLoop()
+    if BigHeartLoopConn then BigHeartLoopConn:Disconnect(); BigHeartLoopConn = nil end
+    BigHeartTime = 0
+    BigHeartLoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not BigHeartConfig.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        BigHeartTime += dt
+        local basePosition = BigHeartConfig.FollowPlayer and torso.Position or torso.Position
+        local pulseEffect = 0
+        if BigHeartConfig.PulseSpeed > 0 then pulseEffect = math.sin(BigHeartTime * BigHeartConfig.PulseSpeed) * BigHeartConfig.PulseAmplitude end
+        for i, point in ipairs(BigHeartPoints) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                local currentAngle = toy.baseAngle + (BigHeartTime * BigHeartConfig.RotationSpeed)
+                local x, y = getHeartPosition(currentAngle, BigHeartConfig.Size, pulseEffect, BigHeartConfig.HeartScale, BigHeartConfig.VerticalStretch)
+                local heightOffset = BigHeartConfig.Height + (math.sin(currentAngle * 2) * 1.0)
+                local localPos = Vector3.new(x, heightOffset, y)
+                local targetPosition = basePosition + localPos
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                toy.BG.CFrame = CFrame.new(targetPosition) * CFrame.Angles(-math.rad(90), 0, 0)
+            end
+        end
+    end)
+end
+
+local function stopBigHeartLoop()
+    if BigHeartLoopConn then BigHeartLoopConn:Disconnect(); BigHeartLoopConn = nil end
+    for _, point in ipairs(BigHeartPoints) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+        end
+    end
+    BigHeartPoints = {}; BigHeartAssignedToys = {}
+end
+
+local function toggleBigHeart(state)
+    BigHeartConfig.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        BigHeartToys = findObjects()
+        BigHeartPoints = createBigHeartPoints(math.min(#BigHeartToys, BigHeartConfig.ObjectCount))
+        BigHeartAssignedToys = assignBigHeartToysToPoints()
+        startBigHeartLoop()
+        OrionLib:MakeNotification({ Name = "Big Heart Started", Content = "Size: " .. BigHeartConfig.Size .. "×" .. BigHeartConfig.HeartScale, Time = 3 })
+    else
+        stopBigHeartLoop()
+        OrionLib:MakeNotification({ Name = "Big Heart Stopped", Content = "Big heart placement disabled", Time = 2 })
+    end
+end
+
+local function createStarOfDavidPoints(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local angle = (i - 1) * (2 * math.pi / 6)
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { angle = angle, part = part, assignedToy = nil, triangleIndex = math.floor((i - 1) / 2) + 1 }
+    end
+    return points
+end
+
+local function getStarOfDavidPosition(i, angle, size, triangleHeight, time, pulseSpeed)
+    local scale = size / 10
+    local baseX = math.cos(angle) * scale
+    local baseZ = math.sin(angle) * scale
+    local heightOffset = (i % 2 == 0) and triangleHeight or -triangleHeight
+    local pulse = math.sin(time * pulseSpeed) * 0.1
+    return baseX, baseZ, heightOffset + pulse
+end
+
+local function assignStarOfDavidToysToPoints()
+    StarOfDavidAssignedToys = {}
+    for i = 1, math.min(#StarOfDavidToys, #StarOfDavidPoints) do
+        local toy = StarOfDavidToys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false end
+                end
+                local BG, BP = attachPhysics(primaryPart)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, baseAngle = StarOfDavidPoints[i].angle, triangleIndex = StarOfDavidPoints[i].triangleIndex }
+                StarOfDavidPoints[i].assignedToy = toyTable
+                table.insert(StarOfDavidAssignedToys, toyTable)
+            end
+        end
+    end
+    return StarOfDavidAssignedToys
+end
+
+local function startStarOfDavidLoop()
+    if StarOfDavidLoopConn then StarOfDavidLoopConn:Disconnect(); StarOfDavidLoopConn = nil end
+    StarOfDavidTime = 0
+    StarOfDavidLoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not StarOfDavidConfig.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        StarOfDavidTime += dt
+        local basePosition = StarOfDavidConfig.FollowPlayer and torso.Position or torso.Position
+        for i, point in ipairs(StarOfDavidPoints) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                local currentAngle = toy.baseAngle + (StarOfDavidTime * StarOfDavidConfig.RotationSpeed)
+                local x, z, heightOffset = getStarOfDavidPosition(i, currentAngle, StarOfDavidConfig.Size, StarOfDavidConfig.TriangleHeight, StarOfDavidTime, StarOfDavidConfig.PulseSpeed)
+                local finalHeight = StarOfDavidConfig.Height + heightOffset
+                local localPos = Vector3.new(x, finalHeight, z)
+                local targetPosition = basePosition + localPos
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                local direction = (targetPosition - basePosition).Unit
+                if direction.Magnitude > 0 then
+                    toy.BG.CFrame = CFrame.lookAt(targetPosition, targetPosition + direction)
+                end
+            end
+        end
+    end)
+end
+
+local function stopStarOfDavidLoop()
+    if StarOfDavidLoopConn then StarOfDavidLoopConn:Disconnect(); StarOfDavidLoopConn = nil end
+    for _, point in ipairs(StarOfDavidPoints) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+        end
+    end
+    StarOfDavidPoints = {}; StarOfDavidAssignedToys = {}
+end
+
+local function toggleStarOfDavid(state)
+    StarOfDavidConfig.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        StarOfDavidToys = findObjects()
+        StarOfDavidPoints = createStarOfDavidPoints(math.min(#StarOfDavidToys, StarOfDavidConfig.ObjectCount))
+        StarOfDavidAssignedToys = assignStarOfDavidToysToPoints()
+        startStarOfDavidLoop()
+        OrionLib:MakeNotification({ Name = "Star of David Started", Content = "Size: " .. StarOfDavidConfig.Size, Time = 3 })
+    else
+        stopStarOfDavidLoop()
+        OrionLib:MakeNotification({ Name = "Star of David Stopped", Content = "Star of David placement disabled", Time = 2 })
+    end
+end
+
+local function createStarPoints(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local starIndex = (i - 1) % 10
+        local isOuter = starIndex % 2 == 0
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { starIndex = starIndex, isOuter = isOuter, part = part, assignedToy = nil }
+    end
+    return points
+end
+
+local function getStarPosition(starIndex, isOuter, outerRadius, innerRadius, time, rotationSpeed, twinkleSpeed)
+    local anglePerPoint = 2 * math.pi / 5
+    local pointAngle = starIndex * (anglePerPoint / 2)
+    local radius = isOuter and outerRadius or innerRadius
+    local rotationAngle = pointAngle + (time * rotationSpeed)
+    local twinkle = math.sin(time * twinkleSpeed + starIndex) * 0.2
+    local finalRadius = radius * (1 + twinkle)
+    local x = math.cos(rotationAngle) * finalRadius
+    local z = math.sin(rotationAngle) * finalRadius
+    return x, z, pointAngle
+end
+
+local function assignStarToysToPoints()
+    StarAssignedToys = {}
+    for i = 1, math.min(#StarToys, #StarPoints) do
+        local toy = StarToys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false end
+                end
+                local BG, BP = attachPhysics(primaryPart)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, starIndex = StarPoints[i].starIndex, isOuter = StarPoints[i].isOuter }
+                StarPoints[i].assignedToy = toyTable
+                table.insert(StarAssignedToys, toyTable)
+            end
+        end
+    end
+    return StarAssignedToys
+end
+
+local function startStarLoop()
+    if StarLoopConn then StarLoopConn:Disconnect(); StarLoopConn = nil end
+    StarTime = 0
+    StarLoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not StarConfig.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        StarTime += dt
+        local basePosition = StarConfig.FollowPlayer and torso.Position or torso.Position
+        for i, point in ipairs(StarPoints) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                local x, z, pointAngle = getStarPosition(toy.starIndex, toy.isOuter, StarConfig.OuterRadius, StarConfig.InnerRadius, StarTime, StarConfig.RotationSpeed, StarConfig.TwinkleSpeed)
+                local heightVariation = math.sin(pointAngle * 3) * 0.5
+                local finalHeight = StarConfig.Height + heightVariation
+                local localPos = Vector3.new(x, finalHeight, z)
+                local targetPosition = basePosition + localPos
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                local direction = (targetPosition - basePosition).Unit
+                if direction.Magnitude > 0 then
+                    toy.BG.CFrame = CFrame.lookAt(targetPosition, targetPosition + direction)
+                end
+            end
+        end
+    end)
+end
+
+local function stopStarLoop()
+    if StarLoopConn then StarLoopConn:Disconnect(); StarLoopConn = nil end
+    for _, point in ipairs(StarPoints) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+        end
+    end
+    StarPoints = {}; StarAssignedToys = {}
+end
+
+local function toggleStar(state)
+    StarConfig.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        StarToys = findObjects()
+        StarPoints = createStarPoints(math.min(#StarToys, StarConfig.ObjectCount))
+        StarAssignedToys = assignStarToysToPoints()
+        startStarLoop()
+        OrionLib:MakeNotification({ Name = "Star Started", Content = "Outer radius: " .. StarConfig.OuterRadius, Time = 3 })
+    else
+        stopStarLoop()
+        OrionLib:MakeNotification({ Name = "Star Stopped", Content = "Star placement disabled", Time = 2 })
+    end
+end
+
+local function createStar2Points(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local t = (i - 1) * (2 * math.pi / count)
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { angle = t, part = part, assignedToy = nil, rayIndex = (i - 1) % Star2Config.RayCount }
+    end
+    return points
+end
+
+local function getStar2Position(t, size, pulse, rayLength, rayIndex, time, jitterSpeed, jitterAmount, maxDistance)
+    local scale = size / 10
+    local baseRadius = scale
+    local rayFactor = 0
+    local anglePerRay = 2 * math.pi / Star2Config.RayCount
+    local rayAngle = rayIndex * anglePerRay
+    local angleDiff = math.abs(t - rayAngle)
+    if angleDiff > math.pi then angleDiff = 2 * math.pi - angleDiff end
+    if angleDiff < (anglePerRay / 4) then
+        rayFactor = (1 - (angleDiff / (anglePerRay / 4))) * rayLength
+        local jitter = math.sin(time * jitterSpeed + rayIndex) * jitterAmount
+        rayFactor = rayFactor * (1 + jitter * 0.1)
+    end
+    local pulseFactor = 1 + (pulse * 0.1)
+    local finalRadius = (baseRadius + rayFactor) * pulseFactor
+    if maxDistance and finalRadius > maxDistance then finalRadius = maxDistance end
+    local x = math.cos(t) * finalRadius
+    local z = math.sin(t) * finalRadius
+    return x, z
+end
+
+local function assignStar2ToysToPoints()
+    Star2AssignedToys = {}
+    for i = 1, math.min(#Star2Toys, #Star2Points) do
+        local toy = Star2Toys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false end
+                end
+                local BG, BP = attachPhysics(primaryPart, 20000, 300)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, baseAngle = Star2Points[i].angle, rayIndex = Star2Points[i].rayIndex }
+                Star2Points[i].assignedToy = toyTable
+                table.insert(Star2AssignedToys, toyTable)
+            end
+        end
+    end
+    return Star2AssignedToys
+end
+
+local function startStar2Loop()
+    if Star2LoopConn then Star2LoopConn:Disconnect(); Star2LoopConn = nil end
+    Star2Time = 0
+    Star2LoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not Star2Config.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        Star2Time += dt
+        local basePosition = Star2Config.FollowPlayer and torso.Position or torso.Position
+        local pulseEffect = (Star2Config.PulseSpeed > 0) and math.sin(Star2Time * Star2Config.PulseSpeed) * Star2Config.PulseAmplitude or 0
+        for i, point in ipairs(Star2Points) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                local currentAngle = toy.baseAngle + (Star2Time * Star2Config.RotationSpeed)
+                local x, z = getStar2Position(currentAngle, Star2Config.Size, pulseEffect, Star2Config.RayLength, toy.rayIndex, Star2Time, Star2Config.JitterSpeed, Star2Config.JitterAmount, Star2Config.MaxDistance)
+                local heightVariation = math.sin(Star2Time * 3 + toy.rayIndex) * 0.5
+                local heightOffset = Star2Config.Height + heightVariation
+                local localPos = Vector3.new(x, heightOffset, z)
+                local targetPosition = basePosition + localPos
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                local direction = (targetPosition - basePosition).Unit
+                if direction.Magnitude > 0 then
+                    toy.BG.CFrame = toy.BG.CFrame:Lerp(CFrame.lookAt(targetPosition, targetPosition + direction), 0.5)
+                end
+            end
+        end
+    end)
+end
+
+local function stopStar2Loop()
+    if Star2LoopConn then Star2LoopConn:Disconnect(); Star2LoopConn = nil end
+    for _, point in ipairs(Star2Points) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+        end
+    end
+    Star2Points = {}; Star2AssignedToys = {}
+end
+
+local function toggleStar2(state)
+    Star2Config.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        Star2Toys = findObjects()
+        Star2Points = createStar2Points(math.min(#Star2Toys, Star2Config.ObjectCount))
+        Star2AssignedToys = assignStar2ToysToPoints()
+        startStar2Loop()
+        OrionLib:MakeNotification({ Name = "Star2 Started", Content = "Size: " .. Star2Config.Size, Time = 3 })
+    else
+        stopStar2Loop()
+        OrionLib:MakeNotification({ Name = "Star2 Stopped", Content = "Star2 disabled", Time = 2 })
+    end
+end
+
+local function createSpherePoints(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local latIndex = math.floor((i - 1) / SphereConfig.Longitudes) + 1
+        local lonIndex = ((i - 1) % SphereConfig.Longitudes) + 1
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { latitudeIndex = latIndex, longitudeIndex = lonIndex, part = part, assignedToy = nil }
+    end
+    return points
+end
+
+local function getSpherePosition(latIndex, lonIndex, totalLats, totalLons, radius, time, horRotationSpeed, verRotationSpeed, pulseSpeed, pulseAmplitude, waveSpeed, waveAmplitude)
+    local latAngle = ((latIndex - 1) / (totalLats - 1) - 0.5) * math.pi
+    local lonAngle = ((lonIndex - 1) / totalLons) * 2 * math.pi
+    local rotatedLon = lonAngle + (time * horRotationSpeed)
+    local rotatedLat = latAngle + (time * verRotationSpeed * 0.5)
+    local pulse = (pulseSpeed > 0) and 1 + math.sin(time * pulseSpeed) * pulseAmplitude or 1
+    local wave = (waveSpeed > 0) and 1 + math.sin(time * waveSpeed + lonIndex * 0.5) * waveAmplitude or 1
+    local finalRadius = radius * pulse * wave
+    local x = finalRadius * math.cos(rotatedLat) * math.cos(rotatedLon)
+    local y = finalRadius * math.sin(rotatedLat)
+    local z = finalRadius * math.cos(rotatedLat) * math.sin(rotatedLon)
+    return x, y, z
+end
+
+local function assignSphereToysToPoints()
+    SphereAssignedToys = {}
+    for i = 1, math.min(#SphereToys, #SpherePoints) do
+        local toy = SphereToys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false end
+                end
+                local BG, BP = attachPhysics(primaryPart, 20000, 300)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, latitudeIndex = SpherePoints[i].latitudeIndex, longitudeIndex = SpherePoints[i].longitudeIndex }
+                SpherePoints[i].assignedToy = toyTable
+                table.insert(SphereAssignedToys, toyTable)
+            end
+        end
+    end
+    return SphereAssignedToys
+end
+
+local function startSphereLoop()
+    if SphereLoopConn then SphereLoopConn:Disconnect(); SphereLoopConn = nil end
+    SphereTime = 0
+    SphereLoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not SphereConfig.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        SphereTime += dt
+        local basePosition = SphereConfig.FollowPlayer and torso.Position or torso.Position
+        for i, point in ipairs(SpherePoints) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                local x, y, z = getSpherePosition(toy.latitudeIndex, toy.longitudeIndex, SphereConfig.Latitudes, SphereConfig.Longitudes, SphereConfig.Radius, SphereTime, SphereConfig.HorizontalRotationSpeed, SphereConfig.VerticalRotationSpeed, SphereConfig.PulseSpeed, SphereConfig.PulseAmplitude, SphereConfig.WaveSpeed, SphereConfig.WaveAmplitude)
+                local finalHeight = SphereConfig.BaseHeight + y
+                local localPos = Vector3.new(x, finalHeight, z)
+                local targetPosition = basePosition + localPos
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                local direction = (targetPosition - basePosition).Unit
+                if direction.Magnitude > 0 then
+                    toy.BG.CFrame = toy.BG.CFrame:Lerp(CFrame.lookAt(targetPosition, targetPosition + direction), 0.4)
+                end
+            end
+        end
+    end)
+end
+
+local function stopSphereLoop()
+    if SphereLoopConn then SphereLoopConn:Disconnect(); SphereLoopConn = nil end
+    for _, point in ipairs(SpherePoints) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+        end
+    end
+    SpherePoints = {}; SphereAssignedToys = {}
+end
+
+local function toggleSphere(state)
+    SphereConfig.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        SphereToys = findObjects()
+        SpherePoints = createSpherePoints(math.min(#SphereToys, SphereConfig.ObjectCount))
+        SphereAssignedToys = assignSphereToysToPoints()
+        startSphereLoop()
+        OrionLib:MakeNotification({ Name = "Sphere Started", Content = "Radius: " .. SphereConfig.Radius, Time = 3 })
+    else
+        stopSphereLoop()
+        OrionLib:MakeNotification({ Name = "Sphere Stopped", Content = "Sphere disabled", Time = 2 })
+    end
+end
+
+local function createFerrisWheelPoints(count)
+    local points = {}
+    if count == 0 then return points end
+    
+    local angleStep = (2 * math.pi) / count
+    
+    for i = 1, count do
+        local angle = (i - 1) * angleStep
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { baseAngle = angle, part = part, assignedToy = nil }
+    end
+    return points
+end
+
+local function getFerrisWheelPosition(angle, radius, height, time, rotationSpeed, verticalCircle, tiltAngle, pulseEffect, pulseSpeed, pulseAmplitude, swingEffect, swingAmount)
+    local currentAngle = angle + (time * rotationSpeed)
+    currentAngle = currentAngle % (2 * math.pi)
+    
+    local currentRadius = radius
+    if pulseEffect then
+        local pulse = 1 + math.sin(time * pulseSpeed) * (pulseAmplitude / radius)
+        currentRadius = radius * pulse
+    end
+    local swingOffset = (swingEffect and math.sin(time * 2 + angle) * swingAmount) or 0
+    
+    if verticalCircle then
+        local x = math.cos(currentAngle) * currentRadius
+        local y = math.sin(currentAngle) * currentRadius + height + swingOffset
+        local z = 0
+        return x, y, z
+    else
+        local x = math.cos(currentAngle) * currentRadius
+        local y = height + math.sin(currentAngle * 2) * (currentRadius * 0.2)
+        local z = math.sin(currentAngle) * currentRadius
+        if tiltAngle ~= 0 then
+            local rad = math.rad(tiltAngle)
+            local rotatedX = x * math.cos(rad) - y * math.sin(rad)
+            local rotatedY = x * math.sin(rad) + y * math.cos(rad)
+            x, y = rotatedX, rotatedY
+        end
+        return x, y, z
+    end
+end
+
+local function assignFerrisWheelToysToPoints()
+    FerrisWheelAssignedToys = {}
+    for i = 1, math.min(#FerrisWheelToys, #FerrisWheelPoints) do
+        local toy = FerrisWheelToys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false end
+                end
+                local BG, BP = attachPhysics(primaryPart, 20000, 300)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, baseAngle = FerrisWheelPoints[i].baseAngle }
+                FerrisWheelPoints[i].assignedToy = toyTable
+                table.insert(FerrisWheelAssignedToys, toyTable)
+            end
+        end
+    end
+    return FerrisWheelAssignedToys
+end
+
+local function startFerrisWheelLoop()
+    if FerrisWheelLoopConn then FerrisWheelLoopConn:Disconnect(); FerrisWheelLoopConn = nil end
+    FerrisWheelTime = 0
+    FerrisWheelLoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not FerrisWheelConfig.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        FerrisWheelTime += dt
+        local basePosition = FerrisWheelConfig.FollowPlayer and torso.Position or torso.Position
+        
+        local fixedCFrame
+        if FerrisWheelConfig.FixedDirection then
+            fixedCFrame = CFrame.Angles(
+                math.rad(FerrisWheelConfig.FixedPitch),
+                math.rad(FerrisWheelConfig.FixedYaw),
+                math.rad(FerrisWheelConfig.FixedRoll)
+            )
+        end
+        
+        for i, point in ipairs(FerrisWheelPoints) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                local x, y, z = getFerrisWheelPosition(toy.baseAngle, FerrisWheelConfig.Radius, FerrisWheelConfig.Height, FerrisWheelTime, FerrisWheelConfig.RotationSpeed, FerrisWheelConfig.VerticalCircle, FerrisWheelConfig.TiltAngle, FerrisWheelConfig.PulseEffect, FerrisWheelConfig.PulseSpeed, FerrisWheelConfig.PulseAmplitude, FerrisWheelConfig.SwingEffect, FerrisWheelConfig.SwingAmount)
+                local localPos = Vector3.new(x, y, z)
+                local targetPosition = basePosition + localPos
+                
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                
+                if FerrisWheelConfig.FixedDirection then
+                    toy.BG.CFrame = CFrame.new(targetPosition) * fixedCFrame
+                else
+                    toy.BG.CFrame = CFrame.lookAt(targetPosition, basePosition)
+                end
+            end
+        end
+    end)
+end
+
+local function stopFerrisWheelLoop()
+    if FerrisWheelLoopConn then FerrisWheelLoopConn:Disconnect(); FerrisWheelLoopConn = nil end
+    for _, point in ipairs(FerrisWheelPoints) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+        end
+    end
+    FerrisWheelPoints = {}; FerrisWheelAssignedToys = {}
+end
+
+local function toggleFerrisWheel(state)
+    FerrisWheelConfig.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        FerrisWheelToys = findObjects()
+        FerrisWheelPoints = createFerrisWheelPoints(math.min(#FerrisWheelToys, FerrisWheelConfig.ObjectCount))
+        FerrisWheelAssignedToys = assignFerrisWheelToysToPoints()
+        startFerrisWheelLoop()
+        OrionLib:MakeNotification({ Name = "Ferris Wheel Started", Content = "Radius: " .. FerrisWheelConfig.Radius .. ", Objects: " .. #FerrisWheelAssignedToys, Time = 3 })
+    else
+        stopFerrisWheelLoop()
+        OrionLib:MakeNotification({ Name = "Ferris Wheel Stopped", Content = "Ferris wheel disabled", Time = 2 })
+    end
+end
+
+local function createAnimN1Points(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local angle = (i - 1) * (2 * math.pi / count)
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { baseAngle = angle, part = part, assignedToy = nil }
+    end
+    return points
+end
+
+local function assignAnimN1ToysToPoints()
+    AnimN1AssignedToys = {}
+    for i = 1, math.min(#AnimN1Toys, #AnimN1Points) do
+        local toy = AnimN1Toys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false; child.Material = Enum.Material.Neon end
+                end
+                local BG, BP = attachPhysics(primaryPart, 30000, 500)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, baseAngle = AnimN1Points[i].baseAngle }
+                AnimN1Points[i].assignedToy = toyTable
+                table.insert(AnimN1AssignedToys, toyTable)
+            end
+        end
+    end
+    return AnimN1AssignedToys
+end
+
+local function startAnimN1Loop()
+    if AnimN1LoopConn then AnimN1LoopConn:Disconnect(); AnimN1LoopConn = nil end
+    AnimN1Time = 0
+    AnimN1LoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not AnimN1Config.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        AnimN1Time += dt
+        local basePosition = AnimN1Config.FollowPlayer and torso.Position or torso.Position
+        
+        for i, point in ipairs(AnimN1Points) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                
+                local rotationAngle = toy.baseAngle + (AnimN1Time * AnimN1Config.RotationSpeed)
+                local pulse = math.sin(AnimN1Time * AnimN1Config.PulseSpeed) * AnimN1Config.PulseAmount
+                local currentRadius = AnimN1Config.Radius + pulse
+                local currentHeight = AnimN1Config.Height + math.sin(AnimN1Time * 3 + i) * 5
+                
+                local chaosX = math.sin(AnimN1Time * 2 + i) * 2
+                local chaosY = math.cos(AnimN1Time * 2.5 + i) * 2
+                local chaosZ = math.sin(AnimN1Time * 3 + i) * 2
+                
+                local x = math.cos(rotationAngle) * currentRadius + chaosX
+                local z = math.sin(rotationAngle) * currentRadius + chaosZ
+                local y = currentHeight + chaosY
+                
+                local localPos = Vector3.new(x, y, z)
+                local targetPosition = basePosition + localPos
+                
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                toy.BG.CFrame = CFrame.new(targetPosition)
+            end
+        end
+    end)
+end
+
+local function stopAnimN1Loop()
+    if AnimN1LoopConn then AnimN1LoopConn:Disconnect(); AnimN1LoopConn = nil end
+    for _, point in ipairs(AnimN1Points) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+            for _, child in ipairs(point.assignedToy.Model:GetDescendants()) do
+                if child:IsA("BasePart") then child.Material = Enum.Material.Plastic end
+            end
+        end
+    end
+    AnimN1Points = {}; AnimN1AssignedToys = {}
+end
+
+local function toggleAnimN1(state)
+    AnimN1Config.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        AnimN1Toys = findObjects()
+        AnimN1Points = createAnimN1Points(math.min(#AnimN1Toys, AnimN1Config.ObjectCount))
+        AnimN1AssignedToys = assignAnimN1ToysToPoints()
+        startAnimN1Loop()
+        OrionLib:MakeNotification({ Name = "N1: Chaos Circle Started", Content = "Objects: " .. #AnimN1AssignedToys, Time = 3 })
+    else
+        stopAnimN1Loop()
+        OrionLib:MakeNotification({ Name = "N1: Chaos Circle Stopped", Content = "Animation disabled", Time = 2 })
+    end
+end
+
+local function createAnimN2Points(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local angle = (i - 1) * (2 * math.pi / count)
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { baseAngle = angle, part = part, assignedToy = nil, riseOffset = i / count }
+    end
+    return points
+end
+
+local function assignAnimN2ToysToPoints()
+    AnimN2AssignedToys = {}
+    for i = 1, math.min(#AnimN2Toys, #AnimN2Points) do
+        local toy = AnimN2Toys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false; child.Material = Enum.Material.Neon end
+                end
+                local BG, BP = attachPhysics(primaryPart, 25000, 400)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, baseAngle = AnimN2Points[i].baseAngle, riseOffset = AnimN2Points[i].riseOffset }
+                AnimN2Points[i].assignedToy = toyTable
+                table.insert(AnimN2AssignedToys, toyTable)
+            end
+        end
+    end
+    return AnimN2AssignedToys
+end
+
+local function startAnimN2Loop()
+    if AnimN2LoopConn then AnimN2LoopConn:Disconnect(); AnimN2LoopConn = nil end
+    AnimN2Time = 0
+    AnimN2LoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not AnimN2Config.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        AnimN2Time += dt
+        local basePosition = AnimN2Config.FollowPlayer and torso.Position or torso.Position
+        
+        for i, point in ipairs(AnimN2Points) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                
+                local rotationAngle = toy.baseAngle + (AnimN2Time * AnimN2Config.RotationSpeed)
+                local rise = (AnimN2Time * AnimN2Config.RiseSpeed) % (AnimN2Config.TopHeight - AnimN2Config.BaseHeight)
+                local currentHeight = AnimN2Config.BaseHeight + rise
+                
+                local chaos = math.sin(AnimN2Time * AnimN2Config.ChaosFactor + i) * 2
+                local currentRadius = AnimN2Config.Radius + chaos
+                
+                local x = math.cos(rotationAngle) * currentRadius
+                local z = math.sin(rotationAngle) * currentRadius
+                local y = currentHeight
+                
+                x = x + math.sin(AnimN2Time * 5 + i) * 1.5
+                z = z + math.cos(AnimN2Time * 5 + i) * 1.5
+                
+                local localPos = Vector3.new(x, y, z)
+                local targetPosition = basePosition + localPos
+                
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                toy.BG.CFrame = CFrame.new(targetPosition)
+            end
+        end
+    end)
+end
+
+local function stopAnimN2Loop()
+    if AnimN2LoopConn then AnimN2LoopConn:Disconnect(); AnimN2LoopConn = nil end
+    for _, point in ipairs(AnimN2Points) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+            for _, child in ipairs(point.assignedToy.Model:GetDescendants()) do
+                if child:IsA("BasePart") then child.Material = Enum.Material.Plastic end
+            end
+        end
+    end
+    AnimN2Points = {}; AnimN2AssignedToys = {}
+end
+
+local function toggleAnimN2(state)
+    AnimN2Config.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN3Config.Enabled then toggleAnimN3(false) end
+        
+        AnimN2Toys = findObjects()
+        AnimN2Points = createAnimN2Points(math.min(#AnimN2Toys, AnimN2Config.ObjectCount))
+        AnimN2AssignedToys = assignAnimN2ToysToPoints()
+        startAnimN2Loop()
+        OrionLib:MakeNotification({ Name = "N2: Tornado Spiral Started", Content = "Objects: " .. #AnimN2AssignedToys, Time = 3 })
+    else
+        stopAnimN2Loop()
+        OrionLib:MakeNotification({ Name = "N2: Tornado Spiral Stopped", Content = "Animation disabled", Time = 2 })
+    end
+end
+
+local function createAnimN3Points(count)
+    local points = {}
+    if count == 0 then return points end
+    for i = 1, count do
+        local part = Instance.new("Part")
+        part.CanCollide = false; part.Anchored = true; part.Transparency = 1
+        part.Size = Vector3.new(4, 1, 4); part.Parent = workspace
+        points[i] = { part = part, assignedToy = nil, randomOffset = math.random() * 100, seed = i }
+    end
+    return points
+end
+
+local function assignAnimN3ToysToPoints()
+    AnimN3AssignedToys = {}
+    for i = 1, math.min(#AnimN3Toys, #AnimN3Points) do
+        local toy = AnimN3Toys[i]
+        if toy and toy:IsA("Model") and toy.Name == ObjectIDConfig.CurrentObjectID then
+            local primaryPart = getPrimaryPart(toy)
+            if primaryPart then
+                for _, child in ipairs(toy:GetChildren()) do
+                    if child:IsA("BasePart") then child.CanCollide = false; child.CanTouch = false; child.Anchored = false; child.Material = Enum.Material.Neon end
+                end
+                local BG, BP = attachPhysics(primaryPart, 20000, 300)
+                local toyTable = { BG = BG, BP = BP, Pallet = primaryPart, Model = toy, PointIndex = i, randomOffset = AnimN3Points[i].randomOffset, seed = i }
+                AnimN3Points[i].assignedToy = toyTable
+                table.insert(AnimN3AssignedToys, toyTable)
+            end
+        end
+    end
+    return AnimN3AssignedToys
+end
+
+local function startAnimN3Loop()
+    if AnimN3LoopConn then AnimN3LoopConn:Disconnect(); AnimN3LoopConn = nil end
+    AnimN3Time = 0
+    AnimN3LoopConn = RunService.RenderStepped:Connect(function(dt)
+        if not AnimN3Config.Enabled or not LocalPlayer.Character then return end
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local torso = LocalPlayer.Character:FindFirstChild("Torso") or LocalPlayer.Character:FindFirstChild("UpperTorso")
+        if not humanoidRootPart or not torso then return end
+        AnimN3Time += dt
+        local basePosition = AnimN3Config.FollowPlayer and torso.Position or torso.Position
+        
+        local cycle = math.sin(AnimN3Time * AnimN3Config.CycleSpeed)
+        local explosionFactor = (cycle + 1) / 2
+        
+        for i, point in ipairs(AnimN3Points) do
+            if point.assignedToy and point.assignedToy.BP and point.assignedToy.BG then
+                local toy = point.assignedToy
+                
+                local direction = Vector3.new(
+                    math.sin(AnimN3Time * 2 + toy.seed),
+                    math.cos(AnimN3Time * 3 + toy.seed),
+                    math.sin(AnimN3Time * 4 + toy.seed)
+                ).Unit
+                
+                local distance = explosionFactor * AnimN3Config.ExplosionRadius + math.sin(AnimN3Time * 5 + toy.seed) * AnimN3Config.Randomness
+                
+                local heightOffset = math.sin(AnimN3Time * 3 + toy.seed) * 5 + AnimN3Config.Height
+                
+                local localPos = direction * distance
+                localPos = Vector3.new(localPos.X, heightOffset, localPos.Z)
+                
+                local targetPosition = basePosition + localPos
+                
+                if point.part then point.part.Position = targetPosition end
+                toy.BP.Position = targetPosition
+                toy.BG.CFrame = CFrame.new(targetPosition)
+            end
+        end
+    end)
+end
+
+local function stopAnimN3Loop()
+    if AnimN3LoopConn then AnimN3LoopConn:Disconnect(); AnimN3LoopConn = nil end
+    for _, point in ipairs(AnimN3Points) do
+        if point.part then point.part:Destroy() end
+        if point.assignedToy then
+            if point.assignedToy.BG then point.assignedToy.BG:Destroy() end
+            if point.assignedToy.BP then point.assignedToy.BP:Destroy() end
+            for _, child in ipairs(point.assignedToy.Model:GetDescendants()) do
+                if child:IsA("BasePart") then child.Material = Enum.Material.Plastic end
+            end
+        end
+    end
+    AnimN3Points = {}; AnimN3AssignedToys = {}
+end
+
+local function toggleAnimN3(state)
+    AnimN3Config.Enabled = state
+    if state then
+        if FeatherConfig.Enabled then toggleFeather(false) end
+        if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+        if HeartConfig.Enabled then toggleHeart(false) end
+        if BigHeartConfig.Enabled then toggleBigHeart(false) end
+        if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+        if StarConfig.Enabled then toggleStar(false) end
+        if Star2Config.Enabled then toggleStar2(false) end
+        if SphereConfig.Enabled then toggleSphere(false) end
+        if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+        if AnimN1Config.Enabled then toggleAnimN1(false) end
+        if AnimN2Config.Enabled then toggleAnimN2(false) end
+        
+        AnimN3Toys = findObjects()
+        AnimN3Points = createAnimN3Points(math.min(#AnimN3Toys, AnimN3Config.ObjectCount))
+        AnimN3AssignedToys = assignAnimN3ToysToPoints()
+        startAnimN3Loop()
+        OrionLib:MakeNotification({ Name = "N3: Hyper Explosion Started", Content = "Objects: " .. #AnimN3AssignedToys, Time = 3 })
+    else
+        stopAnimN3Loop()
+        OrionLib:MakeNotification({ Name = "N3: Hyper Explosion Stopped", Content = "Animation disabled", Time = 2 })
+    end
+end
+
+local function enableNoclip()
+    if NoclipConnection then NoclipConnection:Disconnect(); NoclipConnection = nil end
+    OriginalCollision = {}
+    if LocalPlayer.Character then
+        for _, part in ipairs(LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") then OriginalCollision[part] = part.CanCollide end
+        end
+    end
+    NoclipConnection = RunService.Stepped:Connect(function()
+        if UtilityConfig.Noclip and LocalPlayer.Character then
+            for _, part in ipairs(LocalPlayer.Character:GetDescendants()) do
+                if part:IsA("BasePart") then part.CanCollide = false end
+            end
+        end
+    end)
+end
+
+local function disableNoclip()
+    if NoclipConnection then NoclipConnection:Disconnect(); NoclipConnection = nil end
+    if LocalPlayer.Character then
+        for part, canCollide in pairs(OriginalCollision) do
+            if part and part.Parent then part.CanCollide = canCollide end
+        end
+        OriginalCollision = {}
+    end
+end
+
+local function enableTPWalk()
+    if TPWalkConnection then TPWalkConnection:Disconnect(); TPWalkConnection = nil end
+    if LocalPlayer.Character then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then OriginalWalkSpeed = humanoid.WalkSpeed end
+    end
+    TPWalkConnection = RunService.RenderStepped:Connect(function(dt)
+        if not UtilityConfig.TPWalk or not LocalPlayer.Character then return end
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if humanoid and humanoidRootPart then
+            humanoid.WalkSpeed = UtilityConfig.TPWalkSpeed
+            local moveDirection = Vector3.new(0, 0, 0)
+            local moveVector = humanoid.MoveDirection
+            if moveVector.Magnitude > 0 then
+                moveDirection = moveVector
+            else
+                if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveDirection = moveDirection + humanoidRootPart.CFrame.LookVector end
+                if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveDirection = moveDirection - humanoidRootPart.CFrame.LookVector end
+                if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveDirection = moveDirection - humanoidRootPart.CFrame.RightVector end
+                if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveDirection = moveDirection + humanoidRootPart.CFrame.RightVector end
+            end
+            if moveDirection.Magnitude > 0 then
+                moveDirection = moveDirection.Unit
+                humanoidRootPart.Velocity = Vector3.new(moveDirection.X * UtilityConfig.TPWalkSpeed, humanoidRootPart.Velocity.Y, moveDirection.Z * UtilityConfig.TPWalkSpeed)
+            else
+                humanoidRootPart.Velocity = Vector3.new(0, humanoidRootPart.Velocity.Y, 0)
+            end
+        end
+    end)
+end
+
+local function disableTPWalk()
+    if TPWalkConnection then TPWalkConnection:Disconnect(); TPWalkConnection = nil end
+    if LocalPlayer.Character then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then humanoid.WalkSpeed = OriginalWalkSpeed end
+    end
+end
+
+local function toggleTPWalk(state)
+    UtilityConfig.TPWalk = state
+    if state then enableTPWalk() else disableTPWalk() end
+    OrionLib:MakeNotification({ Name = "TPWalk", Content = state and "Enabled" or "Disabled", Time = 2 })
+end
+
+local function enableESP()
+    if ESPConnection then ESPConnection:Disconnect(); ESPConnection = nil end
+    for _, label in pairs(ESPLabels) do if label then label:Destroy() end end
+    ESPLabels = {}
+    ESPConnection = RunService.RenderStepped:Connect(function()
+        if not UtilityConfig.ESP then return end
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character then
+                local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    if not ESPLabels[player] then
+                        local label = Instance.new("BillboardGui")
+                        label.Name = "ESP_" .. player.Name
+                        label.Adornee = humanoidRootPart
+                        label.AlwaysOnTop = true
+                        label.Size = UDim2.new(0, 200, 0, 50)
+                        label.StudsOffset = Vector3.new(0, 3, 0)
+                        local textLabel = Instance.new("TextLabel")
+                        textLabel.Size = UDim2.new(1, 0, 1, 0)
+                        textLabel.BackgroundTransparency = 1
+                        textLabel.Text = player.Name
+                        textLabel.TextColor3 = Color3.new(1, 1, 1)
+                        textLabel.TextStrokeTransparency = 0
+                        textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                        textLabel.Font = Enum.Font.SourceSansBold
+                        textLabel.TextSize = 20
+                        textLabel.Parent = label
+                        label.Parent = humanoidRootPart
+                        ESPLabels[player] = label
+                    end
+                    local distance = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) and (humanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude or 0
+                    local label = ESPLabels[player]
+                    if label and label:FindFirstChildOfClass("TextLabel") then
+                        label:FindFirstChildOfClass("TextLabel").Text = string.format("%s\n[%.1f studs]", player.Name, distance)
+                    end
+                end
+            end
+        end
+        for player, label in pairs(ESPLabels) do
+            if not Players:FindFirstChild(player.Name) then
+                label:Destroy()
+                ESPLabels[player] = nil
+            end
+        end
+    end)
+end
+
+local function disableESP()
+    if ESPConnection then ESPConnection:Disconnect(); ESPConnection = nil end
+    for _, label in pairs(ESPLabels) do if label then label:Destroy() end end
+    ESPLabels = {}
+end
+
+local function toggleESP(state)
+    UtilityConfig.ESP = state
+    if state then enableESP() else disableESP() end
+    OrionLib:MakeNotification({ Name = "ESP", Content = state and "Enabled" or "Disabled", Time = 2 })
+end
+
+local function toggleInfiniteJump(state)
+    UtilityConfig.InfiniteJump = state
+    if state then
+        game:GetService("UserInputService").JumpRequest:Connect(function()
+            if UtilityConfig.InfiniteJump and LocalPlayer.Character then
+                local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then humanoid:ChangeState("Jumping") end
+            end
+        end)
+    end
+    OrionLib:MakeNotification({ Name = "Infinite Jump", Content = state and "Enabled" or "Disabled", Time = 2 })
+end
+
+local function toggleNoclip(state)
+    UtilityConfig.Noclip = state
+    if state then enableNoclip() else disableNoclip() end
+    OrionLib:MakeNotification({ Name = "Noclip", Content = state and "Enabled" or "Disabled", Time = 2 })
+end
+
+local function executeScript(url, scriptName)
+    local success, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    
+    if success then
+        OrionLib:MakeNotification({
+            Name = scriptName,
+            Content = "Loaded successfully!",
+            Time = 3
+        })
+    else
+        OrionLib:MakeNotification({
+            Name = scriptName,
+            Content = "Load failed: " .. tostring(result),
+            Time = 5
+        })
+    end
+end
+
+local function copyToClipboard(text, name)
+    setclipboard(text)
+    OrionLib:MakeNotification({
+        Name = name,
+        Content = "Copied to clipboard",
+        Time = 2
+    })
+end
+
+local Window = OrionLib:MakeWindow({
+    Name = "🌸Sakura Hub🌸 v0.6.en",
+    HidePremium = false,
+    SaveConfig = false,
+    IntroEnabled = false,
+    ThemeColor = Theme.BackgroundColor,
+    BackgroundColor = Theme.BackgroundColor,
+    TextColor = Theme.TextColor
+})
+
+local ObjectIDTab = Window:MakeTab({
+    Name = "Object Settings",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+ObjectIDTab:AddLabel("All Object IDs (28 types):")
+
+ObjectIDTab:AddLabel("【Row 1】")
+for i = 1, 7 do
+    local id = ObjectIDConfig.AvailableObjects[i]
+    ObjectIDTab:AddButton({
+        Name = id,
+        Callback = function() changeObjectID(id) end
+    })
+end
+
+ObjectIDTab:AddLabel("【Row 2】")
+for i = 8, 14 do
+    local id = ObjectIDConfig.AvailableObjects[i]
+    ObjectIDTab:AddButton({
+        Name = id,
+        Callback = function() changeObjectID(id) end
+    })
+end
+
+ObjectIDTab:AddLabel("【Row 3】")
+for i = 15, 21 do
+    local id = ObjectIDConfig.AvailableObjects[i]
+    ObjectIDTab:AddButton({
+        Name = id,
+        Callback = function() changeObjectID(id) end
+    })
+end
+
+ObjectIDTab:AddLabel("【Row 4】")
+for i = 22, 28 do
+    local id = ObjectIDConfig.AvailableObjects[i]
+    ObjectIDTab:AddButton({
+        Name = id,
+        Callback = function() changeObjectID(id) end
+    })
+end
+
+ObjectIDTab:AddLabel("Supported objects: " .. #ObjectIDConfig.AvailableObjects .. " types")
+
+local FeatherTab = Window:MakeTab({
+    Name = "Feather",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+FeatherTab:AddToggle({
+    Name = "Toggle Feather (Back only)",
+    Default = false,
+    Callback = toggleFeather
+})
+
+FeatherTab:AddSection({ Name = "Placement Settings" })
+FeatherTab:AddSlider({ Name = "Max Objects", Min = 2, Max = 100, Default = FeatherConfig.maxSparklers, Color = Theme.SliderColor, Increment = 2, ValueName = "units", Callback = function(v) FeatherConfig.maxSparklers = v end })
+FeatherTab:AddSlider({ Name = "Object Spacing", Min = 1, Max = 20, Default = FeatherConfig.spacing, Color = Theme.SliderColor, Increment = 0.5, ValueName = "studs", Callback = function(v) FeatherConfig.spacing = v end })
+FeatherTab:AddSlider({ Name = "Height Offset", Min = -10, Max = 30, Default = FeatherConfig.heightOffset, Color = Theme.SliderColor, Increment = 0.5, ValueName = "studs", Callback = function(v) FeatherConfig.heightOffset = v end })
+FeatherTab:AddSlider({ Name = "Backward Offset", Min = 0, Max = 30, Default = FeatherConfig.backwardOffset, Color = Theme.SliderColor, Increment = 0.5, ValueName = "studs", Callback = function(v) FeatherConfig.backwardOffset = v end })
+FeatherTab:AddSection({ Name = "Angle Settings" })
+FeatherTab:AddSlider({ Name = "Object Tilt Angle", Min = 0, Max = 90, Default = FeatherConfig.tiltAngle, Color = Theme.SliderColor, Increment = 5, ValueName = "degrees", Callback = function(v) FeatherConfig.tiltAngle = v end })
+FeatherTab:AddSection({ Name = "Vertical Movement" })
+FeatherTab:AddSlider({ Name = "Wave Speed", Min = 0, Max = 20, Default = FeatherConfig.waveSpeed, Color = Theme.SliderColor, Increment = 0.5, ValueName = "speed", Callback = function(v) FeatherConfig.waveSpeed = v end })
+FeatherTab:AddSlider({ Name = "Base Amplitude", Min = 0, Max = 20, Default = FeatherConfig.baseAmplitude, Color = Theme.SliderColor, Increment = 0.5, ValueName = "studs", Callback = function(v) FeatherConfig.baseAmplitude = v end })
+
+local MagicCircleTab = Window:MakeTab({
+    Name = "Magic Circle",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+MagicCircleTab:AddToggle({ Name = "Toggle Magic Circle", Default = false, Callback = toggleMagicCircle })
+
+MagicCircleTab:AddSection({ Name = "Basic Settings" })
+MagicCircleTab:AddDropdown({
+    Name = "Symbol Type",
+    Default = MagicCircleConfig.SymbolType,
+    Options = {"Ring", "Circle", "Hexagram"},
+    Callback = function(v) MagicCircleConfig.SymbolType = v end
+})
+MagicCircleTab:AddToggle({ Name = "Glow Effect", Default = MagicCircleConfig.GlowEffect, Callback = function(v) MagicCircleConfig.GlowEffect = v; if MagicCircleConfig.Enabled then toggleMagicCircle(false); task.wait(0.1); toggleMagicCircle(true) end end })
+MagicCircleTab:AddSlider({ Name = "Height", Min = 0, Max = 50, Default = MagicCircleConfig.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) MagicCircleConfig.Height = v end })
+MagicCircleTab:AddSlider({ Name = "Diameter", Min = 5, Max = 50, Default = MagicCircleConfig.Diameter, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) MagicCircleConfig.Diameter = v end })
+MagicCircleTab:AddSlider({ Name = "Object Count", Min = 3, Max = 100, Default = MagicCircleConfig.ObjectCount, Color = Theme.SliderColor, Increment = 1, ValueName = "units", Callback = function(v) MagicCircleConfig.ObjectCount = v; if MagicCircleConfig.Enabled then rescanMagicCircle() end end })
+MagicCircleTab:AddSection({ Name = "Rotation Settings" })
+MagicCircleTab:AddSlider({ Name = "Rotation Speed", Min = 1, Max = 100, Default = MagicCircleConfig.RotationSpeed, Color = Theme.SliderColor, Increment = 1, ValueName = "speed", Callback = function(v) MagicCircleConfig.RotationSpeed = v end })
+MagicCircleTab:AddButton({ Name = "Rescan Objects", Callback = function() if MagicCircleConfig.Enabled then rescanMagicCircle() end end })
+
+local HeartTab = Window:MakeTab({
+    Name = "Heart",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+HeartTab:AddToggle({ Name = "Toggle Heart", Default = false, Callback = toggleHeart })
+HeartTab:AddToggle({ Name = "Follow Player", Default = HeartConfig.FollowPlayer, Callback = function(v) HeartConfig.FollowPlayer = v end })
+HeartTab:AddSection({ Name = "Size Settings" })
+HeartTab:AddSlider({ Name = "Heart Size", Min = 2, Max = 50, Default = HeartConfig.Size, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) HeartConfig.Size = v end })
+HeartTab:AddSlider({ Name = "Base Height", Min = 0, Max = 50, Default = HeartConfig.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) HeartConfig.Height = v end })
+HeartTab:AddSlider({ Name = "Object Count", Min = 6, Max = 100, Default = HeartConfig.ObjectCount, Color = Theme.SliderColor, Increment = 2, ValueName = "units", Callback = function(v) HeartConfig.ObjectCount = v; if HeartConfig.Enabled then toggleHeart(false); task.wait(0.1); toggleHeart(true) end end })
+HeartTab:AddSection({ Name = "Movement Settings" })
+HeartTab:AddSlider({ Name = "Rotation Speed", Min = 0, Max = 10, Default = HeartConfig.RotationSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) HeartConfig.RotationSpeed = v end })
+HeartTab:AddSlider({ Name = "Pulse Speed", Min = 0, Max = 10, Default = HeartConfig.PulseSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) HeartConfig.PulseSpeed = v end })
+HeartTab:AddSlider({ Name = "Pulse Amplitude", Min = 0, Max = 10, Default = HeartConfig.PulseAmplitude, Color = Theme.SliderColor, Increment = 0.1, ValueName = "studs", Callback = function(v) HeartConfig.PulseAmplitude = v end })
+
+local BigHeartTab = Window:MakeTab({
+    Name = "Big Heart",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+BigHeartTab:AddToggle({ Name = "Toggle Big Heart", Default = false, Callback = toggleBigHeart })
+BigHeartTab:AddToggle({ Name = "Follow Player", Default = BigHeartConfig.FollowPlayer, Callback = function(v) BigHeartConfig.FollowPlayer = v end })
+BigHeartTab:AddSection({ Name = "Size Settings" })
+BigHeartTab:AddSlider({ Name = "Base Size", Min = 5, Max = 50, Default = BigHeartConfig.Size, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) BigHeartConfig.Size = v end })
+BigHeartTab:AddSlider({ Name = "Scale Factor", Min = 1.0, Max = 10.0, Default = BigHeartConfig.HeartScale, Color = Theme.SliderColor, Increment = 0.1, ValueName = "x", Callback = function(v) BigHeartConfig.HeartScale = v end })
+BigHeartTab:AddSlider({ Name = "Vertical Stretch", Min = 1.0, Max = 5.0, Default = BigHeartConfig.VerticalStretch, Color = Theme.SliderColor, Increment = 0.1, ValueName = "x", Callback = function(v) BigHeartConfig.VerticalStretch = v end })
+BigHeartTab:AddSlider({ Name = "Base Height", Min = 5, Max = 50, Default = BigHeartConfig.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) BigHeartConfig.Height = v end })
+BigHeartTab:AddSlider({ Name = "Object Count", Min = 12, Max = 100, Default = BigHeartConfig.ObjectCount, Color = Theme.SliderColor, Increment = 2, ValueName = "units", Callback = function(v) BigHeartConfig.ObjectCount = v; if BigHeartConfig.Enabled then toggleBigHeart(false); task.wait(0.1); toggleBigHeart(true) end end })
+BigHeartTab:AddSection({ Name = "Movement Settings" })
+BigHeartTab:AddSlider({ Name = "Rotation Speed", Min = 0, Max = BigHeartConfig.RotationSpeedMax, Default = BigHeartConfig.RotationSpeed, Color = Theme.SliderColor, Increment = 0.5, ValueName = "speed", Callback = function(v) BigHeartConfig.RotationSpeed = v end })
+BigHeartTab:AddSlider({ Name = "Pulse Speed", Min = 0, Max = BigHeartConfig.PulseSpeedMax, Default = BigHeartConfig.PulseSpeed, Color = Theme.SliderColor, Increment = 0.5, ValueName = "speed", Callback = function(v) BigHeartConfig.PulseSpeed = v end })
+BigHeartTab:AddSlider({ Name = "Pulse Amplitude", Min = 0, Max = 10, Default = BigHeartConfig.PulseAmplitude, Color = Theme.SliderColor, Increment = 0.1, ValueName = "studs", Callback = function(v) BigHeartConfig.PulseAmplitude = v end })
+
+local StarOfDavidTab = Window:MakeTab({
+    Name = "Star of David ✡",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+StarOfDavidTab:AddToggle({ Name = "Toggle Star of David", Default = false, Callback = toggleStarOfDavid })
+StarOfDavidTab:AddToggle({ Name = "Follow Player", Default = StarOfDavidConfig.FollowPlayer, Callback = function(v) StarOfDavidConfig.FollowPlayer = v end })
+StarOfDavidTab:AddSection({ Name = "Size Settings" })
+StarOfDavidTab:AddSlider({ Name = "Star Size", Min = 2, Max = 50, Default = StarOfDavidConfig.Size, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) StarOfDavidConfig.Size = v end })
+StarOfDavidTab:AddSlider({ Name = "Base Height", Min = 0, Max = 50, Default = StarOfDavidConfig.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) StarOfDavidConfig.Height = v end })
+StarOfDavidTab:AddSlider({ Name = "Triangle Height", Min = 0, Max = 20, Default = StarOfDavidConfig.TriangleHeight, Color = Theme.SliderColor, Increment = 0.1, ValueName = "studs", Callback = function(v) StarOfDavidConfig.TriangleHeight = v end })
+StarOfDavidTab:AddSlider({ Name = "Object Count", Min = 6, Max = 100, Default = StarOfDavidConfig.ObjectCount, Color = Theme.SliderColor, Increment = 2, ValueName = "units", Callback = function(v) StarOfDavidConfig.ObjectCount = v; if StarOfDavidConfig.Enabled then toggleStarOfDavid(false); task.wait(0.1); toggleStarOfDavid(true) end end })
+StarOfDavidTab:AddSection({ Name = "Movement Settings" })
+StarOfDavidTab:AddSlider({ Name = "Rotation Speed", Min = 0, Max = 10, Default = StarOfDavidConfig.RotationSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) StarOfDavidConfig.RotationSpeed = v end })
+StarOfDavidTab:AddSlider({ Name = "Pulse Speed", Min = 0, Max = 10, Default = StarOfDavidConfig.PulseSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) StarOfDavidConfig.PulseSpeed = v end })
+
+local StarTab = Window:MakeTab({
+    Name = "Star ★",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+StarTab:AddToggle({ Name = "Toggle Star", Default = false, Callback = toggleStar })
+StarTab:AddToggle({ Name = "Follow Player", Default = StarConfig.FollowPlayer, Callback = function(v) StarConfig.FollowPlayer = v end })
+StarTab:AddSection({ Name = "Size Settings" })
+StarTab:AddSlider({ Name = "Outer Radius", Min = 2, Max = 50, Default = StarConfig.OuterRadius, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) StarConfig.OuterRadius = v end })
+StarTab:AddSlider({ Name = "Inner Radius", Min = 1, Max = 30, Default = StarConfig.InnerRadius, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) StarConfig.InnerRadius = v end })
+StarTab:AddSlider({ Name = "Base Height", Min = 0, Max = 50, Default = StarConfig.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) StarConfig.Height = v end })
+StarTab:AddSlider({ Name = "Object Count", Min = 5, Max = 100, Default = StarConfig.ObjectCount, Color = Theme.SliderColor, Increment = 1, ValueName = "units", Callback = function(v) StarConfig.ObjectCount = v; if StarConfig.Enabled then toggleStar(false); task.wait(0.1); toggleStar(true) end end })
+StarTab:AddSection({ Name = "Movement Settings" })
+StarTab:AddSlider({ Name = "Rotation Speed", Min = 0, Max = 10, Default = StarConfig.RotationSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) StarConfig.RotationSpeed = v end })
+StarTab:AddSlider({ Name = "Twinkle Speed", Min = 0, Max = 10, Default = StarConfig.TwinkleSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) StarConfig.TwinkleSpeed = v end })
+
+local Star2Tab = Window:MakeTab({
+    Name = "Star2 ✫",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+Star2Tab:AddToggle({ Name = "Toggle Star2", Default = false, Callback = toggleStar2 })
+Star2Tab:AddToggle({ Name = "Follow Player", Default = Star2Config.FollowPlayer, Callback = function(v) Star2Config.FollowPlayer = v end })
+Star2Tab:AddSection({ Name = "Size Settings" })
+Star2Tab:AddSlider({ Name = "Base Size", Min = 5, Max = Star2Config.SizeMax, Default = Star2Config.Size, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) Star2Config.Size = v end })
+Star2Tab:AddSlider({ Name = "Max Distance Limit", Min = 10, Max = 200, Default = Star2Config.MaxDistance, Color = Theme.SliderColor, Increment = 5, ValueName = "studs", Callback = function(v) Star2Config.MaxDistance = v end })
+Star2Tab:AddSlider({ Name = "Ray Length", Min = 1.0, Max = Star2Config.RayLengthMax, Default = Star2Config.RayLength, Color = Theme.SliderColor, Increment = 0.5, ValueName = "studs", Callback = function(v) Star2Config.RayLength = v end })
+Star2Tab:AddSlider({ Name = "Base Height", Min = 5, Max = 50, Default = Star2Config.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) Star2Config.Height = v end })
+Star2Tab:AddSlider({ Name = "Ray Count", Min = 6, Max = 36, Default = Star2Config.RayCount, Color = Theme.SliderColor, Increment = 2, ValueName = "rays", Callback = function(v) Star2Config.RayCount = v; if Star2Config.Enabled then toggleStar2(false); task.wait(0.1); toggleStar2(true) end end })
+Star2Tab:AddSlider({ Name = "Object Count", Min = 12, Max = 100, Default = Star2Config.ObjectCount, Color = Theme.SliderColor, Increment = 4, ValueName = "units", Callback = function(v) Star2Config.ObjectCount = v; if Star2Config.Enabled then toggleStar2(false); task.wait(0.1); toggleStar2(true) end end })
+Star2Tab:AddSection({ Name = "Movement Settings" })
+Star2Tab:AddSlider({ Name = "Rotation Speed", Min = 0, Max = Star2Config.RotationSpeedMax, Default = Star2Config.RotationSpeed, Color = Theme.SliderColor, Increment = 1, ValueName = "speed", Callback = function(v) Star2Config.RotationSpeed = v end })
+Star2Tab:AddSlider({ Name = "Pulse Speed", Min = 0, Max = Star2Config.PulseSpeedMax, Default = Star2Config.PulseSpeed, Color = Theme.SliderColor, Increment = 1, ValueName = "speed", Callback = function(v) Star2Config.PulseSpeed = v end })
+Star2Tab:AddSlider({ Name = "Pulse Amplitude", Min = 0, Max = 10, Default = Star2Config.PulseAmplitude, Color = Theme.SliderColor, Increment = 0.2, ValueName = "studs", Callback = function(v) Star2Config.PulseAmplitude = v end })
+Star2Tab:AddSection({ Name = "Jitter Effect" })
+Star2Tab:AddSlider({ Name = "Jitter Speed", Min = 0, Max = 20, Default = Star2Config.JitterSpeed, Color = Theme.SliderColor, Increment = 0.5, ValueName = "speed", Callback = function(v) Star2Config.JitterSpeed = v end })
+Star2Tab:AddSlider({ Name = "Jitter Amount", Min = 0, Max = 10, Default = Star2Config.JitterAmount, Color = Theme.SliderColor, Increment = 0.1, ValueName = "studs", Callback = function(v) Star2Config.JitterAmount = v end })
+
+local SphereTab = Window:MakeTab({
+    Name = "Sphere ◯",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+SphereTab:AddToggle({ Name = "Toggle Sphere", Default = false, Callback = toggleSphere })
+SphereTab:AddToggle({ Name = "Follow Player", Default = SphereConfig.FollowPlayer, Callback = function(v) SphereConfig.FollowPlayer = v end })
+SphereTab:AddSection({ Name = "Size Settings" })
+SphereTab:AddSlider({ Name = "Sphere Radius", Min = 2, Max = 50, Default = SphereConfig.Radius, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) SphereConfig.Radius = v end })
+SphereTab:AddSlider({ Name = "Base Height", Min = -20, Max = 20, Default = SphereConfig.BaseHeight, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) SphereConfig.BaseHeight = v end })
+SphereTab:AddSlider({ Name = "Latitude Lines", Min = 2, Max = 16, Default = SphereConfig.Latitudes, Color = Theme.SliderColor, Increment = 1, ValueName = "lines", Callback = function(v) SphereConfig.Latitudes = v; if SphereConfig.Enabled then toggleSphere(false); task.wait(0.1); toggleSphere(true) end end })
+SphereTab:AddSlider({ Name = "Longitude Lines", Min = 4, Max = 24, Default = SphereConfig.Longitudes, Color = Theme.SliderColor, Increment = 2, ValueName = "lines", Callback = function(v) SphereConfig.Longitudes = v; if SphereConfig.Enabled then toggleSphere(false); task.wait(0.1); toggleSphere(true) end end })
+SphereTab:AddSlider({ Name = "Object Count", Min = 8, Max = 100, Default = SphereConfig.ObjectCount, Color = Theme.SliderColor, Increment = 4, ValueName = "units", Callback = function(v) SphereConfig.ObjectCount = v; if SphereConfig.Enabled then toggleSphere(false); task.wait(0.1); toggleSphere(true) end end })
+SphereTab:AddSection({ Name = "Rotation Settings" })
+SphereTab:AddSlider({ Name = "Horizontal Rotation Speed", Min = 0, Max = 10, Default = SphereConfig.HorizontalRotationSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) SphereConfig.HorizontalRotationSpeed = v end })
+SphereTab:AddSlider({ Name = "Vertical Rotation Speed", Min = 0, Max = 10, Default = SphereConfig.VerticalRotationSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) SphereConfig.VerticalRotationSpeed = v end })
+SphereTab:AddSlider({ Name = "Spiral Speed", Min = 0, Max = 10, Default = SphereConfig.SpiralSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) SphereConfig.SpiralSpeed = v end })
+SphereTab:AddSection({ Name = "Effect Settings" })
+SphereTab:AddSlider({ Name = "Wave Speed", Min = 0, Max = 10, Default = SphereConfig.WaveSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) SphereConfig.WaveSpeed = v end })
+SphereTab:AddSlider({ Name = "Wave Amplitude", Min = 0, Max = 10, Default = SphereConfig.WaveAmplitude, Color = Theme.SliderColor, Increment = 0.1, ValueName = "studs", Callback = function(v) SphereConfig.WaveAmplitude = v end })
+SphereTab:AddSlider({ Name = "Pulse Speed", Min = 0, Max = 10, Default = SphereConfig.PulseSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) SphereConfig.PulseSpeed = v end })
+SphereTab:AddSlider({ Name = "Pulse Amplitude", Min = 0, Max = 5, Default = SphereConfig.PulseAmplitude, Color = Theme.SliderColor, Increment = 0.1, ValueName = "studs", Callback = function(v) SphereConfig.PulseAmplitude = v end })
+
+local FerrisWheelTab = Window:MakeTab({
+    Name = "Ferris Wheel",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+FerrisWheelTab:AddToggle({ Name = "Toggle Ferris Wheel", Default = false, Callback = toggleFerrisWheel })
+FerrisWheelTab:AddToggle({ Name = "Follow Player", Default = FerrisWheelConfig.FollowPlayer, Callback = function(v) FerrisWheelConfig.FollowPlayer = v end })
+FerrisWheelTab:AddToggle({ Name = "Vertical Circle", Default = FerrisWheelConfig.VerticalCircle, Callback = function(v) FerrisWheelConfig.VerticalCircle = v end })
+
+FerrisWheelTab:AddSection({ Name = "Direction Settings" })
+FerrisWheelTab:AddToggle({ 
+    Name = "Use Fixed Direction", 
+    Default = FerrisWheelConfig.FixedDirection, 
+    Callback = function(v) FerrisWheelConfig.FixedDirection = v end 
+})
+FerrisWheelTab:AddSlider({ 
+    Name = "Fixed Yaw Angle (Horizontal)", 
+    Min = -180, Max = 180, Default = FerrisWheelConfig.FixedYaw, 
+    Color = Theme.SliderColor, Increment = 5, ValueName = "degrees", 
+    Callback = function(v) FerrisWheelConfig.FixedYaw = v end 
+})
+FerrisWheelTab:AddSlider({ 
+    Name = "Fixed Pitch Angle (Vertical)", 
+    Min = -90, Max = 90, Default = FerrisWheelConfig.FixedPitch, 
+    Color = Theme.SliderColor, Increment = 5, ValueName = "degrees", 
+    Callback = function(v) FerrisWheelConfig.FixedPitch = v end 
+})
+FerrisWheelTab:AddSlider({ 
+    Name = "Fixed Roll Angle (Rotation)", 
+    Min = -180, Max = 180, Default = FerrisWheelConfig.FixedRoll, 
+    Color = Theme.SliderColor, Increment = 5, ValueName = "degrees", 
+    Callback = function(v) FerrisWheelConfig.FixedRoll = v end 
+})
+
+FerrisWheelTab:AddSection({ Name = "Size Settings" })
+FerrisWheelTab:AddSlider({ Name = "Radius", Min = 5, Max = 50, Default = FerrisWheelConfig.Radius, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) FerrisWheelConfig.Radius = v end })
+FerrisWheelTab:AddSlider({ Name = "Center Height", Min = 5, Max = 50, Default = FerrisWheelConfig.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) FerrisWheelConfig.Height = v end })
+FerrisWheelTab:AddSlider({ Name = "Object Count", Min = 6, Max = 100, Default = FerrisWheelConfig.ObjectCount, Color = Theme.SliderColor, Increment = 2, ValueName = "units", Callback = function(v) FerrisWheelConfig.ObjectCount = v; if FerrisWheelConfig.Enabled then toggleFerrisWheel(false); task.wait(0.1); toggleFerrisWheel(true) end end })
+FerrisWheelTab:AddSection({ Name = "Movement Settings" })
+FerrisWheelTab:AddSlider({ Name = "Rotation Speed", Min = 0, Max = FerrisWheelConfig.RotationSpeedMax, Default = FerrisWheelConfig.RotationSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) FerrisWheelConfig.RotationSpeed = v end })
+FerrisWheelTab:AddSlider({ Name = "Tilt Angle", Min = 0, Max = 90, Default = FerrisWheelConfig.TiltAngle, Color = Theme.SliderColor, Increment = 5, ValueName = "degrees", Callback = function(v) FerrisWheelConfig.TiltAngle = v end })
+FerrisWheelTab:AddSection({ Name = "Effect Settings" })
+FerrisWheelTab:AddToggle({ Name = "Pulse Effect", Default = FerrisWheelConfig.PulseEffect, Callback = function(v) FerrisWheelConfig.PulseEffect = v end })
+FerrisWheelTab:AddSlider({ Name = "Pulse Speed", Min = 0, Max = 10, Default = FerrisWheelConfig.PulseSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) FerrisWheelConfig.PulseSpeed = v end })
+FerrisWheelTab:AddSlider({ Name = "Pulse Amplitude", Min = 0, Max = 10, Default = FerrisWheelConfig.PulseAmplitude, Color = Theme.SliderColor, Increment = 0.2, ValueName = "studs", Callback = function(v) FerrisWheelConfig.PulseAmplitude = v end })
+FerrisWheelTab:AddToggle({ Name = "Swing Effect", Default = FerrisWheelConfig.SwingEffect, Callback = function(v) FerrisWheelConfig.SwingEffect = v end })
+FerrisWheelTab:AddSlider({ Name = "Swing Amount", Min = 0, Max = 10, Default = FerrisWheelConfig.SwingAmount, Color = Theme.SliderColor, Increment = 0.1, ValueName = "studs", Callback = function(v) FerrisWheelConfig.SwingAmount = v end })
+
+local AnimN1Tab = Window:MakeTab({
+    Name = "N1: Chaos Circle",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+AnimN1Tab:AddToggle({ Name = "Toggle N1", Default = false, Callback = toggleAnimN1 })
+AnimN1Tab:AddToggle({ Name = "Follow Player", Default = AnimN1Config.FollowPlayer, Callback = function(v) AnimN1Config.FollowPlayer = v end })
+AnimN1Tab:AddSection({ Name = "Size Settings" })
+AnimN1Tab:AddSlider({ Name = "Radius", Min = 5, Max = 50, Default = AnimN1Config.Radius, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) AnimN1Config.Radius = v end })
+AnimN1Tab:AddSlider({ Name = "Base Height", Min = 0, Max = 50, Default = AnimN1Config.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) AnimN1Config.Height = v end })
+AnimN1Tab:AddSlider({ Name = "Object Count", Min = 10, Max = 100, Default = AnimN1Config.ObjectCount, Color = Theme.SliderColor, Increment = 2, ValueName = "units", Callback = function(v) AnimN1Config.ObjectCount = v; if AnimN1Config.Enabled then toggleAnimN1(false); task.wait(0.1); toggleAnimN1(true) end end })
+AnimN1Tab:AddSection({ Name = "Animation Settings" })
+AnimN1Tab:AddSlider({ Name = "Rotation Speed", Min = 0, Max = 50, Default = AnimN1Config.RotationSpeed, Color = Theme.SliderColor, Increment = 1, ValueName = "speed", Callback = function(v) AnimN1Config.RotationSpeed = v end })
+AnimN1Tab:AddSlider({ Name = "Pulse Speed", Min = 0, Max = 20, Default = AnimN1Config.PulseSpeed, Color = Theme.SliderColor, Increment = 0.5, ValueName = "speed", Callback = function(v) AnimN1Config.PulseSpeed = v end })
+AnimN1Tab:AddSlider({ Name = "Pulse Amount", Min = 0, Max = 30, Default = AnimN1Config.PulseAmount, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) AnimN1Config.PulseAmount = v end })
+
+local AnimN2Tab = Window:MakeTab({
+    Name = "N2: Tornado Spiral",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+AnimN2Tab:AddToggle({ Name = "Toggle N2", Default = false, Callback = toggleAnimN2 })
+AnimN2Tab:AddToggle({ Name = "Follow Player", Default = AnimN2Config.FollowPlayer, Callback = function(v) AnimN2Config.FollowPlayer = v end })
+AnimN2Tab:AddSection({ Name = "Size Settings" })
+AnimN2Tab:AddSlider({ Name = "Radius", Min = 3, Max = 30, Default = AnimN2Config.Radius, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) AnimN2Config.Radius = v end })
+AnimN2Tab:AddSlider({ Name = "Minimum Height", Min = 0, Max = 20, Default = AnimN2Config.BaseHeight, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) AnimN2Config.BaseHeight = v end })
+AnimN2Tab:AddSlider({ Name = "Maximum Height", Min = 10, Max = 100, Default = AnimN2Config.TopHeight, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) AnimN2Config.TopHeight = v end })
+AnimN2Tab:AddSlider({ Name = "Object Count", Min = 10, Max = 100, Default = AnimN2Config.ObjectCount, Color = Theme.SliderColor, Increment = 2, ValueName = "units", Callback = function(v) AnimN2Config.ObjectCount = v; if AnimN2Config.Enabled then toggleAnimN2(false); task.wait(0.1); toggleAnimN2(true) end end })
+AnimN2Tab:AddSection({ Name = "Animation Settings" })
+AnimN2Tab:AddSlider({ Name = "Rotation Speed", Min = 0, Max = 50, Default = AnimN2Config.RotationSpeed, Color = Theme.SliderColor, Increment = 1, ValueName = "speed", Callback = function(v) AnimN2Config.RotationSpeed = v end })
+AnimN2Tab:AddSlider({ Name = "Rise Speed", Min = 0, Max = 10, Default = AnimN2Config.RiseSpeed, Color = Theme.SliderColor, Increment = 0.2, ValueName = "speed", Callback = function(v) AnimN2Config.RiseSpeed = v end })
+AnimN2Tab:AddSlider({ Name = "Chaos Factor", Min = 0, Max = 10, Default = AnimN2Config.ChaosFactor, Color = Theme.SliderColor, Increment = 0.2, ValueName = "strength", Callback = function(v) AnimN2Config.ChaosFactor = v end })
+
+local AnimN3Tab = Window:MakeTab({
+    Name = "N3: Hyper Explosion",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+AnimN3Tab:AddToggle({ Name = "Toggle N3", Default = false, Callback = toggleAnimN3 })
+AnimN3Tab:AddToggle({ Name = "Follow Player", Default = AnimN3Config.FollowPlayer, Callback = function(v) AnimN3Config.FollowPlayer = v end })
+AnimN3Tab:AddSection({ Name = "Size Settings" })
+AnimN3Tab:AddSlider({ Name = "Base Height", Min = 0, Max = 50, Default = AnimN3Config.Height, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) AnimN3Config.Height = v end })
+AnimN3Tab:AddSlider({ Name = "Explosion Radius", Min = 5, Max = 100, Default = AnimN3Config.ExplosionRadius, Color = Theme.SliderColor, Increment = 1, ValueName = "studs", Callback = function(v) AnimN3Config.ExplosionRadius = v end })
+AnimN3Tab:AddSlider({ Name = "Object Count", Min = 10, Max = 100, Default = AnimN3Config.ObjectCount, Color = Theme.SliderColor, Increment = 2, ValueName = "units", Callback = function(v) AnimN3Config.ObjectCount = v; if AnimN3Config.Enabled then toggleAnimN3(false); task.wait(0.1); toggleAnimN3(true) end end })
+AnimN3Tab:AddSection({ Name = "Animation Settings" })
+AnimN3Tab:AddSlider({ Name = "Cycle Speed", Min = 0, Max = 5, Default = AnimN3Config.CycleSpeed, Color = Theme.SliderColor, Increment = 0.1, ValueName = "speed", Callback = function(v) AnimN3Config.CycleSpeed = v end })
+AnimN3Tab:AddSlider({ Name = "Explosion Speed", Min = 1, Max = 20, Default = AnimN3Config.ExplosionSpeed, Color = Theme.SliderColor, Increment = 0.5, ValueName = "speed", Callback = function(v) AnimN3Config.ExplosionSpeed = v end })
+AnimN3Tab:AddSlider({ Name = "Randomness", Min = 0, Max = 20, Default = AnimN3Config.Randomness, Color = Theme.SliderColor, Increment = 0.5, ValueName = "strength", Callback = function(v) AnimN3Config.Randomness = v end })
+
+local GUITab = Window:MakeTab({
+    Name = "GUI",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+GUITab:AddSection({ Name = "Fixed GUI" })
+GUITab:AddButton({
+    Name = "Fixed GUI",
+    Callback = function()
+        local Player = game.Players.LocalPlayer
+        local Camera = workspace.CurrentCamera
+        local RunService = game:GetService("RunService")
+        local UserInputService = game:GetService("UserInputService")
+
+        local targetPart = nil
+        local fixedPart = nil
+
+        local highlight = Instance.new("Highlight")
+        highlight.FillTransparency = 0.5
+        highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+
+        local ScreenGui = Instance.new("ScreenGui")
+        ScreenGui.Name = "MobileFixerUI"
+        ScreenGui.ResetOnSpawn = false
+        ScreenGui.Parent = game:GetService("CoreGui")
+
+        local MainFrame = Instance.new("Frame")
+        MainFrame.Size = UDim2.new(0, 180, 0, 160)
+        MainFrame.Position = UDim2.new(0.7, 0, 0.4, 0)
+        MainFrame.BackgroundTransparency = 1
+        MainFrame.Parent = ScreenGui
+        MainFrame.Visible = false
+
+        local ToggleButton = Instance.new("TextButton")
+        ToggleButton.Size = UDim2.new(0, 80, 0, 40)
+        ToggleButton.Position = UDim2.new(0.05, 0, 0.4, 0)
+        ToggleButton.Text = "MENU"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        ToggleButton.Font = Enum.Font.GothamBold
+        ToggleButton.Parent = ScreenGui
+        local CornerT = Instance.new("UICorner")
+        CornerT.Parent = ToggleButton
+
+        local FixButton = Instance.new("TextButton")
+        FixButton.Size = UDim2.new(1, 0, 0.45, 0)
+        FixButton.Position = UDim2.new(0, 0, 0, 0)
+        FixButton.Text = "Fix Held Object"
+        FixButton.BackgroundColor3 = Color3.fromRGB(0, 180, 0)
+        FixButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        FixButton.Font = Enum.Font.GothamBold
+        FixButton.Parent = MainFrame
+        local Corner1 = Instance.new("UICorner")
+        Corner1.Parent = FixButton
+
+        local UnfixButton = Instance.new("TextButton")
+        UnfixButton.Size = UDim2.new(1, 0, 0.45, 0)
+        UnfixButton.Position = UDim2.new(0, 0, 0.55, 0)
+        UnfixButton.Text = "Unfix"
+        UnfixButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+        UnfixButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        UnfixButton.Font = Enum.Font.GothamBold
+        UnfixButton.Parent = MainFrame
+        local Corner2 = Instance.new("UICorner")
+        Corner2.Parent = UnfixButton
+
+        ToggleButton.MouseButton1Click:Connect(function()
+            MainFrame.Visible = not MainFrame.Visible
+            if MainFrame.Visible then
+                ToggleButton.Text = "CLOSE"
+                ToggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+            else
+                ToggleButton.Text = "MENU"
+                ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            end
+        end)
+
+        local dragging, dragStart, startPos
+        MainFrame.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = true
+                dragStart = input.Position
+                startPos = MainFrame.Position
+            end
+        end)
+
+        UserInputService.InputChanged:Connect(function(input)
+            if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                local delta = input.Position - dragStart
+                MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            end
+        end)
+
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = false
+            end
+        end)
+
+        RunService.RenderStepped:Connect(function()
+            local viewportCenter = Camera.ViewportSize / 2
+            local unitRay = Camera:ViewportPointToRay(viewportCenter.X, viewportCenter.Y)
+            local raycastParams = RaycastParams.new()
+            raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+            raycastParams.FilterDescendantsInstances = {Player.Character}
+
+            local result = workspace:Raycast(unitRay.Origin, unitRay.Direction * 500, raycastParams)
+
+            if result and result.Instance:IsA("BasePart") then
+                local obj = result.Instance
+                if obj.Size.X < 100 and obj.Size.Z < 100 and obj ~= fixedPart then
+                    targetPart = obj
+                    highlight.Adornee = targetPart
+                    highlight.Parent = targetPart
+                    highlight.FillColor = (targetPart.Anchored) and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(255, 255, 0)
+                end
+            else
+                if not fixedPart then
+                    highlight.Parent = nil
+                    targetPart = nil
+                end
+            end
+        end)
+
+        FixButton.MouseButton1Click:Connect(function()
+            if targetPart then
+                targetPart.Anchored = true
+                fixedPart = targetPart
+                highlight.FillColor = Color3.fromRGB(0, 255, 255)
+            end
+        end)
+
+        UnfixButton.MouseButton1Click:Connect(function()
+            if fixedPart then
+                fixedPart.Anchored = false
+                fixedPart = nil
+                highlight.Parent = nil
+                targetPart = nil
+            end
+        end)
+        
+        OrionLib:MakeNotification({
+            Name = "Fixed GUI",
+            Content = "Started (Press MENU button to show)",
+            Time = 3
+        })
+    end
+})
+
+local UtilityTab = Window:MakeTab({
+    Name = "Utilities",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+UtilityTab:AddSection({ Name = "Movement" })
+UtilityTab:AddToggle({ Name = "Infinite Jump", Default = false, Callback = toggleInfiniteJump })
+UtilityTab:AddToggle({ Name = "Noclip", Default = false, Callback = toggleNoclip })
+UtilityTab:AddToggle({ Name = "TPWalk", Default = false, Callback = toggleTPWalk })
+UtilityTab:AddSlider({ Name = "TPWalk Speed", Min = 16, Max = UtilityConfig.TPWalkSpeedMax, Default = UtilityConfig.TPWalkSpeed, Color = Theme.SliderColor, Increment = 5, ValueName = "speed", Callback = function(v) UtilityConfig.TPWalkSpeed = v; if UtilityConfig.TPWalk then toggleTPWalk(false); task.wait(0.1); toggleTPWalk(true) end end })
+
+UtilityTab:AddSection({ Name = "Visual" })
+UtilityTab:AddToggle({ Name = "ESP", Default = false, Callback = toggleESP })
+UtilityTab:AddSlider({ Name = "FOV", Min = UtilityConfig.MinFOV, Max = UtilityConfig.MaxFOV, Default = UtilityConfig.FOV, Color = Theme.SliderColor, Increment = 1, ValueName = "degrees", Callback = function(v) UtilityConfig.FOV = v; if Camera then Camera.FieldOfView = v end end })
+UtilityTab:AddButton({ Name = "Reset FOV", Callback = function() if Camera then Camera.FieldOfView = UtilityConfig.OriginalFOV; UtilityConfig.FOV = UtilityConfig.OriginalFOV end end })
+
+UtilityTab:AddSection({ Name = "Info" })
+UtilityTab:AddLabel("Player: " .. LocalPlayer.Name)
+UtilityTab:AddLabel("Supported Objects: " .. #ObjectIDConfig.AvailableObjects .. " types")
+UtilityTab:AddLabel("FOV: " .. UtilityConfig.FOV .. " degrees")
+
+UtilityTab:AddSection({ Name = "Control" })
+UtilityTab:AddButton({ Name = "Stop All Features", Callback = function()
+    if FeatherConfig.Enabled then toggleFeather(false) end
+    if MagicCircleConfig.Enabled then toggleMagicCircle(false) end
+    if HeartConfig.Enabled then toggleHeart(false) end
+    if BigHeartConfig.Enabled then toggleBigHeart(false) end
+    if StarOfDavidConfig.Enabled then toggleStarOfDavid(false) end
+    if StarConfig.Enabled then toggleStar(false) end
+    if Star2Config.Enabled then toggleStar2(false) end
+    if SphereConfig.Enabled then toggleSphere(false) end
+    if FerrisWheelConfig.Enabled then toggleFerrisWheel(false) end
+    if AnimN1Config.Enabled then toggleAnimN1(false) end
+    if AnimN2Config.Enabled then toggleAnimN2(false) end
+    if AnimN3Config.Enabled then toggleAnimN3(false) end
+    if UtilityConfig.TPWalk then toggleTPWalk(false) end
+    if UtilityConfig.Noclip then toggleNoclip(false) end
+    if UtilityConfig.ESP then toggleESP(false) end
+    if Camera then Camera.FieldOfView = UtilityConfig.OriginalFOV; UtilityConfig.FOV = UtilityConfig.OriginalFOV end
+    OrionLib:MakeNotification({ Name = "All Features Stopped", Content = "All features disabled", Time = 3 })
+end })
+
+local ScriptHubTab = Window:MakeTab({
+    Name = "Script Hub",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+ScriptHubTab:AddSection({ Name = "External Script Loader" })
+
+ScriptHubTab:AddButton({
+    Name = "Shader",
+    Callback = function()
+        executeScript("https://rawscripts.net/raw/Universal-Script-Shader-77482", "Shader")
+    end
+})
+
+ScriptHubTab:AddButton({
+    Name = "Sky Changer",
+    Callback = function()
+        executeScript("https://rawscripts.net/raw/Universal-Script-SkyBoxinjectHUB-80671", "Sky Changer")
+    end
+})
+
+ScriptHubTab:AddButton({
+    Name = "Tetris",
+    Callback = function()
+        executeScript("https://rawscripts.net/raw/Universal-Script-RTetris-76191", "Tetris")
+    end
+})
+
+ScriptHubTab:AddButton({
+    Name = "Crosske V-Style Flight",
+    Callback = function()
+        executeScript("https://rawscripts.net/raw/Universal-Script-VFly-gui-and-noclip-78112", "Crosske V-Style Flight")
+    end
+})
+
+ScriptHubTab:AddButton({
+    Name = "Hokuto Hub",
+    Callback = function()
+
+        local Players = game:GetService("Players")
+        local RunService = game:GetService("RunService")
+        local UserInputService = game:GetService("UserInputService")
+        local Workspace = game:GetService("Workspace")
+        local LocalPlayer = Players.LocalPlayer
+        local Camera = Workspace.CurrentCamera
+
+        local settings = {
+            toggleKey = Enum.KeyCode.RightShift,
+            guiColor = Color3.fromRGB(255, 105, 180),
+            textColor = Color3.fromRGB(255, 255, 255),
+            backgroundColor = Color3.fromRGB(20, 20, 20),
+            lineColor = Color3.fromRGB(255, 165, 0),
+            transparency = 0.1
+        }
+
+        local allGUIEnabled = false
+        local espEnabled = false
+
+        local mainContainer = nil
+        local espGUI = nil
+        local systemGUI = nil
+        local seisalogGUI = nil
+
+        local guiConnections = {}
+
+        local playerESP = {}
+        local playerLines = {}
+
+        local drawings = {}
+        local function createDrawing(type)
+            local drawing = Drawing.new(type)
+            table.insert(drawings, drawing)
+            return drawing
+        end
+
+        local function clearAllDrawings()
+            for _, drawing in ipairs(drawings) do
+                if drawing and typeof(drawing) == "Drawing" then
+                    pcall(function() drawing:Remove() end)
+                end
+            end
+            drawings = {}
+        end
+
+        local function createMainContainer()
+            if mainContainer then
+                mainContainer:Destroy()
+            end
+            
+            mainContainer = Instance.new("ScreenGui")
+            mainContainer.Name = "HokutoHubContainer"
+            mainContainer.DisplayOrder = 1000
+            mainContainer.ResetOnSpawn = false
+            mainContainer.Parent = game:GetService("CoreGui") or LocalPlayer:WaitForChild("PlayerGui")
+        end
+
+        local function makeDraggable(frame, titleBar)
+            if guiConnections[frame] then
+                for _, conn in ipairs(guiConnections[frame]) do
+                    conn:Disconnect()
+                end
+            end
+            guiConnections[frame] = {}
+            
+            local dragging = false
+            local dragInput
+            local dragStart
+            local startPos
+            
+            local function update(input)
+                if not frame or not frame.Parent then return end
+                
+                local delta = input.Position - dragStart
+                local newX = math.clamp(startPos.X + delta.X, 0, Camera.ViewportSize.X - frame.AbsoluteSize.X)
+                local newY = math.clamp(startPos.Y + delta.Y, 0, Camera.ViewportSize.Y - frame.AbsoluteSize.Y)
+                
+                frame.Position = UDim2.new(0, newX, 0, newY)
+            end
+            
+            local conn1 = titleBar.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    dragging = true
+                    dragStart = input.Position
+                    startPos = Vector2.new(frame.Position.X.Offset, frame.Position.Y.Offset)
+                    
+                    table.insert(guiConnections[frame], input.Changed:Connect(function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                            dragging = false
+                        end
+                    end))
+                end
+            end)
+            
+            table.insert(guiConnections[frame], conn1)
+            
+            local conn2 = titleBar.InputChanged:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                    dragInput = input
+                end
+            end)
+            
+            table.insert(guiConnections[frame], conn2)
+            
+            local conn3 = UserInputService.InputChanged:Connect(function(input)
+                if dragging and (input == dragInput or input.UserInputType == Enum.UserInputType.Touch) then
+                    update(input)
+                end
+            end)
+            
+            table.insert(guiConnections[frame], conn3)
+        end
+
+        local function createESPGUI()
+            if espGUI then espGUI:Destroy() end
+            
+            espGUI = Instance.new("Frame")
+            espGUI.Name = "ESPControl"
+            espGUI.Size = UDim2.new(0, 200, 0, 220)
+            espGUI.Position = UDim2.new(0, 10, 0, 10)
+            espGUI.BackgroundColor3 = settings.backgroundColor
+            espGUI.BackgroundTransparency = settings.transparency
+            espGUI.BorderSizePixel = 2
+            espGUI.BorderColor3 = settings.guiColor
+            espGUI.Visible = false
+            espGUI.Parent = mainContainer
+            
+            local titleBar = Instance.new("TextButton")
+            titleBar.Name = "TitleBar"
+            titleBar.Text = "ESP Control"
+            titleBar.Size = UDim2.new(1, 0, 0, 25)
+            titleBar.BackgroundColor3 = settings.guiColor
+            titleBar.BackgroundTransparency = 0.2
+            titleBar.TextColor3 = settings.textColor
+            titleBar.Font = Enum.Font.GothamBold
+            titleBar.TextSize = 14
+            titleBar.AutoButtonColor = false
+            titleBar.Parent = espGUI
+            
+            local espButton = Instance.new("TextButton")
+            espButton.Name = "ESPButton"
+            espButton.Text = "ESP: OFF"
+            espButton.Size = UDim2.new(0.9, 0, 0, 25)
+            espButton.Position = UDim2.new(0.05, 0, 0, 30)
+            espButton.BackgroundColor3 = settings.guiColor
+            espButton.BackgroundTransparency = 0.3
+            espButton.TextColor3 = settings.textColor
+            espButton.Font = Enum.Font.GothamBold
+            espButton.TextSize = 12
+            espButton.Parent = espGUI
+            
+            espButton.MouseButton1Click:Connect(function()
+                espEnabled = not espEnabled
+                espButton.Text = "ESP: " .. (espEnabled and "ON" or "OFF")
+                espButton.BackgroundTransparency = espEnabled and 0.1 or 0.3
+            end)
+            
+            local aimbotButton = Instance.new("TextButton")
+            aimbotButton.Name = "AimbotButton"
+            aimbotButton.Text = "Aimbot: OFF"
+            aimbotButton.Size = UDim2.new(0.9, 0, 0, 25)
+            aimbotButton.Position = UDim2.new(0.05, 0, 0, 60)
+            aimbotButton.BackgroundColor3 = settings.guiColor
+            aimbotButton.BackgroundTransparency = 0.3
+            aimbotButton.TextColor3 = settings.textColor
+            aimbotButton.Font = Enum.Font.GothamBold
+            aimbotButton.TextSize = 12
+            aimbotButton.Parent = espGUI
+            
+            local aimrookButton = Instance.new("TextButton")
+            aimrookButton.Name = "AimrookButton"
+            aimrookButton.Text = "Aimrook: OFF"
+            aimrookButton.Size = UDim2.new(0.9, 0, 0, 25)
+            aimrookButton.Position = UDim2.new(0.05, 0, 0, 90)
+            aimrookButton.BackgroundColor3 = settings.guiColor
+            aimrookButton.BackgroundTransparency = 0.3
+            aimrookButton.TextColor3 = settings.textColor
+            aimrookButton.Font = Enum.Font.GothamBold
+            aimrookButton.TextSize = 12
+            aimrookButton.Parent = espGUI
+            
+            local targetSelectButton = Instance.new("TextButton")
+            targetSelectButton.Name = "TargetSelectButton"
+            targetSelectButton.Text = "Select Target: NONE"
+            targetSelectButton.Size = UDim2.new(0.9, 0, 0, 25)
+            targetSelectButton.Position = UDim2.new(0.05, 0, 0, 120)
+            targetSelectButton.BackgroundColor3 = settings.guiColor
+            targetSelectButton.BackgroundTransparency = 0.3
+            targetSelectButton.TextColor3 = settings.textColor
+            targetSelectButton.Font = Enum.Font.GothamBold
+            targetSelectButton.TextSize = 12
+            targetSelectButton.Parent = espGUI
+            
+            local clearTargetButton = Instance.new("TextButton")
+            clearTargetButton.Name = "ClearTargetButton"
+            clearTargetButton.Text = "Clear Target"
+            clearTargetButton.Size = UDim2.new(0.9, 0, 0, 25)
+            clearTargetButton.Position = UDim2.new(0.05, 0, 0, 150)
+            clearTargetButton.BackgroundColor3 = settings.guiColor
+            clearTargetButton.BackgroundTransparency = 0.3
+            clearTargetButton.TextColor3 = settings.textColor
+            clearTargetButton.Font = Enum.Font.GothamBold
+            clearTargetButton.TextSize = 12
+            clearTargetButton.Parent = espGUI
+            
+            local trackingModeButton = Instance.new("TextButton")
+            trackingModeButton.Name = "TrackingModeButton"
+            trackingModeButton.Text = "Track Mode: CAMERA"
+            trackingModeButton.Size = UDim2.new(0.9, 0, 0, 25)
+            trackingModeButton.Position = UDim2.new(0.05, 0, 0, 180)
+            trackingModeButton.BackgroundColor3 = settings.guiColor
+            trackingModeButton.BackgroundTransparency = 0.3
+            trackingModeButton.TextColor3 = settings.textColor
+            trackingModeButton.Font = Enum.Font.GothamBold
+            trackingModeButton.TextSize = 12
+            trackingModeButton.Parent = espGUI
+            
+            makeDraggable(espGUI, titleBar)
+            
+            return {
+                frame = espGUI,
+                espButton = espButton,
+                aimbotButton = aimbotButton,
+                aimrookButton = aimrookButton,
+                targetSelectButton = targetSelectButton,
+                clearTargetButton = clearTargetButton,
+                trackingModeButton = trackingModeButton
+            }
+        end
+
+        local function createSystemGUI()
+            if systemGUI then systemGUI:Destroy() end
+            
+            systemGUI = Instance.new("Frame")
+            systemGUI.Name = "SystemInfo"
+            systemGUI.Size = UDim2.new(0, 180, 0, 200)
+            systemGUI.Position = UDim2.new(0, 220, 0, 10)
+            systemGUI.BackgroundColor3 = settings.backgroundColor
+            systemGUI.BackgroundTransparency = settings.transparency
+            systemGUI.BorderSizePixel = 2
+            systemGUI.BorderColor3 = settings.guiColor
+            systemGUI.Visible = false
+            systemGUI.Parent = mainContainer
+            
+            local titleBar = Instance.new("TextButton")
+            titleBar.Name = "TitleBar"
+            titleBar.Text = "System Info"
+            titleBar.Size = UDim2.new(1, 0, 0, 25)
+            titleBar.BackgroundColor3 = settings.guiColor
+            titleBar.BackgroundTransparency = 0.2
+            titleBar.TextColor3 = settings.textColor
+            titleBar.Font = Enum.Font.GothamBold
+            titleBar.TextSize = 14
+            titleBar.AutoButtonColor = false
+            titleBar.Parent = systemGUI
+            
+            local infoLabels = {}
+            local labelData = {
+                {"FPS", 30},
+                {"CPU", 55},
+                {"GPU", 80},
+                {"PING", 105},
+                {"AIMBOT", 130},
+                {"AIMROOK", 155},
+                {"TARGET", 180},
+                {"DISTANCE", 205},
+                {"MODE", 230}
+            }
+            
+            for _, data in ipairs(labelData) do
+                local name, yPos = data[1], data[2]
+                
+                local frame = Instance.new("Frame")
+                frame.Size = UDim2.new(1, -10, 0, 20)
+                frame.Position = UDim2.new(0, 5, 0, yPos)
+                frame.BackgroundTransparency = 1
+                frame.Parent = systemGUI
+                
+                local label = Instance.new("TextLabel")
+                label.Text = name .. ":"
+                label.Size = UDim2.new(0.5, 0, 1, 0)
+                label.TextColor3 = settings.textColor
+                label.Font = Enum.Font.Gotham
+                label.TextSize = 12
+                label.TextXAlignment = Enum.TextXAlignment.Left
+                label.BackgroundTransparency = 1
+                label.Parent = frame
+                
+                local value = Instance.new("TextLabel")
+                value.Name = name .. "Value"
+                value.Text = "0"
+                value.Size = UDim2.new(0.5, 0, 1, 0)
+                value.Position = UDim2.new(0.5, 0, 0, 0)
+                value.TextColor3 = settings.guiColor
+                value.Font = Enum.Font.GothamBold
+                value.TextSize = 12
+                value.TextXAlignment = Enum.TextXAlignment.Right
+                value.BackgroundTransparency = 1
+                value.Parent = frame
+                
+                infoLabels[name:lower()] = value
+            end
+            
+            makeDraggable(systemGUI, titleBar)
+            
+            return {frame = systemGUI, labels = infoLabels}
+        end
+
+        local function createSeisaLogGUI()
+            if seisalogGUI then seisalogGUI:Destroy() end
+            
+            seisalogGUI = Instance.new("Frame")
+            seisalogGUI.Name = "SeisaLog"
+            seisalogGUI.Size = UDim2.new(0, 350, 0, 200)
+            seisalogGUI.Position = UDim2.new(1, -360, 0, 10)
+            seisalogGUI.BackgroundColor3 = settings.backgroundColor
+            seisalogGUI.BackgroundTransparency = settings.transparency
+            seisalogGUI.BorderSizePixel = 2
+            seisalogGUI.BorderColor3 = settings.guiColor
+            seisalogGUI.Visible = false
+            seisalogGUI.Parent = mainContainer
+            
+            local titleBar = Instance.new("TextButton")
+            titleBar.Name = "TitleBar"
+            titleBar.Text = "Seisa Log [SYSTEM]"
+            titleBar.Size = UDim2.new(1, 0, 0, 25)
+            titleBar.BackgroundColor3 = settings.guiColor
+            titleBar.BackgroundTransparency = 0.2
+            titleBar.TextColor3 = settings.textColor
+            titleBar.Font = Enum.Font.GothamBold
+            titleBar.TextSize = 14
+            titleBar.AutoButtonColor = false
+            titleBar.Parent = seisalogGUI
+            
+            local logScrollingFrame = Instance.new("ScrollingFrame")
+            logScrollingFrame.Name = "LogContent"
+            logScrollingFrame.Size = UDim2.new(1, -10, 1, -35)
+            logScrollingFrame.Position = UDim2.new(0, 5, 0, 30)
+            logScrollingFrame.BackgroundTransparency = 1
+            logScrollingFrame.BorderSizePixel = 0
+            logScrollingFrame.ScrollBarThickness = 5
+            logScrollingFrame.ScrollBarImageColor3 = settings.guiColor
+            logScrollingFrame.VerticalScrollBarInset = Enum.ScrollBarInset.Always
+            logScrollingFrame.Parent = seisalogGUI
+            
+            local logContainer = Instance.new("Frame")
+            logContainer.Name = "LogContainer"
+            logContainer.Size = UDim2.new(1, 0, 0, 0)
+            logContainer.BackgroundTransparency = 1
+            logContainer.Parent = logScrollingFrame
+            
+            local autoScroll = true
+            local lastScrollTime = 0
+            
+            local function autoScrollToBottom()
+                if autoScroll and logScrollingFrame then
+                    logScrollingFrame.CanvasPosition = Vector2.new(0, logContainer.AbsoluteSize.Y - logScrollingFrame.AbsoluteSize.Y)
+                end
+            end
+            
+            logScrollingFrame:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
+                local maxScroll = logContainer.AbsoluteSize.Y - logScrollingFrame.AbsoluteSize.Y
+                local currentPos = logScrollingFrame.CanvasPosition.Y
+                
+                if tick() - lastScrollTime > 2 then
+                    autoScroll = (currentPos >= maxScroll - 10)
+                end
+            end)
+            
+            logScrollingFrame.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or 
+                   input.UserInputType == Enum.UserInputType.Touch then
+                    lastScrollTime = tick()
+                    autoScroll = false
+                end
+            end)
+            
+            makeDraggable(seisalogGUI, titleBar)
+            
+            return {frame = seisalogGUI, container = logContainer, scroll = logScrollingFrame, autoScroll = autoScroll}
+        end
+
+        local systemLogs = {
+            "System initialization complete...",
+            "ESP module loaded successfully...",
+            "Aimbot system calibrated (infinite range)...",
+            "Aimrook targeting ready...",
+            "Player database synchronized...",
+            "Network connection stable...",
+            "Performance optimization active...",
+            "Memory allocation optimal...",
+            "Security protocols enabled...",
+            "Real-time tracking active...",
+            "Target acquisition system ready...",
+            "Distance calculation online...",
+            "Visual enhancements applied...",
+            "System resources monitored...",
+            "Connection latency minimal...",
+            "Frame rate stabilized...",
+            "Input processing optimized...",
+            "Rendering pipeline efficient...",
+            "Data stream continuous...",
+            "System integrity verified..."
+        }
+
+        local function addSeisaLogMessage(logHandles, message)
+            if not logHandles or not logHandles.container then return end
+            
+            local timestamp = os.date("[%H:%M:%S]")
+            local fullMessage = timestamp .. " " .. message
+            
+            local logEntry = Instance.new("TextLabel")
+            logEntry.Text = fullMessage
+            logEntry.Size = UDim2.new(1, 0, 0, 18)
+            logEntry.Position = UDim2.new(0, 0, 0, logHandles.container.AbsoluteSize.Y)
+            logEntry.BackgroundTransparency = 1
+            logEntry.TextColor3 = settings.textColor
+            logEntry.Font = Enum.Font.Code
+            logEntry.TextSize = 11
+            logEntry.TextXAlignment = Enum.TextXAlignment.Left
+            logEntry.TextYAlignment = Enum.TextYAlignment.Top
+            logEntry.TextWrapped = true
+            logEntry.Parent = logHandles.container
+            
+            logHandles.container.Size = UDim2.new(1, 0, 0, logHandles.container.AbsoluteSize.Y + 20)
+            logHandles.scroll.CanvasSize = UDim2.new(0, 0, 0, logHandles.container.AbsoluteSize.Y)
+            
+            local children = logHandles.container:GetChildren()
+            if #children > 20 then
+                for i = 1, 5 do
+                    if children[i] and children[i]:IsA("TextLabel") then
+                        children[i]:Destroy()
+                    end
+                end
+            end
+            
+            if logHandles.autoScroll then
+                task.wait(0.01)
+                logHandles.scroll.CanvasPosition = Vector2.new(0, logHandles.container.AbsoluteSize.Y)
+            end
+        end
+
+        local function createPlayerESP(player)
+            if player == LocalPlayer then return end
+            
+            if playerESP[player] then
+                for _, drawing in pairs(playerESP[player]) do
+                    if drawing then drawing:Remove() end
+                end
+            end
+            
+            if playerLines[player] then
+                playerLines[player]:Remove()
+            end
+            
+            local espData = {
+                nameLabel = createDrawing("Text"),
+                box = createDrawing("Square"),
+                healthBar = createDrawing("Line"),
+                healthBarBg = createDrawing("Line"),
+                distanceLabel = createDrawing("Text")
+            }
+            
+            local line = createDrawing("Line")
+            line.Color = settings.lineColor
+            line.Thickness = 1
+            line.Visible = false
+            playerLines[player] = line
+            
+            espData.nameLabel.Text = player.Name
+            espData.nameLabel.Color = settings.guiColor
+            espData.nameLabel.Size = 14
+            espData.nameLabel.Outline = true
+            espData.nameLabel.OutlineColor = Color3.new(0, 0, 0)
+            espData.nameLabel.Visible = false
+            espData.nameLabel.Font = Drawing.Fonts.UI
+            
+            espData.distanceLabel.Color = settings.guiColor
+            espData.distanceLabel.Size = 12
+            espData.distanceLabel.Outline = true
+            espData.distanceLabel.OutlineColor = Color3.new(0, 0, 0)
+            espData.distanceLabel.Visible = false
+            espData.distanceLabel.Font = Drawing.Fonts.UI
+            
+            espData.box.Color = settings.guiColor
+            espData.box.Thickness = 2
+            espData.box.Filled = false
+            espData.box.Visible = false
+            
+            espData.healthBar.Color = settings.guiColor
+            espData.healthBar.Thickness = 3
+            espData.healthBar.Visible = false
+            
+            espData.healthBarBg.Color = Color3.fromRGB(50, 50, 50)
+            espData.healthBarBg.Thickness = 3
+            espData.healthBarBg.Visible = false
+            
+            playerESP[player] = espData
+            
+            return espData
+        end
+
+        local function updatePlayerESP(player, espData)
+            local character = player.Character
+            if not character then 
+                for _, drawing in pairs(espData) do
+                    if drawing then drawing.Visible = false end
+                end
+                if playerLines[player] then
+                    playerLines[player].Visible = false
+                end
+                return false
+            end
+            
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            local humanoid = character:FindFirstChild("Humanoid")
+            
+            if not humanoidRootPart or not humanoid then 
+                for _, drawing in pairs(espData) do
+                    if drawing then drawing.Visible = false end
+                end
+                if playerLines[player] then
+                    playerLines[player].Visible = false
+                end
+                return false
+            end
+            
+            local position, onScreen = Camera:WorldToViewportPoint(humanoidRootPart.Position)
+            local distance = (humanoidRootPart.Position - Camera.CFrame.Position).Magnitude
+            
+            local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+            
+            local line = playerLines[player]
+            if line and espEnabled then
+                if onScreen then
+                    line.From = screenCenter
+                    line.To = Vector2.new(position.X, position.Y)
+                else
+                    local screenPos = Vector2.new(position.X, position.Y)
+                    local direction = (screenPos - screenCenter).Unit
+                    local screenEdge = screenCenter + (direction * 500)
+                    
+                    line.From = screenCenter
+                    line.To = screenEdge
+                end
+                line.Visible = true
+            elseif line then
+                line.Visible = false
+            end
+            
+            if onScreen then
+                local scale = math.clamp(1000 / distance, 0.5, 1.5)
+                
+                local head = character:FindFirstChild("Head")
+                local torso = character:FindFirstChild("UpperTorso") or character:FindFirstChild("Torso")
+                
+                if head and torso then
+                    local headPos = Camera:WorldToViewportPoint(head.Position)
+                    local torsoPos = Camera:WorldToViewportPoint(torso.Position)
+                    
+                    local playerHeight = math.abs(headPos.Y - torsoPos.Y) * 2.5
+                    local playerWidth = playerHeight * 0.5
+                    
+                    local boxX = position.X - (playerWidth / 2)
+                    local boxY = position.Y - (playerHeight / 2)
+                    
+                    espData.box.Size = Vector2.new(playerWidth, playerHeight)
+                    espData.box.Position = Vector2.new(boxX, boxY)
+                    espData.box.Visible = espEnabled
+                    
+                    espData.nameLabel.Position = Vector2.new(position.X, boxY - 20)
+                    espData.nameLabel.Text = player.Name
+                    espData.nameLabel.Visible = espEnabled
+                    
+                    espData.distanceLabel.Position = Vector2.new(position.X, boxY + playerHeight + 5)
+                    espData.distanceLabel.Text = math.floor(distance) .. "m"
+                    espData.distanceLabel.Visible = espEnabled
+                    
+                    local healthPercent = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1)
+                    local barHeight = playerHeight * 0.8
+                    local barX = boxX - 10
+                    local barYBottom = boxY + playerHeight
+                    local barYTop = barYBottom - barHeight
+                    local healthY = barYBottom - (barHeight * healthPercent)
+                    
+                    espData.healthBarBg.From = Vector2.new(barX, barYBottom)
+                    espData.healthBarBg.To = Vector2.new(barX, barYTop)
+                    espData.healthBarBg.Visible = espEnabled
+                    
+                    espData.healthBar.From = Vector2.new(barX, barYBottom)
+                    espData.healthBar.To = Vector2.new(barX, healthY)
+                    espData.healthBar.Visible = espEnabled
+                    
+                    return true
+                end
+            else
+                for name, drawing in pairs(espData) do
+                    if name ~= "distanceLabel" then
+                        drawing.Visible = false
+                    end
+                end
+                
+                if espEnabled then
+                    local screenPos = Vector2.new(position.X, position.Y)
+                    local direction = (screenPos - screenCenter).Unit
+                    local edgePos = screenCenter + (direction * 300)
+                    
+                    espData.distanceLabel.Position = edgePos
+                    espData.distanceLabel.Text = player.Name .. " [" .. math.floor(distance) .. "m]"
+                    espData.distanceLabel.Visible = true
+                else
+                    espData.distanceLabel.Visible = false
+                end
+            end
+            
+            return false
+        end
+
+        local function removePlayerESP(player)
+            if playerESP[player] then
+                for _, drawing in pairs(playerESP[player]) do
+                    if drawing then drawing:Remove() end
+                end
+                playerESP[player] = nil
+            end
+            
+            if playerLines[player] then
+                playerLines[player]:Remove()
+                playerLines[player] = nil
+            end
+        end
+
+        local function clearAllESP()
+            for player, _ in pairs(playerESP) do
+                removePlayerESP(player)
+            end
+            playerESP = {}
+            
+            for _, line in ipairs(playerLines) do
+                if line then line:Remove() end
+            end
+            playerLines = {}
+            
+            clearAllDrawings()
+        end
+
+        local function onPlayerAdded(player)
+            createPlayerESP(player)
+        end
+
+        local function onPlayerRemoving(player)
+            removePlayerESP(player)
+            if selectedTarget == player then
+                selectedTarget = nil
+                addSeisaLogMessage(seisaLogHandles, "Target player left server: " .. player.Name)
+            end
+        end
+
+        local lastUpdate = tick()
+        local frameCount = 0
+        local fps = 0
+        local lastPingCheck = tick()
+
+        local AimbotEnabled = false
+        local AimrookEnabled = false
+        local selectedTarget = nil
+        local autoTarget = nil
+        local trackingMode = "CAMERA"
+        local AimParts = {"Head", "HumanoidRootPart"}
+        local AimPartName = "Head"
+        local lastAimTime = 0
+        local aimCooldown = 0.016
+
+        local function updateSystemInfo(systemHandles, espHandles)
+            if not systemHandles or not systemHandles.labels then return end
+            
+            frameCount = frameCount + 1
+            local currentTime = tick()
+            local elapsed = currentTime - lastUpdate
+            
+            if elapsed >= 0.2 then
+                fps = math.floor(frameCount / elapsed)
+                frameCount = 0
+                lastUpdate = currentTime
+            end
+            
+            systemHandles.labels.fps.Text = tostring(fps)
+            systemHandles.labels.cpu.Text = math.random(5, 85) .. "%"
+            systemHandles.labels.gpu.Text = math.random(10, 95) .. "%"
+            
+            if currentTime - lastPingCheck >= 1 then
+                systemHandles.labels.ping.Text = math.random(15, 250) .. "ms"
+                lastPingCheck = currentTime
+            end
+            
+            systemHandles.labels.aimbot.Text = AimbotEnabled and "ON" or "OFF"
+            systemHandles.labels.aimrook.Text = AimrookEnabled and "ON" or "OFF"
+            systemHandles.labels.target.Text = selectedTarget and selectedTarget.Name or (autoTarget and autoTarget.Name or "NONE")
+            
+            local targetForDistance = selectedTarget or autoTarget
+            if targetForDistance and targetForDistance.Character and targetForDistance.Character:FindFirstChild("HumanoidRootPart") then
+                local localChar = LocalPlayer.Character
+                if localChar and localChar:FindFirstChild("HumanoidRootPart") then
+                    local distance = (targetForDistance.Character.HumanoidRootPart.Position - localChar.HumanoidRootPart.Position).Magnitude
+                    systemHandles.labels.distance.Text = math.floor(distance) .. "m"
+                else
+                    systemHandles.labels.distance.Text = "0m"
+                end
+            else
+                systemHandles.labels.distance.Text = "0m"
+            end
+            
+            systemHandles.labels.mode.Text = trackingMode
+            
+            if espHandles then
+                if espHandles.aimbotButton then
+                    espHandles.aimbotButton.Text = "Aimbot: " .. (AimbotEnabled and "ON" or "OFF")
+                    espHandles.aimbotButton.BackgroundTransparency = AimbotEnabled and 0.1 or 0.3
+                end
+                
+                if espHandles.aimrookButton then
+                    espHandles.aimrookButton.Text = "Aimrook: " .. (AimrookEnabled and "ON" or "OFF")
+                    espHandles.aimrookButton.BackgroundTransparency = AimrookEnabled and 0.1 or 0.3
+                end
+                
+                if espHandles.targetSelectButton then
+                    espHandles.targetSelectButton.Text = "Target: " .. (selectedTarget and selectedTarget.Name or "NONE")
+                end
+                
+                if espHandles.trackingModeButton then
+                    espHandles.trackingModeButton.Text = "Track: " .. trackingMode
+                end
+            end
+        end
+
+        local function createPlayerSelectionMenu()
+            local existingMenu = mainContainer:FindFirstChild("PlayerSelectionMenu")
+            if existingMenu then
+                existingMenu:Destroy()
+            end
+            
+            local selectionGUI = Instance.new("Frame")
+            selectionGUI.Name = "PlayerSelectionMenu"
+            selectionGUI.Size = UDim2.new(0, 250, 0, 300)
+            selectionGUI.Position = UDim2.new(0.5, -125, 0.5, -150)
+            selectionGUI.BackgroundColor3 = settings.backgroundColor
+            selectionGUI.BackgroundTransparency = 0.05
+            selectionGUI.BorderSizePixel = 2
+            selectionGUI.BorderColor3 = settings.guiColor
+            selectionGUI.ZIndex = 1000
+            selectionGUI.Parent = mainContainer
+            
+            local overlay = Instance.new("Frame")
+            overlay.Name = "Overlay"
+            overlay.Size = UDim2.new(1, 0, 1, 0)
+            overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            overlay.BackgroundTransparency = 0.5
+            overlay.ZIndex = 999
+            overlay.Parent = selectionGUI
+            
+            local menuContainer = Instance.new("Frame")
+            menuContainer.Name = "MenuContainer"
+            menuContainer.Size = UDim2.new(1, 0, 1, 0)
+            menuContainer.BackgroundTransparency = 1
+            menuContainer.ZIndex = 1001
+            menuContainer.Parent = selectionGUI
+            
+            local titleBar = Instance.new("TextButton")
+            titleBar.Text = "Select Target Player"
+            titleBar.Size = UDim2.new(1, 0, 0, 30)
+            titleBar.BackgroundColor3 = settings.guiColor
+            titleBar.BackgroundTransparency = 0.2
+            titleBar.TextColor3 = settings.textColor
+            titleBar.Font = Enum.Font.GothamBold
+            titleBar.TextSize = 14
+            titleBar.AutoButtonColor = false
+            titleBar.ZIndex = 1002
+            titleBar.Parent = menuContainer
+            
+            local closeButton = Instance.new("TextButton")
+            closeButton.Text = "X"
+            closeButton.Size = UDim2.new(0, 30, 0, 30)
+            closeButton.Position = UDim2.new(1, -30, 0, 0)
+            closeButton.BackgroundColor3 = settings.guiColor
+            closeButton.TextColor3 = settings.textColor
+            closeButton.Font = Enum.Font.GothamBold
+            closeButton.TextSize = 14
+            closeButton.ZIndex = 1002
+            closeButton.Parent = menuContainer
+            
+            closeButton.MouseButton1Click:Connect(function()
+                selectionGUI:Destroy()
+            end)
+            
+            local scrollFrame = Instance.new("ScrollingFrame")
+            scrollFrame.Size = UDim2.new(1, -10, 1, -40)
+            scrollFrame.Position = UDim2.new(0, 5, 0, 35)
+            scrollFrame.BackgroundTransparency = 1
+            scrollFrame.BorderSizePixel = 0
+            scrollFrame.ScrollBarThickness = 5
+            scrollFrame.ScrollBarImageColor3 = settings.guiColor
+            scrollFrame.ZIndex = 1002
+            scrollFrame.Parent = menuContainer
+            
+            local yOffset = 0
+            local playerCount = 0
+            
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= LocalPlayer then
+                    playerCount = playerCount + 1
+                    
+                    local playerButton = Instance.new("TextButton")
+                    playerButton.Text = player.Name
+                    playerButton.Size = UDim2.new(1, -10, 0, 30)
+                    playerButton.Position = UDim2.new(0, 5, 0, yOffset)
+                    playerButton.BackgroundColor3 = player == selectedTarget and settings.guiColor or Color3.fromRGB(50, 50, 50)
+                    playerButton.BackgroundTransparency = player == selectedTarget and 0.2 or 0.5
+                    playerButton.TextColor3 = settings.textColor
+                    playerButton.Font = Enum.Font.Gotham
+                    playerButton.TextSize = 12
+                    playerButton.ZIndex = 1002
+                    playerButton.Parent = scrollFrame
+                    
+                    playerButton.MouseButton1Click:Connect(function()
+                        selectedTarget = player
+                        addSeisaLogMessage(seisaLogHandles, "Target selected: " .. player.Name)
+                        selectionGUI:Destroy()
+                    end)
+                    
+                    yOffset = yOffset + 35
+                end
+            end
+            
+            if playerCount == 0 then
+                local noPlayersLabel = Instance.new("TextLabel")
+                noPlayersLabel.Text = "No players available"
+                noPlayersLabel.Size = UDim2.new(1, -10, 0, 30)
+                noPlayersLabel.Position = UDim2.new(0, 5, 0, 0)
+                noPlayersLabel.BackgroundTransparency = 1
+                noPlayersLabel.TextColor3 = settings.textColor
+                noPlayersLabel.Font = Enum.Font.Gotham
+                noPlayersLabel.TextSize = 12
+                noPlayersLabel.ZIndex = 1002
+                noPlayersLabel.Parent = scrollFrame
+                yOffset = yOffset + 35
+            end
+            
+            scrollFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
+            
+            overlay.MouseButton1Click:Connect(function()
+                selectionGUI:Destroy()
+            end)
+            
+            return selectionGUI
+        end
+
+        local function adjustCharacterOrientation(targetPosition)
+            local localChar = LocalPlayer.Character
+            if not localChar then return end
+            
+            local humanoidRootPart = localChar:FindFirstChild("HumanoidRootPart")
+            local humanoid = localChar:FindFirstChild("Humanoid")
+            
+            if not humanoidRootPart or not humanoid then return end
+            
+            if trackingMode == "CHARACTER" then
+                local direction = (targetPosition - humanoidRootPart.Position).Unit
+                local lookVector = Vector3.new(direction.X, 0, direction.Z)
+                
+                humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position, 
+                    humanoidRootPart.Position + lookVector)
+            end
+        end
+
+        local function updateAimbot(deltaTime)
+            if not AimbotEnabled then 
+                autoTarget = nil
+                return 
+            end
+            
+            local currentTime = tick()
+            if currentTime - lastAimTime < aimCooldown then
+                return
+            end
+            
+            local bestPlayer, bestPart, closestDistance = nil, nil, math.huge
+            local localChar = LocalPlayer.Character
+            local localRoot = localChar and localChar:FindFirstChild("HumanoidRootPart")
+            
+            if not localRoot then return end
+
+            for _, plr in pairs(Players:GetPlayers()) do
+                if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+                    local part = plr.Character:FindFirstChild(AimPartName)
+                    if part then
+                        local targetPos = part.Position
+                        local distance = (localRoot.Position - targetPos).Magnitude
+                        
+                        if distance < closestDistance then
+                            closestDistance = distance
+                            bestPlayer = plr
+                            bestPart = part
+                        end
+                    end
+                end
+            end
+
+            if bestPlayer and bestPart then
+                autoTarget = bestPlayer
+                local targetPos = bestPart.Position
+                
+                local currentCFrame = Camera.CFrame
+                local targetCFrame = CFrame.lookAt(currentCFrame.Position, targetPos)
+                local smoothedCFrame = currentCFrame:Lerp(targetCFrame, 0.95)
+                Camera.CFrame = smoothedCFrame
+                
+                adjustCharacterOrientation(targetPos)
+                
+                lastAimTime = currentTime
+            else
+                autoTarget = nil
+            end
+        end
+
+        local function updateAimrook(deltaTime)
+            if not AimrookEnabled or not selectedTarget then 
+                return 
+            end
+            
+            local currentTime = tick()
+            if currentTime - lastAimTime < aimCooldown then
+                return
+            end
+            
+            if not selectedTarget.Parent then
+                addSeisaLogMessage(seisaLogHandles, "Target left server: " .. selectedTarget.Name)
+                selectedTarget = nil
+                return
+            end
+            
+            local targetChar = selectedTarget.Character
+            local localChar = LocalPlayer.Character
+            
+            if not targetChar or not localChar then
+                return
+            end
+            
+            local targetRoot = targetChar:FindFirstChild("HumanoidRootPart")
+            local targetHead = targetChar:FindFirstChild("Head")
+            local localRoot = localChar:FindFirstChild("HumanoidRootPart")
+            
+            if not targetRoot or not localRoot then 
+                return
+            end
+            
+            local targetPart = targetHead or targetRoot
+            local targetPos = targetPart.Position
+            
+            local currentCFrame = Camera.CFrame
+            local currentPos = currentCFrame.Position
+            local targetDirection = (targetPos - currentPos).Unit
+            
+            local lookCFrame = CFrame.new(currentPos, currentPos + targetDirection)
+            local smoothedCFrame = currentCFrame:Lerp(lookCFrame, 0.96)
+            
+            local finalDirection = (targetPos - smoothedCFrame.Position).Unit
+            Camera.CFrame = CFrame.new(smoothedCFrame.Position, smoothedCFrame.Position + finalDirection)
+            
+            adjustCharacterOrientation(targetPos)
+            
+            lastAimTime = currentTime
+        end
+
+        local systemHandles, seisaLogHandles, espHandles
+        local lastLogUpdate = 0
+        local lastDeltaTime = 0
+
+        local function mainLoop()
+            local deltaTime = tick() - lastDeltaTime
+            lastDeltaTime = tick()
+            
+            if allGUIEnabled and systemHandles then
+                updateSystemInfo(systemHandles, espHandles)
+            end
+            
+            local currentTime = tick()
+            if allGUIEnabled and seisaLogHandles and currentTime - lastLogUpdate >= 0.5 then
+                addSeisaLogMessage(seisaLogHandles, systemLogs[math.random(1, #systemLogs)])
+                lastLogUpdate = currentTime
+            end
+            
+            for player, espData in pairs(playerESP) do
+                if player and player.Parent then
+                    updatePlayerESP(player, espData)
+                else
+                    removePlayerESP(player)
+                end
+            end
+            
+            if AimrookEnabled and selectedTarget then
+                updateAimrook(deltaTime)
+            elseif AimbotEnabled then
+                updateAimbot(deltaTime)
+            end
+        end
+
+        local function ShowNotification(title, content)
+            print("[Hokuto Hub] " .. title .. ": " .. (content or ""))
+        end
+
+        local function ShowToggleNotification(name, enabled)
+            ShowNotification(name, enabled and "Enabled" or "Disabled")
+        end
+
+        local function initialize()
+            createMainContainer()
+            
+            espHandles = createESPGUI()
+            systemHandles = createSystemGUI()
+            seisaLogHandles = createSeisaLogGUI()
+            
+            for _, player in ipairs(Players:GetPlayers()) do
+                if player ~= LocalPlayer then
+                    createPlayerESP(player)
+                end
+            end
+            
+            Players.PlayerAdded:Connect(onPlayerAdded)
+            Players.PlayerRemoving:Connect(onPlayerRemoving)
+            
+            if espHandles.aimbotButton then
+                espHandles.aimbotButton.MouseButton1Click:Connect(function()
+                    AimbotEnabled = not AimbotEnabled
+                    ShowToggleNotification("Aimbot", AimbotEnabled)
+                    addSeisaLogMessage(seisaLogHandles, "Aimbot " .. (AimbotEnabled and "enabled (infinite range)" or "disabled"))
+                    
+                    if AimbotEnabled and AimrookEnabled then
+                        addSeisaLogMessage(seisaLogHandles, "Aimbot active (Aimrook disabled)")
+                        AimrookEnabled = false
+                    end
+                end)
+            end
+            
+            if espHandles.aimrookButton then
+                espHandles.aimrookButton.MouseButton1Click:Connect(function()
+                    AimrookEnabled = not AimrookEnabled
+                    ShowToggleNotification("Aimrook", AimrookEnabled)
+                    addSeisaLogMessage(seisaLogHandles, "Aimrook " .. (AimrookEnabled and "enabled" or "disabled"))
+                    
+                    if AimrookEnabled and AimbotEnabled then
+                        addSeisaLogMessage(seisaLogHandles, "Aimrook active (Aimbot disabled)")
+                        AimbotEnabled = false
+                    end
+                    
+                    if AimrookEnabled and not selectedTarget then
+                        createPlayerSelectionMenu()
+                    end
+                end)
+            end
+            
+            if espHandles.targetSelectButton then
+                espHandles.targetSelectButton.MouseButton1Click:Connect(function()
+                    createPlayerSelectionMenu()
+                end)
+            end
+            
+            if espHandles.clearTargetButton then
+                espHandles.clearTargetButton.MouseButton1Click:Connect(function()
+                    selectedTarget = nil
+                    ShowNotification("Target", "Cleared")
+                    addSeisaLogMessage(seisaLogHandles, "Target cleared")
+                end)
+            end
+            
+            if espHandles.trackingModeButton then
+                espHandles.trackingModeButton.MouseButton1Click:Connect(function()
+                    if trackingMode == "CAMERA" then
+                        trackingMode = "CHARACTER"
+                        addSeisaLogMessage(seisaLogHandles, "Tracking mode: CHARACTER (Body follows camera)")
+                    else
+                        trackingMode = "CAMERA"
+                        addSeisaLogMessage(seisaLogHandles, "Tracking mode: CAMERA (Camera only)")
+                    end
+                end)
+            end
+            
+            UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if gameProcessed then return end
+                
+                if input.KeyCode == settings.toggleKey then
+                    allGUIEnabled = not allGUIEnabled
+                    
+                    if espHandles and espHandles.frame then
+                        espHandles.frame.Visible = allGUIEnabled
+                    end
+                    
+                    if systemHandles and systemHandles.frame then
+                        systemHandles.frame.Visible = allGUIEnabled
+                    end
+                    
+                    if seisaLogHandles and seisaLogHandles.frame then
+                        seisaLogHandles.frame.Visible = allGUIEnabled
+                        
+                        if allGUIEnabled then
+                            addSeisaLogMessage(seisaLogHandles, "GUI enabled")
+                            addSeisaLogMessage(seisaLogHandles, "System operational")
+                        end
+                    end
+                    
+                    ShowToggleNotification("Hokuto Hub GUI", allGUIEnabled)
+                end
+            end)
+            
+            RunService.RenderStepped:Connect(mainLoop)
+            
+            task.wait(0.5)
+            ShowNotification("Hokuto Hub", "Aim Systems Loaded!")
+            addSeisaLogMessage(seisaLogHandles, "System initialized successfully")
+            addSeisaLogMessage(seisaLogHandles, "Aim systems ready - infinite range")
+            addSeisaLogMessage(seisaLogHandles, "Character-camera sync enabled")
+            
+            print("==========================================")
+            print("Hokuto Hub ESP System with Fixed Aim")
+            print("【FIXED: Infinite Range Mode】")
+            print("FIXED ISSUES:")
+            print("  ✓ CORRECT COLOR SCHEME - Pink/White/Black/Orange only")
+            print("  ✓ CHARACTER-CAMERA SYNC - Body follows camera direction")
+            print("  ✓ TRACKING MODE - Switch between CAMERA/CHARACTER tracking")
+            print("  ✓ NO FLICKERING - Stable 96% lerp for smooth aiming")
+            print("  ✓ PROPER TARGET CLEARING - Server-based removal only")
+            print("DUAL AIM SYSTEMS:")
+            print("  ✓ AIMBOT - Infinite range・Automatically tracks closest player")
+            print("  ✓ AIMROOK - Tracks manually selected player")
+            print("  ✓ MUTUAL EXCLUSION - Only one system active at a time")
+            print("FEATURES:")
+            print("  ✓ ESP with lines to ALL players")
+            print("  ✓ Draggable GUIs")
+            print("  ✓ Auto-scrolling SeisaLog")
+            print("  ✓ Real-time system info")
+            print("Controls:")
+            print("  Right Shift - Toggle all GUI panels")
+            print("  Click 'Track Mode' to switch between CAMERA/CHARACTER")
+            print("  CHARACTER mode syncs body rotation with camera")
+            print("==========================================")
+        end
+
+        local function cleanup()
+            clearAllESP()
+            if mainContainer then
+                mainContainer:Destroy()
+            end
+            for _, connections in pairs(guiConnections) do
+                for _, conn in ipairs(connections) do
+                    pcall(function() conn:Disconnect() end)
+                end
+            end
+            guiConnections = {}
+        end
+
+        game:GetService("Players").PlayerRemoving:Connect(function(player)
+            if player == LocalPlayer then
+                cleanup()
+            end
+        end)
+
+        local success, err = pcall(initialize)
+
+        if not success then
+            warn("[Hokuto Hub Error]: " .. tostring(err))
+            ShowNotification("Error", "Initialization failed: " .. tostring(err))
+        end
+    end
+})
+
+local BarrierBreakTab = Window:MakeTab({
+    Name = "Barrier Break",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+BarrierBreakTab:AddSection({ Name = "Barrier Break Feature" })
+BarrierBreakTab:AddButton({
+    Name = "Barrier Break(BETA)",
+    Callback = function()
+        local player = game:GetService("Players").LocalPlayer
+        if not player then
+            OrionLib:MakeNotification({Name="Error", Content="Player not found", Time = 4})
+            return
+        end
+
+        if not (player.Character and player.Character:FindFirstChild("HumanoidRootPart")) then  
+            OrionLib:MakeNotification({Name="Error", Content="Character not ready", Time = 4})  
+            return  
+        end  
+
+        local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")  
+        local originalWalkSpeed, originalJumpPower  
+        if humanoid then  
+            originalWalkSpeed = humanoid.WalkSpeed  
+            originalJumpPower = humanoid.JumpPower  
+            pcall(function() humanoid.WalkSpeed = 0 humanoid.JumpPower = 0 end)  
+        end  
+
+        local success, err = pcall(function()  
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")  
+            local MenuToys = ReplicatedStorage:WaitForChild("MenuToys")  
+            local hrp = player.Character.HumanoidRootPart  
+            local originalCFrame = hrp.CFrame  
+
+            hrp.CFrame = CFrame.new(246.052, -7.35, 431.821)  
+            task.wait(0.05)  
+
+            MenuToys.SpawnToyRemoteFunction:InvokeServer(  
+                "InstrumentWoodwindOcarina",  
+                CFrame.new(184.148834, -5.54824972, 498.136749,  
+                    0.829037189, -0.214714944, 0.516328275,  
+                    0, 0.923344612, 0.383972496,  
+                    -0.559193552, -0.318327487, 0.765486956),  
+                Vector3.new(0, 34, 0)  
+            )  
+
+            task.wait(0.2)  
+
+            local toyFolder = workspace:FindFirstChild(player.Name .. "SpawnedInToys")  
+            if not toyFolder then error("SpawnedInToys folder not found") end  
+
+            local ocarina = toyFolder:FindFirstChild("InstrumentWoodwindOcarina")  
+            if not ocarina then error("InstrumentWoodwindOcarina not found") end  
+
+            if ocarina:FindFirstChild("HoldPart") and ocarina.HoldPart:FindFirstChild("HoldItemRemoteFunction") then  
+                pcall(function()  
+                    ocarina.HoldPart.HoldItemRemoteFunction:InvokeServer(ocarina, player.Character)  
+                end)  
+                task.wait(0.2)  
+            end  
+
+            player.Character.HumanoidRootPart.CFrame = CFrame.new(304.06, 25.77, 488.54)  
+            task.wait(0.05)  
+
+            if MenuToys:FindFirstChild("DestroyToy") then  
+                MenuToys.DestroyToy:FireServer(ocarina)  
+            else  
+                local destroyEv = ReplicatedStorage:FindFirstChild("MenuToys") and ReplicatedStorage.MenuToys:FindFirstChild("DestroyToy")  
+                if destroyEv then  
+                    destroyEv:FireServer(ocarina)  
+                else  
+                    error("DestroyToy event not found")  
+                end  
+            end  
+
+            task.wait(0.05)  
+
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then  
+                player.Character.HumanoidRootPart.CFrame = originalCFrame  
+            end  
+
+            OrionLib:MakeNotification({Name="Success", Content="Barrier break executed", Time = 3})  
+        end)  
+
+        local function tryRestore()  
+            if originalWalkSpeed == nil and originalJumpPower == nil then return end  
+            local curHum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")  
+            if curHum then  
+                pcall(function()  
+                    if originalWalkSpeed ~= nil then curHum.WalkSpeed = originalWalkSpeed end  
+                    if originalJumpPower ~= nil then curHum.JumpPower = originalJumpPower end  
+                end)  
+            end  
+        end  
+
+        tryRestore()  
+
+        if not success then  
+            OrionLib:MakeNotification({Name="Error", Content=tostring(err), Time = 6})  
+        end  
+    end
+})
+
+local InfoTab = Window:MakeTab({
+    Name = "Info & Support",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
+
+InfoTab:AddSection({ Name = "Details" })
+InfoTab:AddLabel("Version: V0.6")
+InfoTab:AddLabel("Development Group: Saturn Group")
+
+InfoTab:AddSection({ Name = "Links" })
+InfoTab:AddButton({
+    Name = "Join Support Server[Discord]",
+    Callback = function()
+        copyToClipboard("https://discord.gg/6u4pjQrEsC", "Discord Link")
+    end
+})
+
+InfoTab:AddButton({
+    Name = "Join Support Server[LINE OpenChat]",
+    Callback = function()
+        copyToClipboard("https://line.me/ti/g2/-CBPty1N0v2XuNPqaJm5xLmCBt0wBr3_vxrOqQ?utm_source=invitation&utm_medium=link_copy&utm_campaign=default", "LINE Link")
+    end
+})
+
+task.wait(1)
+OrionLib:MakeNotification({
+    Name = "🌸Sakura Hub🌸 v0.6.en Started",
+    Content = "18 tabs, Pink gradient applied, Barrier break added",
+    Image = "rbxassetid://4483362458",
+    Time = 5
+})
+
+print("==========================================")
+print("🌸Sakura Hub🌸 v0.6.en")
+print("==========================================")
+print("Total supported objects: " .. #ObjectIDConfig.AvailableObjects .. " types")
+print("Total tabs: 18")
+print("Max objects: 100")
+print("Ferris Wheel: Twist fixed, Fixed direction support")
+print("New features: Pink gradient auto-apply")
+print("New tabs: GUI, Script Hub, Barrier Break, Info & Support")
+print("==========================================")
